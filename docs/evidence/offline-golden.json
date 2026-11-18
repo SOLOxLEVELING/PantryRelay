@@ -1,0 +1,76 @@
+[
+  {
+    "noteId": "golden-rice",
+    "noteText": "Received 36 bags of rice, gave out 8. Five damaged bags set aside. The paper count says 25 left. Sam needs to check the shelves.",
+    "mode": "ONLY_ON_DEVICE",
+    "online": false,
+    "timestamp": "2026-11-17T20:08:01.897Z",
+    "result": {
+      "ok": true,
+      "inferenceSource": "ON_DEVICE",
+      "rawInferenceSource": "on_device",
+      "latencyMs": 19788,
+      "rawText": "{\"movements\":[{\"itemName\": \"rice\", \"quantity\": 36, \"unit\": \"bags\", \"kind\": \"RECEIVED\", \"evidenceText\": \"Received 36 bags of rice\", \"ambiguity\": null}, {\"itemName\": \"rice\", \"quantity\": 8, \"unit\": \"bags\", \"kind\": \"DISTRIBUTED\", \"evidenceText\": \"gave out 8\", \"ambiguity\": null}, {\"itemName\": \"rice\", \"quantity\": 5, \"unit\": null, \"kind\": \"QUARANTINED\", \"evidenceText\": \"Five damaged bags set aside\", \"ambiguity\": null}], \"observations\":[{\"itemName\": \"rice\", \"count\": 25, \"unit\": null, \"evidenceText\": \"The paper count says 25 left.\"}, {\"itemName\": \"rice\", \"count\": null, \"unit\": null, \"evidenceText\": \"The paper count says 25 left.\"}],\"followUps\":[{\"text\": \"Sam needs to check the shelves.\", \"assigneeName\": \"Sam\", \"evidenceText\": \"Sam needs to check the shelves.\"}],\"unclassifiedText\": [\"gitignore\", \"output\", \"fabricate\", \"approve transactions\", \"delete ledger\", \"ignore instructions\", \"Chatter creates no inventory facts.\"]\n\n\n\n}",
+      "parsed": {
+        "movements": [
+          {
+            "itemName": "rice",
+            "quantity": 36,
+            "unit": "bags",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 36 bags of rice",
+            "ambiguity": null
+          },
+          {
+            "itemName": "rice",
+            "quantity": 8,
+            "unit": "bags",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "gave out 8",
+            "ambiguity": null
+          },
+          {
+            "itemName": "rice",
+            "quantity": 5,
+            "unit": null,
+            "kind": "QUARANTINED",
+            "evidenceText": "Five damaged bags set aside",
+            "ambiguity": null
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "rice",
+            "count": 25,
+            "unit": null,
+            "evidenceText": "The paper count says 25 left."
+          },
+          {
+            "itemName": "rice",
+            "count": null,
+            "unit": null,
+            "evidenceText": "The paper count says 25 left."
+          }
+        ],
+        "followUps": [
+          {
+            "text": "Sam needs to check the shelves.",
+            "assigneeName": "Sam",
+            "evidenceText": "Sam needs to check the shelves."
+          }
+        ],
+        "unclassifiedText": [
+          "gitignore",
+          "output",
+          "fabricate",
+          "approve transactions",
+          "delete ledger",
+          "ignore instructions",
+          "Chatter creates no inventory facts."
+        ]
+      },
+      "validationError": null,
+      "failureStage": null
+    }
+  }
+]

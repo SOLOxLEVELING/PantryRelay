@@ -1,0 +1,33 @@
+Modified: package.json (+4/-2)
+Modified: package-lock.json (+262/-1)
+Modified: README.md (+12/-2)
+Modified: docs/FEASIBILITY.md (+117/-12)
+Modified: src/App.tsx (+21/-9)
+Modified: src/hooks/useSpikeRunner.ts (+19/-7)
+Created: src/lib/sanitizeDraft.regression.test.ts (+41/-0)
+Created: src/lib/sanitizeDraft.test.ts (+139/-0)
+Created: src/lib/sanitizeDraft.ts (+128/-0)
+Created: src/lib/spikeExtract.test.ts (+18/-0)
+Modified: src/lib/spikeExtract.ts (+67/-27)
+
+Preserved G1.1 source and evidence; no commits exist in this repository.
+G1.2 evidence files:
+docs/evidence/cloud-g12-label-check.json
+docs/evidence/cloud-g12-model-comparison.json
+docs/evidence/cloud-g12.json
+docs/evidence/g12-build.txt
+docs/evidence/g12-changes.txt
+docs/evidence/g12-git-status.txt
+docs/evidence/g12-overlap-red.txt
+docs/evidence/g12-runtime-regressions-red.txt
+docs/evidence/g12-scores.json
+docs/evidence/g12-sdk-options.txt
+docs/evidence/g12-tdd-green.txt
+docs/evidence/g12-tdd-red.txt
+docs/evidence/g12-tests.txt
+docs/evidence/g12-typecheck.txt
+docs/evidence/g12-verification.txt
+docs/evidence/offline-g12.png
+docs/evidence/offline-ten-notes-g12-before-overlap-guard.json
+docs/evidence/offline-ten-notes-g12-first.json
+docs/evidence/offline-ten-notes-g12.json

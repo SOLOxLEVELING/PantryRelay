@@ -1,0 +1,379 @@
+{
+  "definition": "Core fixtures require exactly the expected movement tuples, observation category/count, and named follow-up; unclassified wording is scored separately. The skipped empty case has no raw SDK score. G1.1 replay uses the final sanitizer offline, not new inference.",
+  "g11Raw": {
+    "corePasses": 0,
+    "cases": 10,
+    "nullableSentinels": 2,
+    "rows": [
+      {
+        "noteId": "golden-rice",
+        "source": "on_device",
+        "latencyMs": 19344,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "empty",
+        "source": "on_device",
+        "latencyMs": 7449,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "missing-unit",
+        "source": "on_device",
+        "latencyMs": 4369,
+        "corePass": false,
+        "nullableSentinels": 2
+      },
+      {
+        "noteId": "duplicate",
+        "source": "on_device",
+        "latencyMs": 5385,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "damage-overlap",
+        "source": "on_device",
+        "latencyMs": 5055,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "injection",
+        "source": "on_device",
+        "latencyMs": 10661,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "long-shift",
+        "source": "on_device",
+        "latencyMs": 9230,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "chatter",
+        "source": "on_device",
+        "latencyMs": 3269,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "negative-zero",
+        "source": "on_device",
+        "latencyMs": 5850,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "misspelled",
+        "source": "on_device",
+        "latencyMs": 4398,
+        "corePass": false,
+        "nullableSentinels": 0
+      }
+    ]
+  },
+  "g11SanitizerReplay": {
+    "corePasses": 5,
+    "cases": 10,
+    "nullableSentinels": 0,
+    "rows": [
+      {
+        "noteId": "golden-rice",
+        "source": "on_device",
+        "latencyMs": 19344,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "empty",
+        "source": "on_device",
+        "latencyMs": 7449,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "missing-unit",
+        "source": "on_device",
+        "latencyMs": 4369,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "duplicate",
+        "source": "on_device",
+        "latencyMs": 5385,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "damage-overlap",
+        "source": "on_device",
+        "latencyMs": 5055,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "injection",
+        "source": "on_device",
+        "latencyMs": 10661,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "long-shift",
+        "source": "on_device",
+        "latencyMs": 9230,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "chatter",
+        "source": "on_device",
+        "latencyMs": 3269,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "negative-zero",
+        "source": "on_device",
+        "latencyMs": 5850,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "misspelled",
+        "source": "on_device",
+        "latencyMs": 4398,
+        "corePass": false,
+        "nullableSentinels": 0
+      }
+    ]
+  },
+  "g12RawNonempty": {
+    "corePasses": 4,
+    "cases": 9,
+    "nullableSentinels": 2,
+    "rows": [
+      {
+        "noteId": "golden-rice",
+        "source": "on_device",
+        "latencyMs": 17105,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "missing-unit",
+        "source": "on_device",
+        "latencyMs": 5137,
+        "corePass": false,
+        "nullableSentinels": 2
+      },
+      {
+        "noteId": "duplicate",
+        "source": "on_device",
+        "latencyMs": 4128,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "damage-overlap",
+        "source": "on_device",
+        "latencyMs": 6100,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "injection",
+        "source": "on_device",
+        "latencyMs": 5616,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "long-shift",
+        "source": "on_device",
+        "latencyMs": 10034,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "chatter",
+        "source": "on_device",
+        "latencyMs": 2598,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "negative-zero",
+        "source": "on_device",
+        "latencyMs": 6805,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "misspelled",
+        "source": "on_device",
+        "latencyMs": 7103,
+        "corePass": false,
+        "nullableSentinels": 0
+      }
+    ]
+  },
+  "g12Guarded": {
+    "corePasses": 6,
+    "cases": 10,
+    "nullableSentinels": 0,
+    "rows": [
+      {
+        "noteId": "golden-rice",
+        "source": "on_device",
+        "latencyMs": 17105,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "empty",
+        "source": "SKIPPED_EMPTY",
+        "latencyMs": 0,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "missing-unit",
+        "source": "on_device",
+        "latencyMs": 5137,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "duplicate",
+        "source": "on_device",
+        "latencyMs": 4128,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "damage-overlap",
+        "source": "on_device",
+        "latencyMs": 6100,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "injection",
+        "source": "on_device",
+        "latencyMs": 5616,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "long-shift",
+        "source": "on_device",
+        "latencyMs": 10034,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "chatter",
+        "source": "on_device",
+        "latencyMs": 2598,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "negative-zero",
+        "source": "on_device",
+        "latencyMs": 6805,
+        "corePass": false,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "misspelled",
+        "source": "on_device",
+        "latencyMs": 7103,
+        "corePass": false,
+        "nullableSentinels": 0
+      }
+    ]
+  },
+  "g11NonemptyLatency": {
+    "n": 9,
+    "median": 5385,
+    "p95NearestRank": 19344,
+    "min": 3269,
+    "max": 19344
+  },
+  "g12NonemptyLatency": {
+    "n": 9,
+    "median": 6100,
+    "p95NearestRank": 17105,
+    "min": 2598,
+    "max": 17105
+  },
+  "cloudFinal": {
+    "n": 5,
+    "median": 2231,
+    "p95NearestRank": 3393,
+    "min": 1593,
+    "max": 3393
+  },
+  "cloudGolden": {
+    "n": 3,
+    "median": 2231,
+    "p95NearestRank": 3393,
+    "min": 1755,
+    "max": 3393
+  },
+  "cloudCore": {
+    "corePasses": 5,
+    "cases": 5,
+    "nullableSentinels": 0,
+    "rows": [
+      {
+        "noteId": "golden-rice",
+        "source": "in_cloud",
+        "latencyMs": 3393,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "golden-rice",
+        "source": "in_cloud",
+        "latencyMs": 1755,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "golden-rice",
+        "source": "in_cloud",
+        "latencyMs": 2231,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "damage-overlap",
+        "source": "in_cloud",
+        "latencyMs": 1593,
+        "corePass": true,
+        "nullableSentinels": 0
+      },
+      {
+        "noteId": "injection",
+        "source": "in_cloud",
+        "latencyMs": 2463,
+        "corePass": true,
+        "nullableSentinels": 0
+      }
+    ]
+  },
+  "quarantine": {
+    "total": 10,
+    "records": 4,
+    "unclassifiedStrings": 6
+  }
+}

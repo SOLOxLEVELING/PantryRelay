@@ -1,0 +1,21 @@
+
+> pantryrelay@0.0.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.8 building client environment for production...
+transforming...
+✓ 131 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    0.33 kB │ gzip:   0.24 kB
+dist/assets/workbox-window.prod.es5-Bd17z0YL.js    5.65 kB │ gzip:   2.20 kB
+dist/assets/index-BE-usJ1J.js                    407.34 kB │ gzip: 124.67 kB
+
+✓ built in 125ms
+
+PWA v2.0.0
+mode      generateSW
+precache  3 entries (403.64 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js

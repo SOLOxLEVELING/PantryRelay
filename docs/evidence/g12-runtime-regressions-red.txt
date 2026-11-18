@@ -1,0 +1,76 @@
+
+> pantryrelay@0.0.0 test
+> vitest run src/lib/sanitizeDraft.test.ts
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+ ❯ src/lib/sanitizeDraft.test.ts (18 tests | 2 failed) 9ms
+   ❯ sanitizeExtractedNote (18)
+     × preserves a real receipt when Nano changes its trailing comma to a period 3ms
+     × quarantines a positive model quantity that contradicts an explicit zero in its own evidence 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/sanitizeDraft.test.ts > sanitizeExtractedNote > preserves a real receipt when Nano changes its trailing comma to a period
+AssertionError: expected [] to deeply equal [ { itemName: 'oats', …(5) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "ambiguity": null,
+-     "evidenceText": "Received 4 bags of oats.",
+-     "itemName": "oats",
+-     "kind": "RECEIVED",
+-     "quantity": 4,
+-     "unit": "bags",
+-   },
+- ]
++ []
+
+ ❯ src/lib/sanitizeDraft.test.ts:52:36
+     50|   it('preserves a real receipt when Nano changes its trailing comma to…
+     51|     const result = sanitizeExtractedNote('Received 4 bags of oats, gav…
+     52|     expect(result.draft.movements).toEqual([movement]);
+       |                                    ^
+     53|     expect(result.quarantined).toEqual([]);
+     54|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/lib/sanitizeDraft.test.ts > sanitizeExtractedNote > quarantines a positive model quantity that contradicts an explicit zero in its own evidence
+AssertionError: expected [ { itemName: 'oats', …(5) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "ambiguity": null,
++     "evidenceText": "Distributed 0 bags of oats.",
++     "itemName": "oats",
++     "kind": "DISTRIBUTED",
++     "quantity": 1e-31,
++     "unit": "bags",
++   },
++ ]
+
+ ❯ src/lib/sanitizeDraft.test.ts:59:36
+     57|     const invalid = { ...movement, quantity: 1e-31, kind: 'DISTRIBUTED…
+     58|     const result = sanitizeExtractedNote(invalid.evidenceText, noteWit…
+     59|     expect(result.draft.movements).toEqual([]);
+       |                                    ^
+     60|     expect(result.quarantined).toEqual([{ reason: 'Numeric claim contr…
+     61|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 16 passed (18)
+   Start at  14:04:42
+   Duration  123ms (transform 46%, tests 29%, import 18%, worker 6%)
+

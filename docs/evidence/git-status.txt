@@ -1,0 +1,40 @@
+ A .env.example
+ A .gitignore
+ A README.md
+ A docs/FEASIBILITY.md
+ A docs/evidence/app-check-enforced.png
+ A docs/evidence/build.txt
+ A docs/evidence/cloud-blocked.png
+ A docs/evidence/cloud-success.png
+ A docs/evidence/cloud-ten-notes.json
+ A docs/evidence/cloud-verified-session.json
+ A docs/evidence/final-session.json
+ A docs/evidence/git-status.txt
+ A docs/evidence/offline-deadline-partial.json
+ A docs/evidence/offline-device.png
+ A docs/evidence/offline-golden.json
+ A docs/evidence/offline-readiness.png
+ A docs/evidence/offline-ten-notes.json
+ A docs/evidence/offline-ten-results.png
+ A docs/evidence/online-baseline-partial.json
+ A docs/evidence/online-initial.json
+ A docs/evidence/online-session-cleanup.json
+ A docs/evidence/sdk-signatures.txt
+ A docs/evidence/typecheck.txt
+ A docs/evidence/verification.txt
+ A index.html
+ A package-lock.json
+ A package.json
+ A src/App.tsx
+ A src/env.d.ts
+ A src/hooks/useSpikeRunner.ts
+ A src/lib/diagnostics.ts
+ A src/lib/firebase.ts
+ A src/lib/spikeExtract.ts
+ A src/lib/syntheticNotes.ts
+ A src/main.tsx
+ A tsconfig.json
+ A vite.config.ts
+?? PLANNING.md
+?? SPEC.md
+?? START_PLANNING_AGENT.md

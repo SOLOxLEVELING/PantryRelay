@@ -1,0 +1,222 @@
+[
+  {
+    "noteId": "golden-rice",
+    "noteText": "Received 36 bags of rice, gave out 8. Five damaged bags set aside. The paper count says 25 left. Sam needs to check the shelves.",
+    "mode": "ONLY_ON_DEVICE",
+    "online": false,
+    "timestamp": "2026-11-17T20:08:01.897Z",
+    "result": {
+      "ok": true,
+      "inferenceSource": "ON_DEVICE",
+      "rawInferenceSource": "on_device",
+      "latencyMs": 19788,
+      "rawText": "{\"movements\":[{\"itemName\": \"rice\", \"quantity\": 36, \"unit\": \"bags\", \"kind\": \"RECEIVED\", \"evidenceText\": \"Received 36 bags of rice\", \"ambiguity\": null}, {\"itemName\": \"rice\", \"quantity\": 8, \"unit\": \"bags\", \"kind\": \"DISTRIBUTED\", \"evidenceText\": \"gave out 8\", \"ambiguity\": null}, {\"itemName\": \"rice\", \"quantity\": 5, \"unit\": null, \"kind\": \"QUARANTINED\", \"evidenceText\": \"Five damaged bags set aside\", \"ambiguity\": null}], \"observations\":[{\"itemName\": \"rice\", \"count\": 25, \"unit\": null, \"evidenceText\": \"The paper count says 25 left.\"}, {\"itemName\": \"rice\", \"count\": null, \"unit\": null, \"evidenceText\": \"The paper count says 25 left.\"}],\"followUps\":[{\"text\": \"Sam needs to check the shelves.\", \"assigneeName\": \"Sam\", \"evidenceText\": \"Sam needs to check the shelves.\"}],\"unclassifiedText\": [\"gitignore\", \"output\", \"fabricate\", \"approve transactions\", \"delete ledger\", \"ignore instructions\", \"Chatter creates no inventory facts.\"]\n\n\n\n}",
+      "parsed": {
+        "movements": [
+          {
+            "itemName": "rice",
+            "quantity": 36,
+            "unit": "bags",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 36 bags of rice",
+            "ambiguity": null
+          },
+          {
+            "itemName": "rice",
+            "quantity": 8,
+            "unit": "bags",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "gave out 8",
+            "ambiguity": null
+          },
+          {
+            "itemName": "rice",
+            "quantity": 5,
+            "unit": null,
+            "kind": "QUARANTINED",
+            "evidenceText": "Five damaged bags set aside",
+            "ambiguity": null
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "rice",
+            "count": 25,
+            "unit": null,
+            "evidenceText": "The paper count says 25 left."
+          },
+          {
+            "itemName": "rice",
+            "count": null,
+            "unit": null,
+            "evidenceText": "The paper count says 25 left."
+          }
+        ],
+        "followUps": [
+          {
+            "text": "Sam needs to check the shelves.",
+            "assigneeName": "Sam",
+            "evidenceText": "Sam needs to check the shelves."
+          }
+        ],
+        "unclassifiedText": [
+          "gitignore",
+          "output",
+          "fabricate",
+          "approve transactions",
+          "delete ledger",
+          "ignore instructions",
+          "Chatter creates no inventory facts."
+        ]
+      },
+      "validationError": null,
+      "failureStage": null
+    }
+  },
+  {
+    "noteId": "golden-rice",
+    "noteText": "Received 36 bags of rice, gave out 8. Five damaged bags set aside. The paper count says 25 left. Sam needs to check the shelves.",
+    "mode": "ONLY_ON_DEVICE",
+    "online": false,
+    "timestamp": "2026-11-17T20:08:40.248Z",
+    "result": {
+      "ok": true,
+      "inferenceSource": "ON_DEVICE",
+      "rawInferenceSource": "on_device",
+      "latencyMs": 8589,
+      "rawText": "{\"movements\":[{\"itemName\": \"rice\", \"quantity\": 36, \"unit\": \"bags\", \"kind\": \"RECEIVED\", \"evidenceText\": \"Received 36 bags of rice\", \"ambiguity\": null}, {\"itemName\": \"rice\", \"quantity\": 8, \"unit\": \"bags\", \"kind\": \"DISTRIBUTED\", \"evidenceText\": \"gave out 8\", \"ambiguity\": null}, {\"itemName\": \"rice\", \"quantity\": 5, \"unit\": null, \"kind\": \"QUARANTINED\", \"evidenceText\": \"Five damaged bags set aside\", \"ambiguity\": \"iguity\"}],\"observations\":[{\"itemName\": \"rice\", \"count\": 25, \"unit\": null, \"evidenceText\": \"The paper count says 25 left.\"}],\"followUps\":[{\"text\": \"Sam needs to check the shelves.\", \"assigneeName\": \"Sam\", \"evidenceText\": \"Sam needs to check the shelves.\"}],\"unclassifiedText\": []}",
+      "parsed": {
+        "movements": [
+          {
+            "itemName": "rice",
+            "quantity": 36,
+            "unit": "bags",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 36 bags of rice",
+            "ambiguity": null
+          },
+          {
+            "itemName": "rice",
+            "quantity": 8,
+            "unit": "bags",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "gave out 8",
+            "ambiguity": null
+          },
+          {
+            "itemName": "rice",
+            "quantity": 5,
+            "unit": null,
+            "kind": "QUARANTINED",
+            "evidenceText": "Five damaged bags set aside",
+            "ambiguity": "iguity"
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "rice",
+            "count": 25,
+            "unit": null,
+            "evidenceText": "The paper count says 25 left."
+          }
+        ],
+        "followUps": [
+          {
+            "text": "Sam needs to check the shelves.",
+            "assigneeName": "Sam",
+            "evidenceText": "Sam needs to check the shelves."
+          }
+        ],
+        "unclassifiedText": []
+      },
+      "validationError": null,
+      "failureStage": null
+    }
+  },
+  {
+    "noteId": "empty",
+    "noteText": "",
+    "mode": "ONLY_ON_DEVICE",
+    "online": false,
+    "timestamp": "2026-11-17T20:08:46.264Z",
+    "result": {
+      "ok": true,
+      "inferenceSource": "ON_DEVICE",
+      "rawInferenceSource": "on_device",
+      "latencyMs": 6016,
+      "rawText": "{\"movements\":[{\"itemName\": \"unknown\", \"quantity\": null, \"unit\": null, \"kind\": \"DISTRIBUTED\", \"evidenceText\": \"unknown\", \"ambiguity\": null}, {\"itemName\": \"unknown\", \"quantity\": null, \"unit\": null, \"kind\": \"RECEIVED\", \"evidenceText\": \"unknown\", \"ambiguity\": null}], \"observations\":[{\"itemName\": \"unknown\", \"count\": null, \"unit\": null, \"evidenceText\": \"unknown\"}], \"followUps\":[{\"text\": \"unknown\", \"assigneeName\": null, \"evidenceText\": \"unknown\"}], \"unclassifiedText\": []}",
+      "parsed": {
+        "movements": [
+          {
+            "itemName": "unknown",
+            "quantity": null,
+            "unit": null,
+            "kind": "DISTRIBUTED",
+            "evidenceText": "unknown",
+            "ambiguity": null
+          },
+          {
+            "itemName": "unknown",
+            "quantity": null,
+            "unit": null,
+            "kind": "RECEIVED",
+            "evidenceText": "unknown",
+            "ambiguity": null
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "unknown",
+            "count": null,
+            "unit": null,
+            "evidenceText": "unknown"
+          }
+        ],
+        "followUps": [
+          {
+            "text": "unknown",
+            "assigneeName": null,
+            "evidenceText": "unknown"
+          }
+        ],
+        "unclassifiedText": []
+      },
+      "validationError": null,
+      "failureStage": null
+    }
+  },
+  {
+    "noteId": "missing-unit",
+    "noteText": "Received 12 rice. Please check what unit the delivery meant.",
+    "mode": "ONLY_ON_DEVICE",
+    "online": false,
+    "timestamp": "2026-11-17T20:09:46.268Z",
+    "result": {
+      "ok": false,
+      "inferenceSource": "UNKNOWN",
+      "rawInferenceSource": "UNKNOWN",
+      "latencyMs": 60001,
+      "rawText": "",
+      "parsed": null,
+      "validationError": "Error: Extraction exceeded 60000 ms; no SDK response received. On-device work may continue until the next session.",
+      "failureStage": "inference"
+    }
+  },
+  {
+    "noteId": "duplicate",
+    "noteText": "Received 10 bags of rice this morning. Repeating the same delivery for clarity: received 10 bags of rice this morning.",
+    "mode": "ONLY_ON_DEVICE",
+    "online": false,
+    "timestamp": "2026-11-17T20:10:46.269Z",
+    "result": {
+      "ok": false,
+      "inferenceSource": "UNKNOWN",
+      "rawInferenceSource": "UNKNOWN",
+      "latencyMs": 60001,
+      "rawText": "",
+      "parsed": null,
+      "validationError": "Error: Extraction exceeded 60000 ms; no SDK response received. On-device work may continue until the next session.",
+      "failureStage": "inference"
+    }
+  }
+]

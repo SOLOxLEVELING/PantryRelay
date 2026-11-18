@@ -1,0 +1,38 @@
+
+> pantryrelay@0.0.0 test
+> vitest run src/lib/sanitizeDraft.test.ts
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+ ❯ src/lib/sanitizeDraft.test.ts (20 tests | 1 failed) 9ms
+   ❯ sanitizeExtractedNote (20)
+     × holds explicitly included damaged stock for clarification instead of suggesting a second loss 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/sanitizeDraft.test.ts > sanitizeExtractedNote > holds explicitly included damaged stock for clarification instead of suggesting a second loss
+AssertionError: expected [ { itemName: 'rice', …(5) }, …(1) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ src/lib/sanitizeDraft.test.ts:119:36
+    117|     const damaged = { ...movement, itemName: 'rice', quantity: 5, kind…
+    118|     const result = sanitizeExtractedNote(source, noteWith({ movements:…
+    119|     expect(result.draft.movements).toHaveLength(1);
+       |                                    ^
+    120|     expect(result.draft.movements[0]?.kind).toBe('DISTRIBUTED');
+    121|     expect(result.draft.movements[0]?.ambiguity).toContain('clarificat…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 19 passed (20)
+   Start at  14:20:49
+   Duration  111ms (transform 48%, tests 28%, import 18%, worker 6%)
+

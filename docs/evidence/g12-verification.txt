@@ -1,0 +1,17 @@
+Final implementation command results (observed 18 November 2026):
+
+npm test
+Exit code: 0
+Exact output: g12-tests.txt
+29 tests passed across 3 files.
+
+npx tsc --noEmit
+Exit code: 0
+Exact output: g12-typecheck.txt (zero bytes; no stdout/stderr).
+
+npm run build
+Exit code: 0
+Exact output: g12-build.txt
+Final asset: index-BE-usJ1J.js
+
+No implementation changes after these commands. Subsequent changes are documentation and evidence only.

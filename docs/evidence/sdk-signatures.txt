@@ -1,0 +1,94 @@
+firebase@13.4.0 / @firebase/ai@3.1.0
+
+node_modules/firebase/ai/dist/ai/index.d.ts re-exports: export * from '@firebase/ai';
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:613
+    inferenceSource?: InferenceSource;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1118
+    initializeDeviceModel(onDownloadProgress?: (progressValue: number) => void): Promise<void>;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1123
+    generateContent(request: GenerateContentRequest | string | Array<string | Part>, singleRequestOptions?: SingleRequestOptions): Promise<GenerateContentResult>;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1172
+export declare function getAI(app?: FirebaseApp, options?: AIOptions): AI;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1180
+export declare function getGenerativeModel(ai: AI, modelParams: ModelParams | HybridParams, requestOptions?: RequestOptions): GenerativeModel;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1215
+export declare class GoogleAIBackend extends Backend {
+    constructor();
+}
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1554
+export declare interface HybridParams {
+    /**
+     * Specifies on-device or in-cloud inference. Defaults to prefer on-device.
+     */
+    mode: InferenceMode;
+    /**
+     * Optional. Specifies advanced params for on-device inference.
+     */
+    onDeviceParams?: OnDeviceParams;
+    /**
+     * Optional. Specifies advanced params for in-cloud inference.
+     */
+    inCloudParams?: ModelParams;
+}
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1649
+export declare const InferenceMode: {
+    readonly PREFER_ON_DEVICE: "prefer_on_device";
+    readonly ONLY_ON_DEVICE: "only_on_device";
+    readonly ONLY_IN_CLOUD: "only_in_cloud";
+    readonly PREFER_IN_CLOUD: "prefer_in_cloud";
+};
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1668
+export declare const InferenceSource: {
+    readonly ON_DEVICE: "on_device";
+    readonly IN_CLOUD: "in_cloud";
+};
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1815
+export declare interface LanguageModelPromptOptions {
+    responseConstraint?: object;
+}
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:2349
+export declare interface OnDeviceParams {
+    createOptions?: LanguageModelCreateOptions;
+    promptOptions?: LanguageModelPromptOptions;
+}
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:2609
+    static array(arrayParams: SchemaParams & {
+        items: Schema;
+    }): ArraySchema;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:2612
+    static object(objectParams: SchemaParams & {
+        properties: {
+            [k: string]: Schema;
+        };
+        optionalProperties?: string[];
+    }): ObjectSchema;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:2619
+    static enumString(stringParams: SchemaParams & {
+        enum: string[];
+    }): StringSchema;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:2623
+    static number(numberParams?: SchemaParams): NumberSchema;
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:1748
+export declare interface LanguageModelCreateOptions extends LanguageModelCreateCoreOptions {
+    signal?: AbortSignal;
+    initialPrompts?: LanguageModelMessage[];
+}
+
+node_modules/@firebase/ai/dist/ai-public.d.ts:2618
+    static string(stringParams?: SchemaParams): StringSchema;

@@ -1,0 +1,19 @@
+[
+  {
+    "noteId": "golden-rice",
+    "noteText": "Received 36 bags of rice, gave out 8. Five damaged bags set aside. The paper count says 25 left. Sam needs to check the shelves.",
+    "mode": "PREFER_ON_DEVICE",
+    "online": true,
+    "timestamp": "2026-11-17T20:13:50.380Z",
+    "result": {
+      "ok": false,
+      "inferenceSource": "UNKNOWN",
+      "rawInferenceSource": "UNKNOWN",
+      "latencyMs": 60001,
+      "rawText": "",
+      "parsed": null,
+      "validationError": "Error: Extraction exceeded 60000 ms; no SDK response received.",
+      "failureStage": "inference"
+    }
+  }
+]
