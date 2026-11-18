@@ -1,0 +1,392 @@
+G2.1 — Canonical Ledger Types, Seeded Opening Balance, and Deterministic Reconciliation Engine
+TDD order: reconcile.test.ts was written before production modules. After the initial missing-module failure, engine entry points were stubbed with explicit not-implemented errors to demonstrate executable red tests. The following red run precedes the engine implementation.
+
+RED — engine not implemented
+$ npm test -- src/lib/reconcile.test.ts
+
+> pantryrelay@0.0.0 test
+> vitest run src/lib/reconcile.test.ts
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+ ❯ src/lib/reconcile.test.ts (45 tests | 36 failed) 9ms
+   ❯ movement approval gate (20)
+     × blocks invalid movement {"quantity":null} at both boundaries 2ms
+     × blocks invalid movement {"quantity":0} at both boundaries 0ms
+     × blocks invalid movement {"quantity":-1} at both boundaries 0ms
+     × blocks invalid movement {"quantity":null} at both boundaries 0ms
+     × blocks invalid movement {"quantity":null} at both boundaries 0ms
+     × blocks invalid movement {"quantity":null} at both boundaries 0ms
+     × blocks invalid movement {"unit":null} at both boundaries 0ms
+     × blocks invalid movement {"unit":""} at both boundaries 0ms
+     × blocks invalid movement {"unit":"   "} at both boundaries 0ms
+     × blocks invalid movement {"unit":"kg"} at both boundaries 0ms
+     × blocks invalid movement {"canonicalItemId":null} at both boundaries 0ms
+     × blocks invalid movement {"canonicalItemId":"unknown"} at both boundaries 0ms
+     × blocks invalid movement {"kind":null} at both boundaries 1ms
+     × blocks invalid movement {"ambiguity":"Five damaged bags included in those eight distributed."} at both boundaries 0ms
+     × allows a complete movement with no substantive ambiguity (null) 0ms
+     × allows a complete movement with no substantive ambiguity ("") 0ms
+     × allows a complete movement with no substantive ambiguity ("   ") 0ms
+     × validates against the supplied catalog rather than accepting any named item 0ms
+     × creates an immutable event with stable identity and approval provenance without mutating its inputs 0ms
+     × supports the minimal approval context using demo catalog and UNKNOWN source provenance 0ms
+   ❯ deterministic item reconciliation (16)
+     × keeps the golden ledger at 47 usable and 5 quarantined while flagging the observed discrepancy of 22 0ms
+     × uses the human-edited quantity at approval time 0ms
+     × excludes rejected and unapproved rows and reports unresolved drafts 0ms
+     × keeps unknown-item drafts visible but scopes other items out of balances and blockers 0ms
+     × requires a confirmed opening balance before computing balances or discrepancy 0ms
+     × does not use another item opening balance 0ms
+     × refuses event unit mismatch without automatic conversion 0ms
+     × refuses observation unit mismatch without automatic conversion 0ms
+     × does not treat zero observation as missing 0ms
+     × reports a matching observation as balanced 0ms
+     × reports no usable observation for null 0ms
+     × reports no usable observation for {"tempId":"observation-1","rawItemName":"rice","canonicalItemId":"rice","count":null,"unit":"bags","evidenceText":"The paper count says 25 left.","state":"UNVERIFIED"} 0ms
+     × reports no usable observation for {"tempId":"observation-1","rawItemName":"rice","canonicalItemId":null,"count":25,"unit":"bags","evidenceText":"The paper count says 25 left.","state":"UNVERIFIED"} 0ms
+     × reports no usable observation for {"tempId":"observation-1","rawItemName":"rice","canonicalItemId":"rice","count":25,"unit":"bags","evidenceText":"The paper count says 25 left.","state":"DISMISSED"} 0ms
+     × adds positive explicit adjustments and preserves the opening quarantine balance 0ms
+     × is repeatable and never changes the observation, events, drafts, or opening balance 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 36 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"quantity":null} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"quantity":0} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"quantity":-1} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"quantity":null} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"quantity":null} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"quantity":null} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"unit":null} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"unit":""} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"unit":"   "} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"unit":"kg"} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"canonicalItemId":null} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"canonicalItemId":"unknown"} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"kind":null} at both boundaries
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > blocks invalid movement {"ambiguity":"Five damaged bags included in those eight distributed."} at both boundaries
+Error: Movement approval is not implemented
+ ❯ canApproveMovement src/lib/reconcile.ts:2:9
+      1| export function canApproveMovement(..._args: unknown[]): never {
+      2|   throw new Error('Movement approval is not implemented');
+       |         ^
+      3| }
+      4|
+ ❯ src/lib/reconcile.test.ts:61:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > allows a complete movement with no substantive ambiguity (null)
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > allows a complete movement with no substantive ambiguity ("")
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > allows a complete movement with no substantive ambiguity ("   ")
+Error: Movement approval is not implemented
+ ❯ canApproveMovement src/lib/reconcile.ts:2:9
+      1| export function canApproveMovement(..._args: unknown[]): never {
+      2|   throw new Error('Movement approval is not implemented');
+       |         ^
+      3| }
+      4|
+ ❯ src/lib/reconcile.test.ts:68:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > validates against the supplied catalog rather than accepting any named item
+Error: Movement approval is not implemented
+ ❯ canApproveMovement src/lib/reconcile.ts:2:9
+      1| export function canApproveMovement(..._args: unknown[]): never {
+      2|   throw new Error('Movement approval is not implemented');
+       |         ^
+      3| }
+      4|
+ ❯ src/lib/reconcile.test.ts:74:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > creates an immutable event with stable identity and approval provenance without mutating its inputs
+Error: Ledger event creation is not implemented
+ ❯ createLedgerEvent src/lib/reconcile.ts:6:9
+      4|
+      5| export function createLedgerEvent(..._args: unknown[]): never {
+      6|   throw new Error('Ledger event creation is not implemented');
+       |         ^
+      7| }
+      8|
+ ❯ approve src/lib/reconcile.test.ts:26:10
+ ❯ src/lib/reconcile.test.ts:82:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > movement approval gate > supports the minimal approval context using demo catalog and UNKNOWN source provenance
+Error: Ledger event creation is not implemented
+ ❯ createLedgerEvent src/lib/reconcile.ts:6:9
+      4|
+      5| export function createLedgerEvent(..._args: unknown[]): never {
+      6|   throw new Error('Ledger event creation is not implemented');
+       |         ^
+      7| }
+      8|
+ ❯ src/lib/reconcile.test.ts:94:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > keeps the golden ledger at 47 usable and 5 quarantined while flagging the observed discrepancy of 22
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:101:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > uses the human-edited quantity at approval time
+Error: Ledger event creation is not implemented
+ ❯ createLedgerEvent src/lib/reconcile.ts:6:9
+      4|
+      5| export function createLedgerEvent(..._args: unknown[]): never {
+      6|   throw new Error('Ledger event creation is not implemented');
+       |         ^
+      7| }
+      8|
+ ❯ approve src/lib/reconcile.test.ts:26:10
+ ❯ src/lib/reconcile.test.ts:112:48
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > excludes rejected and unapproved rows and reports unresolved drafts
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:124:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > keeps unknown-item drafts visible but scopes other items out of balances and blockers
+Error: Ledger event creation is not implemented
+ ❯ createLedgerEvent src/lib/reconcile.ts:6:9
+      4|
+      5| export function createLedgerEvent(..._args: unknown[]): never {
+      6|   throw new Error('Ledger event creation is not implemented');
+       |         ^
+      7| }
+      8|
+ ❯ approve src/lib/reconcile.test.ts:26:10
+ ❯ src/lib/reconcile.test.ts:132:65
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > requires a confirmed opening balance before computing balances or discrepancy
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:139:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > does not use another item opening balance
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:145:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > refuses event unit mismatch without automatic conversion
+Error: Ledger event creation is not implemented
+ ❯ createLedgerEvent src/lib/reconcile.ts:6:9
+      4|
+      5| export function createLedgerEvent(..._args: unknown[]): never {
+      6|   throw new Error('Ledger event creation is not implemented');
+       |         ^
+      7| }
+      8|
+ ❯ approve src/lib/reconcile.test.ts:26:10
+ ❯ src/lib/reconcile.test.ts:151:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > refuses observation unit mismatch without automatic conversion
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:150:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > does not treat zero observation as missing
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:158:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > reports a matching observation as balanced
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:163:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > reports no usable observation for null
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > reports no usable observation for {"tempId":"observation-1","rawItemName":"rice","canonicalItemId":"rice","count":null,"unit":"bags","evidenceText":"The paper count says 25 left.","state":"UNVERIFIED"}
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > reports no usable observation for {"tempId":"observation-1","rawItemName":"rice","canonicalItemId":null,"count":25,"unit":"bags","evidenceText":"The paper count says 25 left.","state":"UNVERIFIED"}
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > reports no usable observation for {"tempId":"observation-1","rawItemName":"rice","canonicalItemId":"rice","count":25,"unit":"bags","evidenceText":"The paper count says 25 left.","state":"DISMISSED"}
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ reconcile src/lib/reconcile.test.ts:49:10
+ ❯ src/lib/reconcile.test.ts:169:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > adds positive explicit adjustments and preserves the opening quarantine balance
+Error: Ledger event creation is not implemented
+ ❯ createLedgerEvent src/lib/reconcile.ts:6:9
+      4|
+      5| export function createLedgerEvent(..._args: unknown[]): never {
+      6|   throw new Error('Ledger event creation is not implemented');
+       |         ^
+      7| }
+      8|
+ ❯ approve src/lib/reconcile.test.ts:26:10
+ ❯ src/lib/reconcile.test.ts:175:43
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/18]⎯
+
+ FAIL  src/lib/reconcile.test.ts > deterministic item reconciliation > is repeatable and never changes the observation, events, drafts, or opening balance
+Error: Deterministic reconciliation is not implemented
+ ❯ reconcileItem src/lib/reconcile.ts:10:9
+      8|
+      9| export function reconcileItem(..._args: unknown[]): never {
+     10|   throw new Error('Deterministic reconciliation is not implemented');
+       |         ^
+     11| }
+     12|
+ ❯ src/lib/reconcile.test.ts:183:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/18]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  36 failed | 9 passed (45)
+   Start at  20:11:10
+   Duration  195ms (transform 49%, tests 25%, import 19%, worker 7%)
+
+
+Exit code: 1
+
+GREEN — full suite
+$ npm test
+
+> pantryrelay@0.0.0 test
+> vitest run
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+
+ Test Files  4 passed (4)
+      Tests  74 passed (74)
+   Start at  20:12:26
+   Duration  238ms (import 55%, transform 31%, tests 10%, worker 3%)
+
+
+Exit code: 0
+
+GREEN — typecheck
+$ npx tsc --noEmit
+
+Exit code: 0
+
+GREEN — production build
+$ npm run build
+
+> pantryrelay@0.0.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.8 building client environment for production...
+transforming...
+✓ 131 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    0.33 kB │ gzip:   0.24 kB
+dist/assets/workbox-window.prod.es5-Bd17z0YL.js    5.65 kB │ gzip:   2.20 kB
+dist/assets/index-BE-usJ1J.js                    407.34 kB │ gzip: 124.67 kB
+
+✓ built in 138ms
+
+PWA v2.0.0
+mode      generateSW
+precache  3 entries (403.64 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+
+Exit code: 0
+
+File summary (all newly added):
+src/types/inventory.ts: 77 lines
+src/lib/seedData.ts: 59 lines
+src/lib/reconcile.ts: 149 lines
+src/lib/reconcile.test.ts: 242 lines
+docs/evidence/g21-validation.txt: red/green command outputs and review evidence
+
+Existing tracked files unchanged; no commits created.
+
+$ git status --short --untracked-files=all
+?? PLANNING.md
+?? SPEC.md
+?? START_PLANNING_AGENT.md
+?? docs/evidence/g21-validation.txt
+?? src/lib/reconcile.test.ts
+?? src/lib/reconcile.ts
+?? src/lib/seedData.ts
+?? src/types/inventory.ts
