@@ -29,6 +29,7 @@ h1 { font-size: 26px; font-weight: 650; letter-spacing: -1px; line-height: 1.2; 
 h2 { font-size: 21px; font-weight: 650; letter-spacing: -.5px; display: flex; align-items: center; gap: 10px; }
 h3 { font-size: 15px; font-weight: 650; }
 .workspace { max-width: 1504px; padding: 26px 32px 18px; margin: auto; }
+.workspace-panels { border: 0; margin: 0; padding: 0; min-width: 0; }
 .workspace-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 22px; }
 .brand { display: flex; gap: 13px; align-items: center; }
 .brand svg { color: var(--primary); }
@@ -82,6 +83,10 @@ blockquote { margin: 0; white-space: pre-wrap; font-size: 12px; line-height: 1.7
 .text-button { border-color: transparent; background: transparent; color: var(--primary); }
 .approve-button { color: #355e48; border-color: #b7cdbb; background: #f2f7f1; }
 .success-badge { background: #eaf3eb; border-color: #c7dccb; color: #315c3c; }
+.status-bar .error-badge { background: #fcf0ed; border-color: #edc6be; color: #87372e; }
+.movement-sync { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+.synced-text { color: #315c3c; }
+.error-text { color: #87372e; }
 .approval-reason, .ambiguity { margin-top: 7px; font-size: 11px; color: #805211; }
 .ambiguity { background: #fbf6e9; padding: 8px; border-radius: 4px; }
 .ambiguity label { display: flex; gap: 6px; margin-top: 8px; align-items: flex-start; cursor: pointer; color: #644813; }
@@ -93,7 +98,6 @@ blockquote { margin: 0; white-space: pre-wrap; font-size: 12px; line-height: 1.7
 .observation .badge { margin: 0 0 4px 7px; }
 .observation .row-actions { margin: 0; justify-content: end; }
 .manual-button { margin-top: 14px; color: var(--primary); font-size: 12px; }
-.session-note { margin-top: 11px; color: var(--muted); font-size: 10px; }
 .empty-state { padding: 28px 22px; background: #f7f9f5; border: 1px dashed #cbd6ca; border-radius: 5px; }
 .empty-state h3 { margin-bottom: 8px; }
 .empty-state p { color: var(--muted); font-size: 13px; max-width: 52ch; }
@@ -125,6 +129,11 @@ summary { cursor: pointer; font-size: 11px; margin-top: 6px; }
 .neutral-notice, .balanced-notice { padding: 12px 0; color: var(--muted); font-size: 12px; }
 .balanced-notice { color: #315c3c; }
 .item-reconciliation + .item-reconciliation { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
+.approved-movements { margin-top: 16px; }
+.approved-movements h3 { font-size: 12px; }
+.approved-movements ul { list-style: none; margin: 5px 0 0; padding: 0; }
+.approved-movements li { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; padding-block: 3px; font-size: 11px; }
+.approved-movements .movement-sync { margin: 0; }
 .follow-ups { border-top: 1px solid var(--border); margin-top: 20px; padding-top: 15px; }
 .follow-ups h3 { font-size: 13px; }
 .task { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; padding: 8px 0; font-size: 12px; }

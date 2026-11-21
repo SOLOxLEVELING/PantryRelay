@@ -13,6 +13,12 @@ Minimal React + Vite + TypeScript feasibility spike for real Firebase AI Logic h
 
 `.env.local`, generated `dist`, and dependencies are ignored by git. Vite embeds `VITE_*` values in bundles: keep debug builds local and rebuild without the debug token before distributing a build. Debug builds refuse to run on non-localhost origins.
 
+## Enable ledger sync
+
+In the same Firebase project, create the default Cloud Firestore database and enable **Authentication → Sign-in method → Anonymous**. Publish the repository's `firestore.rules` in **Firestore → Rules**. The rules allow each authenticated user to read and create events in their own workspace. Ledger updates and deletes are denied.
+
+Use `npm run preview` and wait for **App shell Cached offline** before testing a reload with DevTools set to Offline. Use Chrome's standard reload so the service worker can serve the app. Reconnecting retries queued approvals automatically. You can also use **Sync now** or **Retry sync**. **Synced** appears after Firestore acknowledges the event.
+
 ## Reproduce the spike
 
 - Run the golden note in `ONLY_IN_CLOUD` while online, then `PREFER_ON_DEVICE` while online.

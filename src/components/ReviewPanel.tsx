@@ -2,6 +2,7 @@ import type { PantryWorkflow } from '../hooks/usePantryWorkflow';
 import type { ReviewMovementItem } from '../types/inventory';
 import { canApproveMovement } from '../lib/reconcile';
 import { SourceBadge } from './CapturePanel';
+import { MovementSyncLabel } from './MovementSyncLabel';
 
 const kindLabels = { RECEIVED: 'Received (+)', DISTRIBUTED: 'Distributed (−)', QUARANTINED: 'Quarantined (−)', ADJUSTMENT: 'Adjustment (+)' };
 
@@ -46,6 +47,7 @@ export function ReviewPanel({ workflow, noteText }: { workflow: PantryWorkflow; 
               <input aria-label={`${name} unit`} value={row.unit ?? ''} disabled={disabled} placeholder="Unit, e.g. bags"
                 onChange={event => workflow.editMovement(row.tempId, { unit: event.target.value || null })} /></td>
             <td><span className={`badge ${row.state === 'APPROVED' ? 'success-badge' : ''}`}>{rowLabel(row)}</span>
+              {row.state === 'APPROVED' && <MovementSyncLabel entry={row.ledgerEventId ? workflow.outboxByEvent.get(row.ledgerEventId) : undefined} />}
               {!check.ok && !locked && <p className="approval-reason" id={`${row.tempId}-reason`}><strong>Needs clarification.</strong> {check.reason}</p>}
               {row.ambiguity && <div className="ambiguity"><p>{row.ambiguity}</p>{!locked && <label><input type="checkbox" disabled={workflow.busy}
                 onChange={() => workflow.editMovement(row.tempId, { ambiguity: null })} /> I resolved this clarification</label>}</div>}
@@ -70,6 +72,5 @@ export function ReviewPanel({ workflow, noteText }: { workflow: PantryWorkflow; 
         {note.draft.unclassifiedText.map((text, index) => <p key={index}>{text}</p>)}</details>}
     </div>)}
     <button className="manual-button" disabled={workflow.busy} onClick={() => workflow.addMovement(noteText)}>+ Add manual movement</button>
-    <p className="session-note">Demo session only. Keep this tab open; reloading clears this work.</p>
   </section>;
 }

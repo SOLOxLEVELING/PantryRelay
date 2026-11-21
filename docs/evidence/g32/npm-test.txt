@@ -1,0 +1,13 @@
+
+> pantryrelay@0.0.0 test
+> vitest run
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+
+ Test Files  7 passed (7)
+      Tests  111 passed (111)
+   Start at  14:53:08
+   Duration  432ms (import 63%, transform 20%, tests 12%, worker 5%)
+

@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import type { PantryWorkflow } from '../hooks/usePantryWorkflow';
+import { MovementSyncLabel } from './MovementSyncLabel';
+
+const movementLabels = { RECEIVED: 'Received', DISTRIBUTED: 'Distributed', QUARANTINED: 'Quarantined', ADJUSTMENT: 'Adjusted' };
 
 export function ReconcilePanel({ workflow, noteText }: { workflow: PantryWorkflow; noteText: string }) {
   const [recountFor, setRecountFor] = useState<string | null>(null);
@@ -39,6 +42,13 @@ export function ReconcilePanel({ workflow, noteText }: { workflow: PantryWorkflo
       </div>}
       {result.status === 'NO_OBSERVATION' && <p className="neutral-notice">No active shelf count. Capture a counted quantity to compare with approved stock.</p>}
       {result.status === 'BALANCED' && <p className="balanced-notice">Balanced · Expected {result.confirmedUsable} matches observed {latestObservation?.count}.</p>}
+      {workflow.state.approvedEvents.some(event => event.itemId === item.id) && <div className="approved-movements">
+        <h3>Approved movements</h3>
+        <ul>{workflow.state.approvedEvents.filter(event => event.itemId === item.id).map(event => <li key={event.id}>
+          <span>{movementLabels[event.kind]} {event.quantity} {event.unit}</span>
+          <MovementSyncLabel entry={workflow.outboxByEvent.get(event.id)} />
+        </li>)}</ul>
+      </div>}
     </div>)}
     <div className="follow-ups"><div className="field-heading"><h3>Follow-up tasks</h3><span className="badge">{tasks.filter(task => task.status === 'OPEN').length} open</span></div>
       {tasks.length === 0 ? <p className="subtle">Checks and recounts will appear here.</p> : tasks.map(task => <label className="task" key={task.id}>

@@ -1,5 +1,6 @@
 import type { FollowUpTask, ReviewDraft, ReviewMovementItem, SourceMode } from '../types/inventory';
 import type { SpikeResult } from './spikeExtract';
+import type { LocalWorkspaceSnapshot } from './storage';
 import { buildReviewDraftFromNote, DEMO_CATALOG, DEMO_OPENING_BALANCES } from './seedData';
 import { canApproveMovement, createLedgerEvent, reconcileItem } from './reconcile';
 import type { LedgerEvent } from '../types/inventory';
@@ -13,6 +14,8 @@ export interface WorkflowNote {
 }
 
 export interface WorkflowState {
+  sessionId: string;
+  hydrated: boolean;
   catalog: typeof DEMO_CATALOG;
   openingBalances: typeof DEMO_OPENING_BALANCES;
   notes: WorkflowNote[];
@@ -25,6 +28,7 @@ export type MovementEdit = Partial<Pick<ReviewMovementItem,
   'canonicalItemId' | 'quantity' | 'unit' | 'kind' | 'ambiguity'>>;
 
 export type WorkflowAction =
+  | { type: 'HYDRATE'; snapshot: LocalWorkspaceSnapshot | undefined }
   | { type: 'RESET' }
   | { type: 'EXTRACT_START'; noteId: string; noteText: string }
   | { type: 'EXTRACT_FINISH'; noteId: string; result: SpikeResult }
@@ -38,7 +42,8 @@ export type WorkflowAction =
   | { type: 'KEEP_OPEN'; itemId: string };
 
 export function initialWorkflowState(): WorkflowState {
-  return { catalog: structuredClone(DEMO_CATALOG), openingBalances: structuredClone(DEMO_OPENING_BALANCES),
+  return { sessionId: crypto.randomUUID(), hydrated: false,
+    catalog: structuredClone(DEMO_CATALOG), openingBalances: structuredClone(DEMO_OPENING_BALANCES),
     notes: [], approvedEvents: [], extractingNoteId: null, keptOpen: [] };
 }
 
@@ -54,7 +59,12 @@ function withNote(state: WorkflowState, noteId: string, noteText: string): Workf
 
 export function workflowReducer(state: WorkflowState, action: WorkflowAction): WorkflowState {
   switch (action.type) {
-    case 'RESET': return initialWorkflowState();
+    case 'HYDRATE': {
+      if (!action.snapshot) return { ...state, hydrated: true };
+      const { sessionId, notes, approvedEvents, keptOpen } = action.snapshot;
+      return { ...state, hydrated: true, sessionId, notes, approvedEvents, keptOpen, extractingNoteId: null };
+    }
+    case 'RESET': return { ...initialWorkflowState(), hydrated: true };
     case 'EXTRACT_START': return { ...withNote(state, action.noteId, action.noteText), extractingNoteId: action.noteId };
     case 'EXTRACT_FINISH': {
       if (state.extractingNoteId !== action.noteId) return state;
@@ -87,7 +97,7 @@ export function workflowReducer(state: WorkflowState, action: WorkflowAction): W
         sourceNoteOrigin: row.origin === 'HUMAN_ADDED' ? 'UNKNOWN' : note.inferenceSource });
       return { ...state, approvedEvents: [...state.approvedEvents, event], notes: state.notes.map(candidate => ({
         ...candidate, draft: { ...candidate.draft, movements: candidate.draft.movements.map(movement =>
-          movement.tempId === action.tempId ? { ...movement, state: 'APPROVED' } : movement) },
+          movement.tempId === action.tempId ? { ...movement, state: 'APPROVED', ledgerEventId: event.id } : movement) },
       })) };
     }
     case 'EDIT':

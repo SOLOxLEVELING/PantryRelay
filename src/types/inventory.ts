@@ -23,6 +23,7 @@ export interface OpeningBalance {
 
 export interface ReviewMovementItem {
   tempId: string;
+  ledgerEventId?: string;
   rawItemName: string;
   canonicalItemId: string | null;
   quantity: number | null;

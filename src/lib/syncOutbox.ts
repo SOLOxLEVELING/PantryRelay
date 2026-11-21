@@ -12,6 +12,7 @@ export interface FlushOptions {
   uid: string;
   sessionId: string;
   writer: LedgerRemoteWriter;
+  canWrite?: () => boolean;
 }
 
 export interface FlushResult {
@@ -63,17 +64,19 @@ export function createFirestoreLedgerWriter(db: Firestore): LedgerRemoteWriter {
   };
 }
 
-async function flushSession({ uid, sessionId, writer }: FlushOptions): Promise<FlushResult> {
+async function flushSession({ uid, sessionId, writer, canWrite }: FlushOptions): Promise<FlushResult> {
   const entries = await listOutboxEntries(sessionId);
   const syncedIds: string[] = [];
   const failedIds: string[] = [];
 
   for (const entry of entries) {
+    if (canWrite && !canWrite()) break;
     if (entry.syncState === 'SYNCED') continue;
     const { event } = entry;
     try {
       await writer.writeLedgerEvent(uid, sessionId, event);
     } catch (error) {
+      if (canWrite && !canWrite()) break;
       await markOutboxError(event.id, safeWriteError(error));
       failedIds.push(event.id);
       continue;

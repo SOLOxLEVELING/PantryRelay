@@ -1,9 +1,12 @@
+import 'fake-indexeddb/auto';
 import { describe, expect, it } from 'vitest';
 import { initialWorkflowState, reconcileWorkflow, workflowReducer } from './workflowState';
 import type { WorkflowState } from './workflowState';
 import type { ExtractedNote, SpikeResult } from './spikeExtract';
 import { sanitizeExtractedNote } from './sanitizeDraft';
 import { syntheticNotes } from './syntheticNotes';
+import { clearLocalWorkspace, listOutboxEntries, loadLocalWorkspace, saveLocalWorkspace } from './storage';
+import { flushSyncOutbox } from './syncOutbox';
 
 const noteText = syntheticNotes[0]?.text ?? '';
 const golden: ExtractedNote = {
@@ -34,6 +37,41 @@ function approve(state: WorkflowState, index: number) {
 function summary(state: WorkflowState) { return reconcileWorkflow(state).find(item => item.item.id === 'rice')?.result; }
 
 describe('pantry workflow', () => {
+  it('rehydrates the original note, mixed approvals, follow-ups and kept-open discrepancies from IndexedDB', async () => {
+    const saved = workflowReducer(approve(approve(extract(), 0), 1), { type: 'KEEP_OPEN', itemId: 'rice' });
+    const { sessionId, notes, approvedEvents, keptOpen } = saved;
+    try {
+      await saveLocalWorkspace({ sessionId, notes, approvedEvents, keptOpen, updatedAt: now });
+      const fresh = initialWorkflowState();
+      expect(fresh.hydrated).toBe(false);
+      const restored = workflowReducer(fresh, { type: 'HYDRATE', snapshot: await loadLocalWorkspace() });
+      expect(restored).toMatchObject({ hydrated: true, sessionId, notes, approvedEvents, keptOpen, extractingNoteId: null });
+      expect(restored.notes[0]?.draft.movements.map(row => row.state)).toEqual(['APPROVED', 'APPROVED', 'DRAFT']);
+      expect(restored.notes[0]?.draft.movements[0]?.ledgerEventId).toBe(approvedEvents[0]?.id);
+      expect(restored.notes[0]?.draft.followUps[0]?.assigneeName).toBe('Sam');
+      expect(restored.approvedEvents.every(Object.isFrozen)).toBe(true);
+
+      expect((await listOutboxEntries(sessionId)).map(entry => entry.syncState))
+        .toEqual(['APPROVED_PENDING_SYNC', 'APPROVED_PENDING_SYNC']);
+      await flushSyncOutbox({ sessionId, uid: 'test-user', writer: { async writeLedgerEvent(_uid, _session, event) {
+        if (event.id === 'event-1') throw new Error('write failed');
+      } } });
+      await saveLocalWorkspace({ sessionId, notes, approvedEvents, keptOpen, updatedAt: now });
+      expect((await listOutboxEntries(sessionId)).map(entry => entry.syncState)).toEqual(['SYNCED', 'SYNC_ERROR']);
+    } finally {
+      await clearLocalWorkspace();
+    }
+  });
+
+  it('starts a fresh hydrated session on every reset', () => {
+    const prior = approve(extract(), 0);
+    const reset = workflowReducer(prior, { type: 'RESET' });
+    const resetAgain = workflowReducer(reset, { type: 'RESET' });
+    expect(reset).toMatchObject({ hydrated: true, notes: [], approvedEvents: [], keptOpen: [] });
+    expect(reset.sessionId).toMatch(/^[a-f0-9-]{36}$/);
+    expect(new Set([prior.sessionId, reset.sessionId, resetAgain.sessionId]).size).toBe(3);
+  });
+
   it('retains the verbatim source, untrusted draft and SDK metadata without moving stock', () => {
     const text = `  ${noteText}\n`;
     const state = extract(golden, text);

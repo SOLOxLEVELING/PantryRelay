@@ -1,0 +1,26 @@
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   README.md
+	modified:   index.html
+	modified:   src/App.tsx
+	modified:   src/components/ReconcilePanel.tsx
+	modified:   src/components/ReviewPanel.tsx
+	modified:   src/components/StatusBar.tsx
+	modified:   src/hooks/usePantryWorkflow.ts
+	modified:   src/lib/syncOutbox.ts
+	modified:   src/lib/workflowState.test.ts
+	modified:   src/lib/workflowState.ts
+	modified:   src/styles/app.css
+	modified:   src/types/inventory.ts
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	PLANNING.md
+	SPEC.md
+	START_PLANNING_AGENT.md
+	docs/evidence/g32/
+	src/components/MovementSyncLabel.tsx
+
+no changes added to commit (use "git add" and/or "git commit -a")
