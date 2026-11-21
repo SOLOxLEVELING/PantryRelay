@@ -1,0 +1,23 @@
+Chrome DevTools Console, production Vite preview at localhost:4174
+Viewport: 1440 × 1200 CSS pixels
+
+Clean verification: desktop Chrome Incognito.
+DevTools displayed "No errors" and one LanguageModel output-language warning.
+There was no favicon 404. The preview HTML declared an inline data favicon.
+Firebase App Check debug token: [REDACTED]
+
+The offline device-only extraction returned Source: On-device in 18.2 seconds.
+The note spelled out "Gave out 8 bags of rice." All three extracted rows were
+approved offline and persisted across reopening. Reconnecting changed Pending
+sync (3) to Synced (3) under an anonymous owner. Cloud briefing returned
+Source: Cloud with 47 usable bags, 5 quarantined, a discrepancy of 22, and Sam
+assigned to check the shelves. The copy control displayed Copied offline and
+again online with the page focused. The browser setup disclosure expanded.
+
+The offline-handoff.png and cloud-handoff.png browser captures are from the
+first run in the regular Chrome profile. That run used the unmodified Golden
+rice sample and added the eight-bag distribution manually after the sanitizer
+blocked paraphrased evidence. The console in that profile logged Grammarly
+errors plus ERR_BLOCKED_BY_CLIENT on Analytics and a Firestore Write channel
+termination. Reconnect still acknowledged all three writes. The Incognito
+verification above showed zero errors without those client blocks.

@@ -1,0 +1,11 @@
+Active default Firestore release updated: 2026-11-21T09:27:02.562381Z
+Active release source matches repository firestore.rules: True
+SHA-256 of normalized source: 052f87620d53e379f090f923e260da72fb76e84a7d88a21965fa743019a44d9a
+
+Simulated cases using the active release source (no document changes):
+Owner create: expected ALLOW, SUCCESS
+Unauthenticated create: expected DENY, SUCCESS
+Other UID create: expected DENY, SUCCESS
+Other UID read: expected DENY, SUCCESS
+Owner update: expected DENY, SUCCESS
+Owner delete: expected DENY, SUCCESS

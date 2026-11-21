@@ -105,7 +105,7 @@ export function workflowReducer(state: WorkflowState, action: WorkflowAction): W
       movements: note.draft.movements.map(row => {
         if (row.tempId !== action.tempId || row.state === 'APPROVED' || row.state === 'REJECTED') return row;
         if (action.type === 'REJECT') return { ...row, state: 'REJECTED' };
-        const edited: ReviewMovementItem = { ...row, ...action.changes, origin: 'HUMAN_EDITED' };
+        const edited: ReviewMovementItem = { ...row, ...action.changes, origin: row.origin === 'HUMAN_ADDED' ? row.origin : 'HUMAN_EDITED' };
         return { ...edited, state: canApproveMovement(edited, state.catalog).ok ? 'DRAFT' : 'NEEDS_CLARIFICATION' };
       }),
     } })) };

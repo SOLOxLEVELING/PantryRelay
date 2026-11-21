@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CapturePanel } from './components/CapturePanel';
 import { ReviewPanel } from './components/ReviewPanel';
+import { HandoffPanel } from './components/HandoffPanel';
 import { ReconcilePanel } from './components/ReconcilePanel';
 import { StatusBar } from './components/StatusBar';
 import { usePantryWorkflow } from './hooks/usePantryWorkflow';
@@ -18,6 +19,7 @@ function WorkspacePanels({ workflow }: { workflow: PantryWorkflow }) {
       mode={mode} setMode={setMode} busy={workflow.busy} latest={latest} onExtract={() => void workflow.extractNote(noteText, mode)} />
     <div className="review-workspace"><ReviewPanel workflow={workflow} noteText={noteText} />
       <ReconcilePanel workflow={workflow} noteText={noteText} /></div>
+    <HandoffPanel workflow={workflow} />
   </fieldset>;
 }
 

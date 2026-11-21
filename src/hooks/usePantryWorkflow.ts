@@ -7,8 +7,21 @@ import { createFirestoreLedgerWriter, flushSyncOutbox, summarizeSyncState } from
 import { extractNoteHybrid, languageModelDiagnostic, preloadDeviceModel } from '../lib/spikeExtract';
 import type { ExtractionMode } from '../lib/spikeExtract';
 import { initialWorkflowState, reconcileWorkflow, workflowReducer } from '../lib/workflowState';
-import type { MovementEdit } from '../lib/workflowState';
+import type { MovementEdit, WorkflowState } from '../lib/workflowState';
 import type { FollowUpTask } from '../types/inventory';
+import { generateCloudShiftBriefing } from '../lib/shiftBriefing';
+
+type BriefingState =
+  | { status: 'IDLE' | 'LOADING'; text: ''; inferenceSource: 'UNKNOWN'; latencyMs: null; error: null }
+  | { status: 'ERROR'; text: ''; inferenceSource: 'UNKNOWN'; latencyMs: null; error: string }
+  | ({ status: 'READY'; error: null; notes: WorkflowState['notes'] } &
+    Awaited<ReturnType<typeof generateCloudShiftBriefing>>);
+
+const emptyBriefing = { text: '', inferenceSource: 'UNKNOWN', latencyMs: null } satisfies Pick<
+  Extract<BriefingState, { status: 'ERROR' }>, 'text' | 'inferenceSource' | 'latencyMs'
+>;
+const idleBriefing: BriefingState = { ...emptyBriefing, status: 'IDLE', error: null };
+const offlineBriefingMessage = 'Cloud briefing requires an internet connection. You can still copy the shift handoff offline.';
 
 const ledgerWriter = createFirestoreLedgerWriter(db);
 
@@ -36,6 +49,8 @@ export function usePantryWorkflow() {
   const [syncFailure, setSyncFailure] = useState<string>();
   const [syncing, setSyncing] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [briefingState, setBriefing] = useState<BriefingState>(idleBriefing);
+  const briefingLock = useRef<number | null>(null);
   const generation = useRef(0);
   const storageQueue = useRef(Promise.resolve());
   const syncLock = useRef<number | null>(null);
@@ -140,6 +155,8 @@ export function usePantryWorkflow() {
     generation.current += 1;
     syncLock.current = null;
     setSyncing(false);
+    briefingLock.current = null;
+    setBriefing(idleBriefing);
     try {
       await queueStorage(clearLocalWorkspace);
       setSaved(undefined);
@@ -234,12 +251,38 @@ export function usePantryWorkflow() {
       status: 'OPEN', createdAt: new Date().toISOString() } });
   }
 
+  const reconciliations = reconcileWorkflow(state);
+  const briefing = briefingState.status === 'READY' && briefingState.notes !== notes ? idleBriefing : briefingState;
+
+  async function requestCloudBriefing() {
+    if (!hydrated || resetLock.current || briefingLock.current !== null) return;
+    if (!navigator.onLine) {
+      setBriefing({ ...emptyBriefing, status: 'ERROR', error: offlineBriefingMessage });
+      return;
+    }
+
+    const token = generation.current;
+    briefingLock.current = token;
+    setBriefing({ ...emptyBriefing, status: 'LOADING', error: null });
+    try {
+      const result = await generateCloudShiftBriefing({
+        reconciliations, followUps: notes.flatMap(note => note.draft.followUps), approvedEvents,
+      });
+      if (token === generation.current) setBriefing({ status: 'READY', ...result, notes, error: null });
+    } catch {
+      if (token === generation.current) setBriefing({ ...emptyBriefing, status: 'ERROR',
+        error: navigator.onLine ? 'Could not generate a cloud briefing. Try again or copy the shift handoff.' : offlineBriefingMessage });
+    } finally {
+      if (briefingLock.current === token) briefingLock.current = null;
+    }
+  }
+
   const locallySaved = saved?.sessionId === sessionId && saved.notes === notes &&
     saved.approvedEvents === approvedEvents && saved.keptOpen === keptOpen;
   const syncSummary = summarizeSyncState(outboxEntries);
   const syncError = syncFailure ?? outboxEntries.find(entry => entry.syncState === 'SYNC_ERROR')?.lastError;
   const outboxByEvent = new Map(outboxEntries.map(entry => [entry.event.id, entry]));
-  return { state, reconciliations: reconcileWorkflow(state), online, modelStatus, shellCached, appCheck, preloading,
+  return { state, reconciliations, briefing, requestCloudBriefing, offlineBriefingMessage, online, modelStatus, shellCached, appCheck, preloading,
     locallySaved, storageError, outboxByEvent, syncSummary, syncError, syncing, resetting, syncNow, resetDemo,
     busy: state.extractingNoteId !== null, extractNote, preload, refreshAppCheck,
     editMovement: (tempId: string, changes: MovementEdit) => dispatch({ type: 'EDIT', tempId, changes }),
