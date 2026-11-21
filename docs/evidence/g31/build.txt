@@ -1,0 +1,27 @@
+
+> pantryrelay@0.0.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.8 building client environment for production...
+transforming...
+✓ 149 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    0.41 kB │ gzip:   0.28 kB
+dist/assets/index-C_BIB8l1.css                    10.89 kB │ gzip:   3.05 kB
+dist/assets/workbox-window.prod.es5-Bd17z0YL.js    5.65 kB │ gzip:   2.20 kB
+dist/assets/index-mPFfajKN.js                    896.83 kB │ gzip: 272.19 kB
+
+✓ built in 274ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+PWA v2.0.0
+mode      generateSW
+precache  4 entries (892.39 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js

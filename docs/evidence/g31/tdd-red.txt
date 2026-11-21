@@ -1,0 +1,252 @@
+
+> pantryrelay@0.0.0 test
+> vitest run src/lib/storage.test.ts src/lib/syncOutbox.test.ts
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+ ❯ src/lib/storage.test.ts (4 tests | 3 failed) 9ms
+   ❯ local workspace storage (4)
+     × restores the exact snapshot and pending approval on a fresh IndexedDB connection 4ms
+     × rolls back the workspace snapshot if the outbox cannot store its approval 2ms
+     × deduplicates concurrent enqueues, never replaces an event and keeps acknowledged and errored state 1ms
+ ❯ src/lib/syncOutbox.test.ts (10 tests | 10 failed) 9ms
+   ❯ outbox flushing (3)
+     × coalesces concurrent flushes, isolates sessions, and skips already acknowledged events 5ms
+     × records a sanitized failed attempt, keeps retry pending until remote acknowledgment, and then marks it synced 1ms
+     × reports aggregate counts and prioritizes errors while work remains 1ms
+   ❯ Firestore ledger writer (7)
+     × sends the unchanged event to its stable document path 1ms
+     × acknowledges an identical committed event after an interrupted local acknowledgment 0ms
+     × does not acknowledge a different, missing, or locally pending document ({"remote":{"id":"receipt-id","itemId":"rice","noteId":"note","quantity":99,"unit":"bags","kind":"RECEIVED","occurredAt":"2026-11-21T10:00:00.000Z","approvedAt":"2026-11-21T10:00:00.000Z","approvedBy":"volunteer","sourceNoteOrigin":"ON_DEVICE"},"pending":false}) 0ms
+     × does not acknowledge a different, missing, or locally pending document ({"remote":{"id":"receipt-id","itemId":"rice","noteId":"note","quantity":36,"unit":"bags","kind":"RECEIVED","occurredAt":"2026-11-21T10:00:00.000Z","approvedAt":"2026-11-21T10:00:00.000Z","approvedBy":"volunteer","sourceNoteOrigin":"ON_DEVICE","extra":"unexpected"},"pending":false}) 0ms
+     × does not acknowledge a different, missing, or locally pending document ({"pending":false}) 0ms
+     × does not acknowledge a different, missing, or locally pending document ({"remote":{"id":"receipt-id","itemId":"rice","noteId":"note","quantity":36,"unit":"bags","kind":"RECEIVED","occurredAt":"2026-11-21T10:00:00.000Z","approvedAt":"2026-11-21T10:00:00.000Z","approvedBy":"volunteer","sourceNoteOrigin":"ON_DEVICE"},"pending":true}) 0ms
+     × preserves the original write error if the server read is denied 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > restores the exact snapshot and pending approval on a fresh IndexedDB connection
+NotFoundError: No objectStore named workspace in this database
+ ❯ new NotFoundError node_modules/fake-indexeddb/build/esm/lib/errors.js:59:5
+ ❯ FDBDatabase.transaction node_modules/fake-indexeddb/build/esm/FDBDatabase.js:146:15
+ ❯ Proxy.<anonymous> node_modules/idb/build/index.js:121:26
+ ❯ Proxy.method node_modules/idb/build/index.js:224:25
+ ❯ src/lib/storage.test.ts:48:36
+     46|     const freshConnection = await openDB('pantryrelay-local', 1);
+     47|     try {
+     48|       expect(await freshConnection.getAll('workspace')).toEqual([snaps…
+       |                                    ^
+     49|       expect(await freshConnection.get('outbox', receipt.id)).toMatchO…
+     50|         event: receipt, sessionId, syncState: 'APPROVED_PENDING_SYNC',…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > rolls back the workspace snapshot if the outbox cannot store its approval
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ src/lib/storage.test.ts:64:106
+     62|     await saveLocalWorkspace(snapshot);
+     63|     const invalidEvent = { ...receipt, id: 'new-event', extra: () => '…
+     64|     await expect(saveLocalWorkspace({ ...snapshot, updatedAt: 'later',…
+       |                                                                                                          ^
+     65|
+     66|     expect(await loadLocalWorkspace()).toEqual(snapshot);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > deduplicates concurrent enqueues, never replaces an event and keeps acknowledged and errored state
+AssertionError: expected [] to have a length of 2 but got +0
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ src/lib/storage.test.ts:76:39
+     74|       enqueueOutboxEvents(sessionId, [receipt, other]),
+     75|     ]);
+     76|     expect(await listOutboxEntries()).toHaveLength(2);
+       |                                       ^
+     77|
+     78|     await markOutboxSynced(receipt.id, updatedAt);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  src/lib/syncOutbox.test.ts > outbox flushing > coalesces concurrent flushes, isolates sessions, and skips already acknowledged events
+AssertionError: expected { syncedIds: [], failedIds: [], …(1) } to deeply equal { syncedIds: [ …(2) ], …(2) }
+
+- Expected
++ Received
+
+  {
+    "failedIds": [],
+    "pendingCount": 0,
+-   "syncedIds": [
+-     "distribution-id",
+-     "receipt-id",
+-   ],
++   "syncedIds": [],
+  }
+
+ ❯ src/lib/syncOutbox.test.ts:40:19
+     38|
+     39|     const [first, concurrent] = await Promise.all([flushSyncOutbox(opt…
+     40|     expect(first).toEqual({ syncedIds: [distribution.id, receipt.id], …
+       |                   ^
+     41|     expect(concurrent).toEqual(first);
+     42|     await enqueueOutboxEvents(sessionId, [receipt]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  src/lib/syncOutbox.test.ts > outbox flushing > records a sanitized failed attempt, keeps retry pending until remote acknowledgment, and then marks it synced
+AssertionError: expected { syncedIds: [], failedIds: [], …(1) } to deeply equal { syncedIds: [], …(2) }
+
+- Expected
++ Received
+
+  {
+-   "failedIds": [
+-     "receipt-id",
+-   ],
+-   "pendingCount": 1,
++   "failedIds": [],
++   "pendingCount": 0,
+    "syncedIds": [],
+  }
+
+ ❯ src/lib/syncOutbox.test.ts:59:44
+     57|       });
+     58|     const options = { uid, sessionId, writer: { writeLedgerEvent } };
+     59|     expect(await flushSyncOutbox(options)).toEqual({ syncedIds: [], fa…
+       |                                            ^
+     60|     const failed = await listOutboxEntries(sessionId);
+     61|     expect(failed).toMatchObject([{ syncState: 'SYNC_ERROR', attempts:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  src/lib/syncOutbox.test.ts > outbox flushing > reports aggregate counts and prioritizes errors while work remains
+AssertionError: expected { pending: +0, synced: +0, …(2) } to deeply equal { pending: 1, synced: +0, …(2) }
+
+- Expected
++ Received
+
+  {
+    "error": 0,
+-   "pending": 1,
+-   "status": "PENDING",
++   "pending": 0,
++   "status": "IDLE",
+    "synced": 0,
+  }
+
+ ❯ src/lib/syncOutbox.test.ts:78:59
+     76|     expect(summarizeSyncState([])).toEqual({ pending: 0, synced: 0, er…
+     77|     await enqueueOutboxEvents(sessionId, [receipt]);
+     78|     expect(summarizeSyncState(await listOutboxEntries())).toEqual({ pe…
+       |                                                           ^
+     79|     const writeLedgerEvent = vi.fn<LedgerRemoteWriter['writeLedgerEven…
+     80|       .mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Erro…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL  src/lib/syncOutbox.test.ts > Firestore ledger writer > sends the unchanged event to its stable document path
+AssertionError: expected "vi.fn()" to be called once with arguments: [ ObjectContaining{…}, …(1) ]
+
+Number of calls: 0
+
+ ❯ src/lib/syncOutbox.test.ts:98:35
+     96|     firestoreCalls.setDoc.mockResolvedValue(undefined);
+     97|     await writer.writeLedgerEvent(uid, sessionId, receipt);
+     98|     expect(firestoreCalls.setDoc).toHaveBeenCalledExactlyOnceWith(
+       |                                   ^
+     99|       expect.objectContaining({ path: `workspaces/${uid}/sessions/${se…
+    100|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL  src/lib/syncOutbox.test.ts > Firestore ledger writer > acknowledges an identical committed event after an interrupted local acknowledgment
+AssertionError: expected { syncedIds: [], failedIds: [], …(1) } to deeply equal { syncedIds: [ 'receipt-id' ], …(2) }
+
+- Expected
++ Received
+
+  {
+    "failedIds": [],
+    "pendingCount": 0,
+-   "syncedIds": [
+-     "receipt-id",
+-   ],
++   "syncedIds": [],
+  }
+
+ ❯ src/lib/syncOutbox.test.ts:109:63
+    107|     await enqueueOutboxEvents(sessionId, [receipt]);
+    108|
+    109|     expect(await flushSyncOutbox({ uid, sessionId, writer })).toEqual({
+       |                                                               ^
+    110|       syncedIds: [receipt.id], failedIds: [], pendingCount: 0,
+    111|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL  src/lib/syncOutbox.test.ts > Firestore ledger writer > does not acknowledge a different, missing, or locally pending document ({"remote":{"id":"receipt-id","itemId":"rice","noteId":"note","quantity":99,"unit":"bags","kind":"RECEIVED","occurredAt":"2026-11-21T10:00:00.000Z","approvedAt":"2026-11-21T10:00:00.000Z","approvedBy":"volunteer","sourceNoteOrigin":"ON_DEVICE"},"pending":false})
+ FAIL  src/lib/syncOutbox.test.ts > Firestore ledger writer > does not acknowledge a different, missing, or locally pending document ({"remote":{"id":"receipt-id","itemId":"rice","noteId":"note","quantity":36,"unit":"bags","kind":"RECEIVED","occurredAt":"2026-11-21T10:00:00.000Z","approvedAt":"2026-11-21T10:00:00.000Z","approvedBy":"volunteer","sourceNoteOrigin":"ON_DEVICE","extra":"unexpected"},"pending":false})
+ FAIL  src/lib/syncOutbox.test.ts > Firestore ledger writer > does not acknowledge a different, missing, or locally pending document ({"pending":false})
+ FAIL  src/lib/syncOutbox.test.ts > Firestore ledger writer > does not acknowledge a different, missing, or locally pending document ({"remote":{"id":"receipt-id","itemId":"rice","noteId":"note","quantity":36,"unit":"bags","kind":"RECEIVED","occurredAt":"2026-11-21T10:00:00.000Z","approvedAt":"2026-11-21T10:00:00.000Z","approvedBy":"volunteer","sourceNoteOrigin":"ON_DEVICE"},"pending":true})
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ src/lib/syncOutbox.test.ts:125:67
+    123|     firestoreCalls.getDocFromServer.mockResolvedValue({ data: () => re…
+    124|
+    125|     await expect(writer.writeLedgerEvent(uid, sessionId, receipt)).rej…
+       |                                                                   ^
+    126|   });
+    127|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+ FAIL  src/lib/syncOutbox.test.ts > Firestore ledger writer > preserves the original write error if the server read is denied
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ src/lib/syncOutbox.test.ts:132:67
+    130|     firestoreCalls.getDocFromServer.mockRejectedValue(new Error('Read …
+    131|
+    132|     await expect(writer.writeLedgerEvent(uid, sessionId, receipt)).rej…
+       |                                                                   ^
+    133|   });
+    134| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  13 failed | 1 passed (14)
+   Start at  14:21:46
+   Duration  263ms (import 60%, transform 29%, tests 8%, worker 2%)
+

@@ -1,0 +1,22 @@
+PASS owner can create a valid ledger event
+PASS owner can read the exact committed event
+PASS owner can list the session ledger
+PASS foreign UID cannot read
+PASS foreign UID cannot list
+PASS foreign UID cannot create
+PASS unauthenticated client cannot read
+PASS unauthenticated client cannot create
+PASS owner cannot overwrite the event with identical setDoc
+PASS owner cannot update the event
+PASS owner cannot delete the event
+PASS owner cannot write outside the ledger
+PASS create rejects wrong ID
+PASS create rejects zero quantity
+PASS create rejects negative quantity
+PASS create rejects string quantity
+PASS create rejects empty unit
+PASS create rejects non-string unit
+PASS create rejects unknown movement kind
+PASS rejected writes leave one unchanged document
+20 Firestore Rules emulator checks passed
+✔  Script exited successfully (code 0)

@@ -1,0 +1,18 @@
+ M package-lock.json
+ M package.json
+ M src/lib/firebase.ts
+?? PLANNING.md
+?? SPEC.md
+?? START_PLANNING_AGENT.md
+?? docs/evidence/g31/build.txt
+?? docs/evidence/g31/firestore-emulator.txt
+?? docs/evidence/g31/git-status.txt
+?? docs/evidence/g31/npm-test.txt
+?? docs/evidence/g31/tdd-green.txt
+?? docs/evidence/g31/tdd-red.txt
+?? docs/evidence/g31/typecheck.txt
+?? firestore.rules
+?? src/lib/storage.test.ts
+?? src/lib/storage.ts
+?? src/lib/syncOutbox.test.ts
+?? src/lib/syncOutbox.ts

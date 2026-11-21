@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAI, GoogleAIBackend } from 'firebase/ai';
 import { getToken, initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
+import { getAuth, signInAnonymously } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import { errorText, redactDiagnostic } from './diagnostics';
 
 declare global {
@@ -42,6 +44,20 @@ export const appCheck = initializeAppCheck(app, {
   isTokenAutoRefreshEnabled: true,
 });
 export const ai = getAI(app, { backend: new GoogleAIBackend() });
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+let pendingSignIn: Promise<string> | undefined;
+
+export async function ensureSignedInUid(): Promise<string> {
+  await auth.authStateReady();
+  if (auth.currentUser) return auth.currentUser.uid;
+
+  pendingSignIn ??= signInAnonymously(auth)
+    .then(({ user }) => user.uid)
+    .finally(() => { pendingSignIn = undefined; });
+  return pendingSignIn;
+}
 
 export async function checkAppCheck(): Promise<string> {
   try {
