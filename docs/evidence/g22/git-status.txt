@@ -1,0 +1,12 @@
+ M index.html
+ M src/App.tsx
+ M src/main.tsx
+?? PLANNING.md
+?? SPEC.md
+?? START_PLANNING_AGENT.md
+?? docs/evidence/g22/
+?? src/components/
+?? src/hooks/usePantryWorkflow.ts
+?? src/lib/workflowState.test.ts
+?? src/lib/workflowState.ts
+?? src/styles/

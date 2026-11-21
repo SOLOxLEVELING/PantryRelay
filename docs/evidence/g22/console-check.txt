@@ -1,0 +1,23 @@
+Desktop Google Chrome DevTools console check, 2026-11-18.
+Preview: http://localhost:4173/ (Vite production preview).
+Checked after real offline extraction, online cloud extraction, quantity edit,
+movement approval, ambiguity resolution, and rejection.
+
+Visible Console sidebar (no text filter):
+  1 message
+  No user messages
+  No errors
+  No warnings
+  1 info
+  No verbose
+
+Info source: /assets/index-Cz0QZN55.js:9
+  This page uses Chrome's Built-In AI features (LanguageModel)!
+
+No application exceptions were observed in the tested interactions.
+The initial console before clearing contained extension warnings from MetaMask,
+Grammarly unload-policy errors, an extension analytics request blocked by the
+client, and a LanguageModel output-language diagnostic warning. These are not
+represented as application errors or as a clean initial browser profile.
+The initial Firebase App Check diagnostic printed its debug token as [REDACTED].
+No token values or environment values are included in this evidence.
