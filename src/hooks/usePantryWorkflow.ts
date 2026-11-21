@@ -7,7 +7,7 @@ import { createFirestoreLedgerWriter, flushSyncOutbox, summarizeSyncState } from
 import { extractNoteHybrid, languageModelDiagnostic, preloadDeviceModel } from '../lib/spikeExtract';
 import type { ExtractionMode } from '../lib/spikeExtract';
 import { initialWorkflowState, reconcileWorkflow, workflowReducer } from '../lib/workflowState';
-import type { MovementEdit, WorkflowState } from '../lib/workflowState';
+import type { MovementEdit, ObservationEdit, WorkflowState } from '../lib/workflowState';
 import type { FollowUpTask } from '../types/inventory';
 import { generateCloudShiftBriefing } from '../lib/shiftBriefing';
 
@@ -243,6 +243,12 @@ export function usePantryWorkflow() {
     dispatch({ type: 'ADD_MOVEMENT', ...manualContext(noteText), tempId: crypto.randomUUID(), itemId, adjustment });
   }
 
+  function addObservation(noteText: string) {
+    const latest = notes.at(-1)?.draft;
+    const noteId = latest?.noteText === noteText ? latest.noteId : crypto.randomUUID();
+    dispatch({ type: 'ADD_OBSERVATION', noteId, noteText, tempId: crypto.randomUUID() });
+  }
+
   function addRecount(itemId: string, noteText: string, assigneeName: string) {
     const context = manualContext(noteText);
     dispatch({ type: 'ADD_TASK', ...context, task: { id: crypto.randomUUID(), noteId: context.noteId,
@@ -289,6 +295,8 @@ export function usePantryWorkflow() {
     addMovement,
     approveMovement: (tempId: string) => dispatch({ type: 'APPROVE', tempId, id: crypto.randomUUID(), now: new Date().toISOString() }),
     rejectMovement: (tempId: string) => dispatch({ type: 'REJECT', tempId }),
+    addObservation,
+    editObservation: (tempId: string, changes: ObservationEdit) => dispatch({ type: 'EDIT_OBSERVATION', tempId, changes }),
     setObservation: (tempId: string, status: 'CONFIRMED' | 'DISMISSED') => dispatch({ type: 'OBSERVATION', tempId, state: status }),
     setTaskStatus: (id: string, status: FollowUpTask['status']) => dispatch({ type: 'TASK_STATUS', id, status }),
     addRecount,

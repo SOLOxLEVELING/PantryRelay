@@ -97,7 +97,10 @@ blockquote { margin: 0; white-space: pre-wrap; font-size: 12px; line-height: 1.7
 .observation { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding-bottom: 12px; font-size: 12px; }
 .observation .badge { margin: 0 0 4px 7px; }
 .observation .row-actions { margin: 0; justify-content: end; }
-.manual-button { margin-top: 14px; color: var(--primary); font-size: 12px; }
+.observation-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; margin-bottom: 5px; }
+.observation-fields select { grid-column: 1 / -1; }
+.manual-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.manual-actions button { color: var(--primary); font-size: 12px; }
 .empty-state { padding: 28px 22px; background: #f7f9f5; border: 1px dashed #cbd6ca; border-radius: 5px; }
 .empty-state h3 { margin-bottom: 8px; }
 .empty-state p { color: var(--muted); font-size: 13px; max-width: 52ch; }

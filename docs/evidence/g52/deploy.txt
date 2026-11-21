@@ -1,0 +1,29 @@
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+npm warn deprecated json-ptr@3.1.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm warn deprecated uuid@9.0.1: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+=== Deploying to 'pantryrelay-c3246'...
+
+i  deploying firestore, hosting
+i  firestore: ensuring required API firestore.googleapis.com is enabled...
+✔  firestore: required API firestore.googleapis.com is enabled
+i  firestore: ensuring required API firestore.googleapis.com is enabled...
+i  cloud.firestore: checking firestore.rules for compilation errors...
+✔  cloud.firestore: rules file firestore.rules compiled successfully
+i  firestore: latest version of firestore.rules already up to date, skipping upload...
+i  hosting[pantryrelay-c3246]: beginning deploy...
+i  hosting[pantryrelay-c3246]: found 9 files in dist
+i  hosting: uploading new files [0/9] (0%)
+i  hosting: upload complete
+✔  hosting[pantryrelay-c3246]: file upload complete
+✔  firestore: released rules firestore.rules to cloud.firestore
+i  hosting[pantryrelay-c3246]: finalizing version...
+✔  hosting[pantryrelay-c3246]: version finalized
+i  hosting[pantryrelay-c3246]: releasing new version...
+✔  hosting[pantryrelay-c3246]: release complete
+
+✔  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/pantryrelay-c3246/overview
+Hosting URL: https://pantryrelay-c3246.web.app

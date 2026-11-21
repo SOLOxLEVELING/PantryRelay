@@ -1,0 +1,19 @@
+## main
+ M README.md
+ M docs/EVALUATION.md
+ M e2e/golden-path.spec.ts
+ M src/components/ReviewPanel.tsx
+ M src/hooks/usePantryWorkflow.ts
+ M src/lib/workflowState.test.ts
+ M src/lib/workflowState.ts
+ M src/styles/app.css
+ M src/types/inventory.ts
+?? LICENSE
+?? PLANNING.md
+?? SPEC.md
+?? START_PLANNING_AGENT.md
+?? docs/ARCHITECTURE.md
+?? docs/COMPLIANCE_CHECKLIST.md
+?? docs/DEMO_AND_SUBMISSION.md
+?? docs/RESEARCH.md
+?? docs/evidence/g52/

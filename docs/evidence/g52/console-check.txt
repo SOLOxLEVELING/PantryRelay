@@ -1,0 +1,27 @@
+Hosted desktop Chrome check (2026-11-21)
+Origin: https://pantryrelay-c3246.web.app/
+Profile: Chrome Incognito
+Account, site key, URL query, and token values omitted.
+
+Before pressing App Check > Check:
+- The workspace rendered. Chrome DevTools showed no console errors and one warning at initial inspection.
+- The page reported On-device model Ready. The service worker later controlled the page and the app reported Cached offline.
+
+After pressing App Check > Check while online:
+- UI: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).
+- DevTools: Failed to load resource: the server responded with a status of 400 ()
+- DevTools: POST https://www.google.com/recaptcha/enterprise/clr 400 (Bad Request)
+- The same App Check error also reproduced in regular Chrome.
+
+The exact server rejection reason was not returned in the observed UI. The
+Fraud Defense website score key inspected in Cloud Console had verification
+enabled and both Firebase Hosting domains in its allowlist. Its key ID differed
+from the site key configured in .env.local and observed in the hosted request.
+
+Recheck after the owner corrected the site key and the app was redeployed:
+- The hosted App Check button reported Verified in Chrome Incognito.
+- During the online cloud extraction, Firestore sync, and successful briefing retry, DevTools showed one LanguageModel output-language warning and no errors.
+- The first briefing attempt displayed the app's generic retry message. A second request succeeded, and another succeeded after reconnecting.
+- Switching DevTools to Offline produced net::ERR_INTERNET_DISCONNECTED for a Firestore Write channel termination. No App Check error was observed during the verified workflows.
+- With DevTools Network set to Offline, the reloaded app showed Offline, Cached offline, and Ready. Hosted assets returned 200 / ServiceWorker and DevTools reported 0 B transferred. ONLY_ON_DEVICE returned Source: On-device in 26.0 s.
+- Restored No throttling. App Check again reported Verified and the ledger still showed Synced (3).

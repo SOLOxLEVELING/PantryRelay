@@ -1,38 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import type { LocalWorkspaceSnapshot } from '../src/lib/storage';
 
 const noteText = 'Received 36 bags of rice, distributed 8 bags, quarantined 5 bags and counted 25 bags on the shelf.';
-const snapshot: LocalWorkspaceSnapshot = {
-  sessionId: 'golden-path',
-  updatedAt: '2026-01-01T00:00:00.000Z',
-  approvedEvents: [],
-  keptOpen: [],
-  notes: [{ inferenceSource: 'UNKNOWN', latencyMs: null, quarantined: [], error: null, draft: {
-    noteId: 'golden-note', noteText, movements: [], followUps: [], unclassifiedText: [],
-    observations: [{ tempId: 'shelf-count', canonicalItemId: 'rice', rawItemName: 'rice', count: 25,
-      unit: 'bags', evidenceText: 'counted 25 bags on the shelf', state: 'UNVERIFIED' }],
-  } }],
-};
-
-async function seedShelfCount(page: Page) {
-  await page.goto('/sw.js');
-  await page.evaluate(seed => new Promise<void>((resolve, reject) => {
-    const open = indexedDB.open('pantryrelay-local', 1);
-    open.onerror = () => reject(open.error);
-    open.onupgradeneeded = () => {
-      open.result.createObjectStore('workspace');
-      open.result.createObjectStore('outbox', { keyPath: 'event.id' }).createIndex('bySession', 'sessionId');
-    };
-    open.onsuccess = () => {
-      const db = open.result;
-      const tx = db.transaction('workspace', 'readwrite');
-      tx.oncomplete = () => { db.close(); resolve(); };
-      tx.onabort = () => { db.close(); reject(tx.error); };
-      tx.objectStore('workspace').put(seed, 'active');
-    };
-  }), snapshot);
-}
 
 function movementRow(page: Page, index: number) {
   return page.getByRole('row').filter({ has: page.getByLabel(`Movement 1.${index} item`, { exact: true }) });
@@ -53,13 +22,28 @@ for (const { distributed, usable, difference } of [
   test(`manual approvals reconcile to ${usable} usable and a ${difference}-bag discrepancy`, async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await context.route(url => url.hostname !== 'localhost', route => route.abort());
-    await seedShelfCount(page);
     await page.goto('/');
     const readiness = page.getByLabel('Workspace readiness');
     await expect(readiness.getByText('Cached offline', { exact: true })).toBeVisible();
     await context.setOffline(true);
     await expect(page.getByText('Offline', { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Confirm count' }).click();
+    await page.getByRole('textbox', { name: 'Volunteer note' }).fill(noteText);
+    await page.getByRole('button', { name: 'Add shelf count' }).click();
+    const confirmCount = page.getByRole('button', { name: 'Confirm count' });
+    await expect(confirmCount).toBeDisabled();
+    const item = page.getByLabel('Shelf count 1.1 item');
+    await item.selectOption('beans');
+    await item.selectOption('rice');
+    const count = page.getByLabel('Shelf count 1.1 count');
+    await count.fill('24');
+    await count.fill('25');
+    await page.getByLabel('Shelf count 1.1 unit').fill('kg');
+    await expect(confirmCount).toBeDisabled();
+    await expect(confirmCount).toHaveAccessibleDescription('Use bags for Rice.');
+    await page.getByLabel('Shelf count 1.1 unit').fill('bags');
+    await confirmCount.click();
+    await expect(page.getByText('25 bags Rice', { exact: true })).toBeVisible();
+    await expect(count).toHaveCount(0);
 
     await enterMovement(page, 1, 'RECEIVED', '36');
     await enterMovement(page, 2, 'DISTRIBUTED', '8');
@@ -101,6 +85,7 @@ for (const { distributed, usable, difference } of [
     expect(reloaded?.fromServiceWorker()).toBe(true);
     await expect(page.getByRole('textbox', { name: 'Volunteer note' })).toHaveValue(noteText);
     await expect(distributionQuantity).toHaveValue(String(distributed));
+    await expect(page.getByText('25 bags Rice', { exact: true })).toBeVisible();
     await expect(blocker).toBeDisabled();
     await expect(discrepancy).toContainText(`Expected ${usable} vs observed 25`);
     await expect(page.getByRole('status').filter({ hasText: 'Pending sync (3)' })).toBeVisible();

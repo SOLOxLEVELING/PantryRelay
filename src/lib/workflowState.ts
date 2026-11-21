@@ -1,9 +1,8 @@
-import type { FollowUpTask, ReviewDraft, ReviewMovementItem, SourceMode } from '../types/inventory';
+import type { FollowUpTask, LedgerEvent, ReviewDraft, ReviewMovementItem, ReviewObservationItem, SourceMode } from '../types/inventory';
 import type { SpikeResult } from './spikeExtract';
 import type { LocalWorkspaceSnapshot } from './storage';
 import { buildReviewDraftFromNote, DEMO_CATALOG, DEMO_OPENING_BALANCES } from './seedData';
 import { canApproveMovement, createLedgerEvent, reconcileItem } from './reconcile';
-import type { LedgerEvent } from '../types/inventory';
 
 export interface WorkflowNote {
   draft: ReviewDraft;
@@ -26,6 +25,7 @@ export interface WorkflowState {
 
 export type MovementEdit = Partial<Pick<ReviewMovementItem,
   'canonicalItemId' | 'quantity' | 'unit' | 'kind' | 'ambiguity'>>;
+export type ObservationEdit = Partial<Pick<ReviewObservationItem, 'canonicalItemId' | 'count' | 'unit'>>;
 
 export type WorkflowAction =
   | { type: 'HYDRATE'; snapshot: LocalWorkspaceSnapshot | undefined }
@@ -36,6 +36,8 @@ export type WorkflowAction =
   | { type: 'ADD_MOVEMENT'; noteId: string; noteText: string; tempId: string; itemId?: string; adjustment?: boolean }
   | { type: 'APPROVE'; tempId: string; id: string; now: string }
   | { type: 'REJECT'; tempId: string }
+  | { type: 'ADD_OBSERVATION'; noteId: string; noteText: string; tempId: string }
+  | { type: 'EDIT_OBSERVATION'; tempId: string; changes: ObservationEdit }
   | { type: 'OBSERVATION'; tempId: string; state: 'CONFIRMED' | 'DISMISSED' }
   | { type: 'TASK_STATUS'; id: string; status: FollowUpTask['status'] }
   | { type: 'ADD_TASK'; noteId: string; noteText: string; task: FollowUpTask }
@@ -55,6 +57,18 @@ function emptyNote(noteId: string, noteText: string): WorkflowNote {
 function withNote(state: WorkflowState, noteId: string, noteText: string): WorkflowState {
   return state.notes.some(note => note.draft.noteId === noteId) ? state :
     { ...state, notes: [...state.notes, emptyNote(noteId, noteText)] };
+}
+
+function isShelfCount(count: number): boolean {
+  return Number.isFinite(count) && count >= 0;
+}
+
+export function observationConfirmationIssue(row: ReviewObservationItem, catalog: WorkflowState['catalog']): string | null {
+  const item = catalog.find(candidate => candidate.id === row.canonicalItemId);
+  if (!item) return 'Choose an item.';
+  if (row.count === null || !isShelfCount(row.count)) return 'Enter a finite count of zero or more.';
+  if (row.unit === null || !item.allowedUnits.includes(row.unit)) return `Use ${item.allowedUnits.join(' or ')} for ${item.name}.`;
+  return null;
 }
 
 export function workflowReducer(state: WorkflowState, action: WorkflowAction): WorkflowState {
@@ -109,9 +123,32 @@ export function workflowReducer(state: WorkflowState, action: WorkflowAction): W
         return { ...edited, state: canApproveMovement(edited, state.catalog).ok ? 'DRAFT' : 'NEEDS_CLARIFICATION' };
       }),
     } })) };
-    case 'OBSERVATION': return { ...state, notes: state.notes.map(note => ({ ...note, draft: { ...note.draft,
-      observations: note.draft.observations.map(row => row.tempId !== action.tempId ? row : { ...row, state: action.state }),
-    } })) };
+    case 'ADD_OBSERVATION': {
+      const next = withNote(state, action.noteId, action.noteText);
+      return { ...next, notes: next.notes.map(note => note.draft.noteId !== action.noteId ? note : {
+        ...note, draft: { ...note.draft, observations: [...note.draft.observations, {
+          tempId: action.tempId, rawItemName: '', canonicalItemId: null, count: null, unit: null,
+          evidenceText: 'Entered manually by volunteer.', state: 'UNVERIFIED', origin: 'HUMAN_ADDED',
+        }] },
+      }) };
+    }
+    case 'EDIT_OBSERVATION':
+    case 'OBSERVATION': {
+      const changes = action.type === 'EDIT_OBSERVATION' ? action.changes : null;
+      if (changes?.count != null && !isShelfCount(changes.count)) return state;
+      return { ...state, notes: state.notes.map(note => ({ ...note, draft: { ...note.draft,
+        observations: note.draft.observations.map(row => {
+          if (row.tempId !== action.tempId || row.state === 'DISMISSED') return row;
+          if (action.type === 'OBSERVATION') {
+            if (action.state === 'CONFIRMED' && observationConfirmationIssue(row, state.catalog)) return row;
+            return { ...row, state: action.state };
+          }
+          if (row.state !== 'UNVERIFIED') return row;
+          const { canonicalItemId = row.canonicalItemId, count = row.count, unit = row.unit } = action.changes;
+          return { ...row, canonicalItemId, count, unit, origin: row.origin ?? 'HUMAN_EDITED' };
+        }),
+      } })) };
+    }
     case 'TASK_STATUS': return { ...state, notes: state.notes.map(note => ({ ...note, draft: { ...note.draft,
       followUps: note.draft.followUps.map(task => task.id !== action.id ? task : { ...task, status: action.status }),
     } })) };
@@ -133,7 +170,8 @@ export function reconcileWorkflow(state: WorkflowState) {
     observations.some(row => row.canonicalItemId === item.id && row.state !== 'DISMISSED') ||
     movements.some(row => row.canonicalItemId === item.id)).map(item => {
     const openingBalance = state.openingBalances.find(balance => balance.itemId === item.id);
-    const latestObservation = [...observations].reverse().find(row => row.canonicalItemId === item.id && row.state !== 'DISMISSED');
+    const latestObservation = observations.findLast(row => row.canonicalItemId === item.id &&
+      (row.state === 'CONFIRMED' || (row.state === 'UNVERIFIED' && row.origin === undefined)));
     return { item, openingBalance, latestObservation, result: reconcileItem({ item, openingBalance,
       latestObservation, approvedEvents: state.approvedEvents, pendingDrafts: movements }) };
   });

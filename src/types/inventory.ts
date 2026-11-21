@@ -43,6 +43,7 @@ export interface ReviewObservationItem {
   unit: string | null;
   evidenceText: string;
   state: 'UNVERIFIED' | 'CONFIRMED' | 'DISMISSED';
+  origin?: 'HUMAN_ADDED' | 'HUMAN_EDITED';
 }
 
 export interface FollowUpTask {

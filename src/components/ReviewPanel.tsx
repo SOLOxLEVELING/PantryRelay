@@ -1,6 +1,7 @@
 import type { PantryWorkflow } from '../hooks/usePantryWorkflow';
 import type { ReviewMovementItem } from '../types/inventory';
 import { canApproveMovement } from '../lib/reconcile';
+import { observationConfirmationIssue } from '../lib/workflowState';
 import { SourceBadge } from './CapturePanel';
 import { MovementSyncLabel } from './MovementSyncLabel';
 
@@ -20,7 +21,7 @@ export function ReviewPanel({ workflow, noteText }: { workflow: PantryWorkflow; 
     <div className="section-heading"><h2 id="review-heading"><span className="step">2</span> Review</h2><span className="badge">{pending} pending</span></div>
     <p className="section-intro">AI suggests. A volunteer approves each movement.</p>
     {workflow.state.notes.length === 0 && <div className="empty-state"><h3>Your note is ready for review</h3>
-      <p>Extract changes to see suggested movements, shelf counts, and follow-ups. You can also start with a manual movement.</p></div>}
+      <p>Extract changes for suggestions, or enter a movement or shelf count manually.</p></div>}
     {workflow.state.notes.map((note, noteIndex) => <div className="review-note" key={note.draft.noteId}>
       <div className="original-note"><div className="field-heading"><strong>Original note{workflow.state.notes.length > 1 ? ` ${noteIndex + 1}` : ''}</strong><SourceBadge note={note} /></div>
         <blockquote>{note.draft.noteText || 'Empty note · manual entry'}</blockquote></div>
@@ -59,18 +60,41 @@ export function ReviewPanel({ workflow, noteText }: { workflow: PantryWorkflow; 
           </tr>;
         })}</tbody></table></div>}
       {note.draft.observations.length > 0 && <div className="observations"><h3>Shelf counts <span className="subtle">Observations, never stock movements</span></h3>
-        {note.draft.observations.map(row => <div className="observation" key={row.tempId}><div><strong>{row.count ?? 'Unknown'} {row.unit ?? '(unit missing)'} {row.rawItemName}</strong>
-          <span className="badge">{row.state === 'CONFIRMED' ? 'Human-confirmed' : row.state === 'DISMISSED' ? 'Dismissed' : 'Unverified count'}</span>
-          <p className="evidence">“{row.evidenceText}”</p></div><div className="row-actions">
-            {row.state !== 'CONFIRMED' && <button disabled={workflow.busy || row.count === null || row.unit === null || row.canonicalItemId === null}
+        {note.draft.observations.map((row, index) => {
+          const name = `Shelf count ${noteIndex + 1}.${index + 1}`;
+          const editable = row.state === 'UNVERIFIED';
+          const issue = editable ? observationConfirmationIssue(row, workflow.state.catalog) : null;
+          const itemName = workflow.state.catalog.find(item => item.id === row.canonicalItemId)?.name ?? row.rawItemName;
+          return <div className="observation" key={row.tempId}><div>
+            {editable ? <div className="observation-fields">
+              <select aria-label={`${name} item`} value={row.canonicalItemId ?? ''} disabled={workflow.busy}
+                onChange={event => workflow.editObservation(row.tempId, { canonicalItemId: event.target.value || null })}>
+                <option value="">Choose item{row.rawItemName ? ` (${row.rawItemName})` : ''}</option>
+                {workflow.state.catalog.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+              </select>
+              <input aria-label={`${name} count`} type="number" min="0" step="any" value={row.count ?? ''} disabled={workflow.busy}
+                placeholder="Count" onChange={event => workflow.editObservation(row.tempId, { count: event.target.value === '' ? null : event.target.valueAsNumber })} />
+              <input aria-label={`${name} unit`} value={row.unit ?? ''} disabled={workflow.busy} placeholder="Unit, e.g. bags"
+                onChange={event => workflow.editObservation(row.tempId, { unit: event.target.value || null })} />
+            </div> : <strong>{row.count ?? 'Unknown'} {row.unit ?? '(unit missing)'} {itemName}</strong>}
+            <span className="badge">{row.state === 'CONFIRMED' ? 'Human-confirmed' : row.state === 'DISMISSED' ? 'Dismissed' : 'Unverified count'}</span>
+            <p className="evidence">“{row.evidenceText}”</p>
+            {issue && <p className="approval-reason" id={`${row.tempId}-reason`}>{issue}</p>}
+          </div><div className="row-actions">
+            {editable && <button disabled={workflow.busy || issue !== null} aria-describedby={issue ? `${row.tempId}-reason` : undefined}
               onClick={() => workflow.setObservation(row.tempId, 'CONFIRMED')}>Confirm count</button>}
-            {row.state !== 'DISMISSED' && <button className="text-button" disabled={workflow.busy} onClick={() => workflow.setObservation(row.tempId, 'DISMISSED')}>Dismiss</button>}</div></div>)}</div>}
+            {row.state !== 'DISMISSED' && <button className="text-button" disabled={workflow.busy} onClick={() => workflow.setObservation(row.tempId, 'DISMISSED')}>Dismiss</button>}
+          </div></div>;
+        })}</div>}
       {(note.quarantined.length > 0 || note.draft.unclassifiedText.length > 0) && <details className="blocked-content">
         <summary>Blocked / untrusted content ({note.quarantined.length}) · Other note text ({note.draft.unclassifiedText.length})</summary>
         <p>These items cannot be approved or change stock. Inventory in quarantine is tracked separately.</p>
         {note.quarantined.map((item, index) => <div key={index}><strong>{item.reason}</strong><pre>{JSON.stringify(item.item, null, 2)}</pre></div>)}
         {note.draft.unclassifiedText.map((text, index) => <p key={index}>{text}</p>)}</details>}
     </div>)}
-    <button className="manual-button" disabled={workflow.busy} onClick={() => workflow.addMovement(noteText)}>+ Add manual movement</button>
+    <div className="manual-actions">
+      <button disabled={workflow.busy} onClick={() => workflow.addMovement(noteText)}>+ Add manual movement</button>
+      <button disabled={workflow.busy} onClick={() => workflow.addObservation(noteText)}>+ Add shelf count</button>
+    </div>
   </section>;
 }

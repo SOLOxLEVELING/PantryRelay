@@ -1,0 +1,18 @@
+
+> pantryrelay@0.0.0 test:e2e
+> playwright test
+
+[WebServer] (node:52166) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:52198) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:52200) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/golden-path.spec.ts:22:3 › manual approvals reconcile to 47 usable and a 22-bag discrepancy (1.1s)
+  ✓  2 e2e/golden-path.spec.ts:22:3 › manual approvals reconcile to 45 usable and a 20-bag discrepancy (833ms)
+  ✓  3 e2e/golden-path.spec.ts:104:1 › volunteer route exposes named sections, headings, live status and keyboard navigation (973ms)
+
+  3 passed (3.9s)

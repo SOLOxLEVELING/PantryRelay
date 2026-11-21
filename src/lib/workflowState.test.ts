@@ -141,6 +141,48 @@ describe('pantry workflow', () => {
     expect(summary(state)?.confirmedUsable).toBe(27);
   });
 
+  it('adds, edits and confirms a manual shelf count without changing approved stock', () => {
+    const approved = approve(extract(), 0);
+    const noteText = 'Counted the shelf manually.';
+    const added = workflowReducer(approved, { type: 'ADD_OBSERVATION', noteId: 'manual', noteText, tempId: 'shelf' });
+    expect(added.notes.at(-1)).toMatchObject({ inferenceSource: 'UNKNOWN', draft: { noteText, observations: [
+      { tempId: 'shelf', canonicalItemId: null, count: null, unit: null, state: 'UNVERIFIED' },
+    ] } });
+
+    const edited = workflowReducer(added, { type: 'EDIT_OBSERVATION', tempId: 'shelf', changes: {
+      canonicalItemId: 'rice', count: 0, unit: 'bags',
+    } });
+    expect(edited.notes.at(-1)?.draft.observations[0]).toMatchObject({ canonicalItemId: 'rice', count: 0, unit: 'bags' });
+    expect(summary(edited)).toEqual(summary(approved));
+    const confirmed = workflowReducer(edited, { type: 'OBSERVATION', tempId: 'shelf', state: 'CONFIRMED' });
+    expect(summary(confirmed)).toMatchObject({ confirmedUsable: 60, discrepancy: 60 });
+    expect(confirmed.approvedEvents).toBe(approved.approvedEvents);
+    const locked = workflowReducer(confirmed, { type: 'EDIT_OBSERVATION', tempId: 'shelf', changes: { count: 100 } });
+    expect(locked.notes.at(-1)?.draft.observations[0]).toMatchObject({ count: 0, state: 'CONFIRMED' });
+  });
+
+  it('keeps invalid count edits out and blocks confirmation until the item, count and unit are valid', () => {
+    let state = workflowReducer(initialWorkflowState(), { type: 'ADD_OBSERVATION', noteId: 'manual', noteText: '', tempId: 'shelf' });
+    for (const count of [-1, Infinity, NaN]) {
+      expect(workflowReducer(state, { type: 'EDIT_OBSERVATION', tempId: 'shelf', changes: { count } })).toBe(state);
+    }
+    state = workflowReducer(state, { type: 'EDIT_OBSERVATION', tempId: 'shelf', changes: { canonicalItemId: 'rice', count: 25, unit: 'kg' } });
+    expect(summary(state)).toMatchObject({ confirmedUsable: 24, status: 'NO_OBSERVATION' });
+    const unconfirmed = workflowReducer(state, { type: 'OBSERVATION', tempId: 'shelf', state: 'CONFIRMED' });
+    expect(unconfirmed.notes[0]?.draft.observations[0]?.state).toBe('UNVERIFIED');
+    state = workflowReducer(state, { type: 'EDIT_OBSERVATION', tempId: 'shelf', changes: { count: null } });
+    expect(state.notes[0]?.draft.observations[0]?.count).toBeNull();
+  });
+
+  it('allows correcting an unverified extracted count while retaining its evidence', () => {
+    const original = extract();
+    const edited = workflowReducer(original, { type: 'EDIT_OBSERVATION', tempId: 'note:observation:0', changes: { count: 20 } });
+    expect(edited.notes[0]?.draft.observations[0]).toMatchObject({ count: 20, evidenceText: 'The paper count says 25 left.' });
+    expect(summary(edited)).toMatchObject({ confirmedUsable: 24, status: 'NO_OBSERVATION' });
+    expect(summary(workflowReducer(edited, { type: 'OBSERVATION', tempId: 'note:observation:0', state: 'CONFIRMED' })))
+      .toMatchObject({ confirmedUsable: 24, discrepancy: 4 });
+  });
+
   it('confirms or dismisses observations without changing stock and restores the previous active count', () => {
     let state = approve(approve(approve(extract(), 0), 1), 2);
     state = workflowReducer(state, { type: 'OBSERVATION', tempId: 'note:observation:0', state: 'CONFIRMED' });

@@ -1,41 +1,60 @@
-# PantryRelay G1.2
+# PantryRelay
 
-Minimal React + Vite + TypeScript feasibility spike for real Firebase AI Logic hybrid structured extraction. This is an unstyled diagnostic harness, not the PantryRelay product UI. See [the feasibility report](docs/FEASIBILITY.md) for actual results and limitations.
+PantryRelay turns volunteer shift notes into reviewable inventory movements, shelf counts, and follow-ups. Volunteers approve each movement, compare the resulting balance with the shelf count, and copy a handoff for the next shift. Firebase AI Logic can extract drafts on supported desktop Chrome while offline or in the cloud while online. Manual movements and shelf counts work without inference.
+
+## Hosted demo
+
+[Open PantryRelay](https://pantryrelay-c3246.web.app/) in desktop Chrome and use the synthetic **Golden rice** sample. Desktop Chrome verified App Check, cloud extraction, Firestore sync, and Cloud Shift Briefing. With DevTools Network set to Offline, the cached app reloaded and completed on-device extraction. [Deployment and browser evidence](docs/evidence/g52/verification.md)
 
 ## Run locally
 
-1. Use Node 24 and run `npm ci`.
-2. In Firebase Console, register a Web App, complete **AI Logic → Get started → Gemini Developer API**, and enforce App Check for AI Logic.
-3. Register reCAPTCHA Enterprise for the Web App. Copy `.env.example` to `.env.local` and fill in the six Firebase configuration values and Enterprise site key.
-4. For localhost, set `VITE_APPCHECK_DEBUG_TOKEN` to a debug token registered for that Web App in Firebase App Check. The debug token is assigned before App Check initialization, including in production-mode `vite preview`. Without a supplied token, `npm run dev` can generate one; its SDK log is redacted, so prefer supplying a registered token.
-5. Run `npx tsc --noEmit`, `npm test`, `npm run build`, then `npm run preview`.
-6. Open `http://localhost:4173/` in desktop Chrome. Click **Refresh diagnostics / App Check**, then **Preload device model via Firebase**. Both inference and preload use `firebase/ai`.
+1. Install Node.js 24 and run `npm ci`.
+2. In Firebase Console, register a Web App and set up **AI Logic → Get started → Gemini Developer API**. Confirm App Check enforcement for **Firebase AI Logic**. Under **App Check → Apps**, register the web app with a Google Cloud Fraud Defense reCAPTCHA Enterprise website score key. Use the same key in the app and add the Hosting hostname to that key's allowed domains. [Firebase App Check setup](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider)
+3. Create the default Cloud Firestore database, deploy [`firestore.rules`](firestore.rules), and enable **Authentication → Sign-in method → Anonymous** in the same project.
+4. Copy `.env.example` to `.env.local`. Fill in the six `VITE_FIREBASE_*` Web App values and `VITE_RECAPTCHA_SITE_KEY`. For localhost cloud tests, set `VITE_APPCHECK_DEBUG_TOKEN` to a registered App Check debug token for that same web app. Keep the file private. The debug token also applies to a localhost preview build. [Firebase debug provider](https://firebase.google.com/docs/app-check/web/debug-provider)
+5. Run `npm run build` and `npm run preview`. Open `http://localhost:4173/`. While online, click **App Check → Check** and look for **Verified**. Use `npm run dev` on port 5173 for editing. Use the preview build for service-worker verification.
 
-`.env.local`, generated `dist`, and dependencies are ignored by git. Vite embeds `VITE_*` values in bundles: keep debug builds local and rebuild without the debug token before distributing a build. Debug builds refuse to run on non-localhost origins.
+## Chrome and offline setup
 
-## Enable ledger sync
+Firebase documents support from **desktop Chrome 139 onward**. The G5.1 device run used **Chrome 157**. Chrome requires a supported OS, at least 22 GB free on the profile volume for eligibility, and either more than 4 GB VRAM or at least 16 GB RAM with four CPU cores. Use an unmetered connection for the initial download. [Firebase browser setup](https://firebase.google.com/docs/ai-logic/hybrid/web/get-started) · [Chrome requirements](https://developer.chrome.com/docs/ai/prompt-api) · [G5.1 evidence](docs/EVALUATION.md)
 
-In the same Firebase project, create the default Cloud Firestore database and enable **Authentication → Sign-in method → Anonymous**. Publish the repository's `firestore.rules` in **Firestore → Rules**. The rules allow each authenticated user to read and create events in their own workspace. Ledger updates and deletes are denied.
+1. While online, open the app and click **Preload model** if needed. Wait for **On-device model Ready** and **App shell Cached offline**. If the model is unavailable on an otherwise eligible Chrome installation, follow the Firebase flag and restart instructions. The tested Chrome 157 profile already reported availability without manually enabled flags.
+2. In Chrome DevTools **Network**, choose **Offline**. Reload normally. Check **Offline**, **Cached offline**, and **Ready**. Select **ONLY_ON_DEVICE**, then click **Extract changes**. A successful result displays **Source: On-device**. The Network panel should show the page served by the service worker.
+3. Review the extracted values against the original note and confirm the shelf count. If extraction stalls or the device lacks the model, use **+ Add manual movement** and **+ Add shelf count** in Review. Set the item, count and unit for the observation, then click **Confirm count**.
+4. For the golden note, approve 36 bags received, 8 distributed and 5 quarantined. With sample opening stock of 24, the ledger shows 47 usable. A count of 25 produces a discrepancy of 22. Keep it open or add a recount task, then **Copy shift handoff**.
+5. Restore **No throttling** to retry pending ledger writes. Use **Sync now** or **Retry sync** if needed and wait for **Synced**. Try **ONLY_IN_CLOUD** and **Generate cloud briefing** online. Each successful cloud call displays **Source: Cloud** in its own panel.
 
-Use `npm run preview` and wait for **App shell Cached offline** before testing a reload with DevTools set to Offline. Use Chrome's standard reload so the service worker can serve the app. Reconnecting retries queued approvals automatically. You can also use **Sync now** or **Retry sync**. **Synced** appears after Firestore acknowledges the event.
+## Tests
 
-## Reproduce the spike
+```sh
+npm test
+npx tsc --noEmit
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
 
-- Run the golden note in `ONLY_IN_CLOUD` while online, then `PREFER_ON_DEVICE` while online.
-- Wait for service-worker control and model availability `available`. In DevTools Network, choose **Offline**, reload normally, and verify the document/scripts are served by the service worker.
-- Select `ONLY_ON_DEVICE`, run the golden note, then run all ten synthetic notes. Keep DevTools open and Offline throughout. Restore **No throttling** when finished.
-- Download the attempt evidence before reloading: the spike keeps its attempt list only in memory. The JSON contains note text, mode, online state, timestamp, raw SDK source, duration, raw response, parsed response, and errors. It never includes App Check token values.
+Playwright serves the built app at `http://localhost:4175/` and covers manual entry, reconciliation, cached reload, and the handoff with external requests blocked. Use physical desktop Chrome for live AI checks. Open `/?benchmark=1` on the local preview for the [G5.1 synthetic evaluation](docs/EVALUATION.md).
 
-## G1.2 guarded drafts
+## Production deploy
 
-`parsed` and `rawParsed` retain the exact Zod-validated SDK payload. `sanitized` is a separate draft; `quarantined` retains removed records and reasons. The sanitizer normalizes nullable placeholders, checks normalized evidence spans and attack context, suppresses repeated movements, rejects contradictions to single numeric literals in evidence, and holds possible double losses from explicit damage/distribution inclusion. It does not fill missing quantities, item names, or assignees.
+Build with the production project's Web App configuration and reCAPTCHA Enterprise site key in a private environment or ignored `.env.local`. Vite embeds `VITE_*` values in browser bundles. Use an explicit empty override when a local file contains a registered debug token.
 
-Empty or whitespace-only notes return `SKIPPED_EMPTY`, `UNKNOWN`, zero latency, no raw SDK payload, and an empty sanitized draft. The empty case is an intentional skip, so the ten-note offline set contains nine actual SDK requests.
+```sh
+VITE_APPCHECK_DEBUG_TOKEN="" npm run build
+npx firebase-tools deploy --only hosting,firestore:rules --project <VITE_FIREBASE_PROJECT_ID>
+```
 
-Use **Cloud check: golden x3 + overlap + injection** to test repeatability for the selected cloud model. All calls still use Firebase AI Logic. Gemini 2.5 model IDs remain available in this spike selector for comparison, but this project returned HTTP 404 for both; see the feasibility report.
+Run the Firebase CLI under an account with Hosting and Firestore Rules deploy access. Verify the printed Hosting URL in a clean Chrome profile. Use the hosted **Check** button before testing cloud inference and sync. [Hosting configuration](firebase.json)
 
-The runner stops device batches on prompt-format errors, model crashes, or two consecutive 60-second deadlines. Schema PASS describes raw structure, not factual correctness or approval. Every sanitized row still needs human review.
+## Limitations
 
-Each extraction has a 60-second deadline. The signal is supplied through Firebase's cloud request options and on-device `createOptions.signal`. The on-device session is aborted after completion or timeout to release resources. A timeout is recorded as no SDK response, with source `UNKNOWN`.
+Use synthetic data in the demo. **PREFER_ON_DEVICE** may send the note to Firebase AI Logic if it falls back. **ONLY_IN_CLOUD** sends the note, and the optional cloud briefing sends structured shift data. Confirm all proposed quantities by hand. The G5.1 evaluation observed incorrect drafts, device timeouts, and cloud quota errors.
 
-The raw SDK source values in Firebase 13.4.0 are `on_device` and `in_cloud`. The result contract maps these to `ON_DEVICE` and `IN_CLOUD` and displays both. A valid schema is not proof that the extracted facts are correct; inspect the raw and parsed JSON.
+The workspace uses a sample rice baseline and a small catalog. Notes, counts, and tasks live in this browser's IndexedDB. Firestore mirrors approved movements for the anonymous user, and the app has no cross-device workspace recovery. PantryRelay has had no live pantry interviews.
+
+[Architecture](docs/ARCHITECTURE.md) · [Research](docs/RESEARCH.md) · [Compliance](docs/COMPLIANCE_CHECKLIST.md) · [Demo and submission draft](docs/DEMO_AND_SUBMISSION.md)
+
+## License
+
+[Apache-2.0](LICENSE).
