@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-21",
+  "operator": "Codex operating both interfaces manually via computer use",
+  "spreadsheet": {
+    "application": "Google Sheets private scratch sheet",
+    "protocol": "Transcribe each note into a single clipboard row, then time navigating to the row, pasting it into the prepared template, and observing the selected range. Note reading, row preparation, workbook setup and final CSV verification are outside the timer. The template calculates balance and discrepancy where the baseline and unit permit.",
+    "rows": "spreadsheet-rows.csv",
+    "attempts": [
+      { "noteId": "06", "startedAt": "2026-11-21T10:26:45.411Z", "elapsedMs": 5193, "selectedRange": "A2:I2" },
+      { "noteId": "19", "startedAt": "2026-11-21T10:26:50.603Z", "elapsedMs": 4616, "selectedRange": "A3:I3" },
+      { "noteId": "20", "startedAt": "2026-11-21T10:26:55.219Z", "elapsedMs": 4636, "selectedRange": "A4:I4" },
+      { "noteId": "25", "startedAt": "2026-11-21T10:26:59.855Z", "elapsedMs": 5150, "selectedRange": "A5:I5" },
+      { "noteId": "30", "startedAt": "2026-11-21T10:27:05.006Z", "elapsedMs": 4600, "selectedRange": "A6:I6" }
+    ],
+    "totalMs": 24195,
+    "medianMs": 4636
+  },
+  "pantryRelay": {
+    "mode": "ONLY_ON_DEVICE",
+    "protocol": "Use a separate incognito workspace offline after a service-worker reload. Reset and select the mode before each timer. Time note entry, real extraction, human review or fallback as available, then copy the handoff and observe Copied. The measured elapsed time includes UI automation and review pauses between actions.",
+    "attempts": [
+      {
+        "noteId": "06", "startedAt": "2026-11-21T10:28:46.793Z", "elapsedMs": 26432,
+        "sourceDisplayed": "On-device", "deadlineExceeded": false,
+        "outcome": "Approval was blocked for uncatalogued chickpeas. No movement was approved. The pending clarification was absent from the handoff."
+      },
+      {
+        "noteId": "19", "startedAt": "2026-11-21T10:29:14.881Z", "elapsedMs": 39877,
+        "sourceDisplayed": "On-device", "deadlineExceeded": false,
+        "outcome": "Approved receipt of 17, rejected a false adjustment, confirmed count 19. The demo opening of 24 produced usable 41 and discrepancy 22. The rice demo could not represent the missing baseline."
+      },
+      {
+        "noteId": "20", "startedAt": "2026-11-21T10:30:43.814Z", "elapsedMs": 79580,
+        "sourceDisplayed": "Unknown", "deadlineExceeded": true,
+        "outcome": "The 60-second deadline elapsed. Neither the observation nor the recount reached review."
+      },
+      {
+        "noteId": "25", "startedAt": "2026-11-21T10:32:05.038Z", "elapsedMs": 114140,
+        "sourceDisplayed": "Unknown", "deadlineExceeded": true,
+        "outcome": "Manually approved distribution of 6 and quarantine of 2. Usable stock was 16. Without manual shelf count entry, the handoff omitted the count of 15 and discrepancy of 1."
+      },
+      {
+        "noteId": "30", "startedAt": "2026-11-21T10:34:01.100Z", "elapsedMs": 82083,
+        "sourceDisplayed": "Unknown", "deadlineExceeded": true,
+        "outcome": "Manually approved the 4-bag distribution. The handoff showed 20 usable bags and omitted Mo's follow-up."
+      }
+    ],
+    "totalMs": 342112,
+    "medianMs": 79580
+  }
+}

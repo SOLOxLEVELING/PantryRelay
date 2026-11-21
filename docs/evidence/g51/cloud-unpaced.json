@@ -1,0 +1,2221 @@
+{
+  "version": 1,
+  "mode": "ONLY_IN_CLOUD",
+  "cloudModel": "gemini-3.5-flash-lite",
+  "exportedAt": "2026-11-21T10:24:12.452Z",
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+  "shellControlledAtExport": true,
+  "batches": [
+    {
+      "first": 1,
+      "last": 30,
+      "stopReason": null
+    }
+  ],
+  "attempts": [
+    {
+      "noteId": "01",
+      "startedAt": "2026-11-21T10:22:22.503Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"sourdough\",\n      \"quantity\": 18,\n      \"unit\": \"loaves\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"The bakery dropped off 18 loaves of sourdough at the side door.\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "sourdough",
+            "quantity": 18,
+            "unit": "loaves",
+            "kind": "RECEIVED",
+            "evidenceText": "The bakery dropped off 18 loaves of sourdough at the side door.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "sourdough",
+            "quantity": 18,
+            "unit": "loaves",
+            "kind": "RECEIVED",
+            "evidenceText": "The bakery dropped off 18 loaves of sourdough at the side door.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 2432,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "02",
+      "startedAt": "2026-11-21T10:22:24.935Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\"movements\":[{\"itemName\":\"oat milk\",\"quantity\":11,\"unit\":\"cartons\",\"kind\":\"DISTRIBUTED\",\"evidenceText\":\"We handed out 11 cartons of oat milk at the late pickup.\",\"ambiguity\":null}],\"observations\":[],\"followUps\":[],\"unclassifiedText\":[]}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "oat milk",
+            "quantity": 11,
+            "unit": "cartons",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "We handed out 11 cartons of oat milk at the late pickup.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "oat milk",
+            "quantity": 11,
+            "unit": "cartons",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "We handed out 11 cartons of oat milk at the late pickup.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 1935,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "03",
+      "startedAt": "2026-11-21T10:22:26.870Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"applesauce\",\n      \"quantity\": 4,\n      \"unit\": \"jars\",\n      \"kind\": \"QUARANTINED\",\n      \"evidenceText\": \"Moved 4 leaking jars of applesauce into the quarantine bin.\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "applesauce",
+            "quantity": 4,
+            "unit": "jars",
+            "kind": "QUARANTINED",
+            "evidenceText": "Moved 4 leaking jars of applesauce into the quarantine bin.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "applesauce",
+            "quantity": 4,
+            "unit": "jars",
+            "kind": "QUARANTINED",
+            "evidenceText": "Moved 4 leaking jars of applesauce into the quarantine bin.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 1651,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "04",
+      "startedAt": "2026-11-21T10:22:28.521Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"cornflakes\",\n      \"quantity\": 9,\n      \"unit\": \"boxes\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"9 boxes of cornflakes\",\n      \"ambiguity\": null\n    },\n    {\n      \"itemName\": \"sweetcorn\",\n      \"quantity\": 16,\n      \"unit\": \"tins\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"16 tins of sweetcorn\",\n      \"ambiguity\": null\n    },\n    {\n      \"itemName\": \"sweetcorn\",\n      \"quantity\": 7,\n      \"unit\": \"tins\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"given away 7 tins of sweetcorn\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "cornflakes",
+            "quantity": 9,
+            "unit": "boxes",
+            "kind": "RECEIVED",
+            "evidenceText": "9 boxes of cornflakes",
+            "ambiguity": null
+          },
+          {
+            "itemName": "sweetcorn",
+            "quantity": 16,
+            "unit": "tins",
+            "kind": "RECEIVED",
+            "evidenceText": "16 tins of sweetcorn",
+            "ambiguity": null
+          },
+          {
+            "itemName": "sweetcorn",
+            "quantity": 7,
+            "unit": "tins",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "given away 7 tins of sweetcorn",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "cornflakes",
+            "quantity": 9,
+            "unit": "boxes",
+            "kind": "RECEIVED",
+            "evidenceText": "9 boxes of cornflakes",
+            "ambiguity": null
+          },
+          {
+            "itemName": "sweetcorn",
+            "quantity": 16,
+            "unit": "tins",
+            "kind": "RECEIVED",
+            "evidenceText": "16 tins of sweetcorn",
+            "ambiguity": null
+          },
+          {
+            "itemName": "sweetcorn",
+            "quantity": 7,
+            "unit": "tins",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "given away 7 tins of sweetcorn",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 1732,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "05",
+      "startedAt": "2026-11-21T10:22:30.253Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"oranges\",\n      \"quantity\": null,\n      \"unit\": \"crates\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"Collected crates of oranges from Hill Market.\",\n      \"ambiguity\": \"Quantity is unreadable due to damaged tally.\"\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [\n    {\n      \"text\": \"Ask the driver for the tally.\",\n      \"assigneeName\": \"Dev\",\n      \"evidenceText\": \"Dev should ask the driver for the tally.\"\n    }\n  ],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "oranges",
+            "quantity": null,
+            "unit": "crates",
+            "kind": "RECEIVED",
+            "evidenceText": "Collected crates of oranges from Hill Market.",
+            "ambiguity": "Quantity is unreadable due to damaged tally."
+          }
+        ],
+        "observations": [],
+        "followUps": [
+          {
+            "text": "Ask the driver for the tally.",
+            "assigneeName": "Dev",
+            "evidenceText": "Dev should ask the driver for the tally."
+          }
+        ],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "oranges",
+            "quantity": null,
+            "unit": "crates",
+            "kind": "RECEIVED",
+            "evidenceText": "Collected crates of oranges from Hill Market.",
+            "ambiguity": "Quantity is unreadable due to damaged tally."
+          }
+        ],
+        "observations": [],
+        "followUps": [
+          {
+            "text": "Ask the driver for the tally.",
+            "assigneeName": "Dev",
+            "evidenceText": "Dev should ask the driver for the tally."
+          }
+        ],
+        "unclassifiedText": []
+      },
+      "latencyMs": 1638,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "06",
+      "startedAt": "2026-11-21T10:22:31.892Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"chickpeas\",\n      \"quantity\": 14,\n      \"unit\": null,\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"distributed 14 chickpeas\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": [\n    \"Dispatch tally: distributed 14 chickpeas. The unit column is blank.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "chickpeas",
+            "quantity": 14,
+            "unit": null,
+            "kind": "DISTRIBUTED",
+            "evidenceText": "distributed 14 chickpeas",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Dispatch tally: distributed 14 chickpeas. The unit column is blank."
+        ]
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "chickpeas",
+            "quantity": 14,
+            "unit": null,
+            "kind": "DISTRIBUTED",
+            "evidenceText": "distributed 14 chickpeas",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Dispatch tally: distributed 14 chickpeas. The unit column is blank."
+        ]
+      },
+      "latencyMs": 1331,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "07",
+      "startedAt": "2026-11-21T10:22:33.223Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"spagetti\",\n      \"quantity\": 13,\n      \"unit\": \"packs\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"Received 13 packs of spagetti on the noon truck.\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [\n    {\n      \"itemName\": \"spagetti\",\n      \"count\": null,\n      \"unit\": null,\n      \"evidenceText\": \"Label reads “spagetti”.\"\n    }\n  ],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "spagetti",
+            "quantity": 13,
+            "unit": "packs",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 13 packs of spagetti on the noon truck.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "spagetti",
+            "count": null,
+            "unit": null,
+            "evidenceText": "Label reads “spagetti”."
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "spagetti",
+            "quantity": 13,
+            "unit": "packs",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 13 packs of spagetti on the noon truck.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "spagetti",
+            "count": null,
+            "unit": null,
+            "evidenceText": "Label reads “spagetti”."
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 1743,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "08",
+      "startedAt": "2026-11-21T10:22:34.965Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [],\n  \"observations\": [\n    {\n      \"itemName\": \"tomatoes\",\n      \"count\": 15,\n      \"unit\": \"trays\",\n      \"evidenceText\": \"the loading sheet says 15 trays received\"\n    },\n    {\n      \"itemName\": \"tomatoes\",\n      \"count\": 19,\n      \"unit\": \"trays\",\n      \"evidenceText\": \"the intake clipboard says 19 trays received\"\n    }\n  ],\n  \"followUps\": [],\n  \"unclassifiedText\": [\n    \"One receipt for tomatoes, two versions: the loading sheet says 15 trays received and the intake clipboard says 19 trays received. Neither has been confirmed.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [],
+        "observations": [
+          {
+            "itemName": "tomatoes",
+            "count": 15,
+            "unit": "trays",
+            "evidenceText": "the loading sheet says 15 trays received"
+          },
+          {
+            "itemName": "tomatoes",
+            "count": 19,
+            "unit": "trays",
+            "evidenceText": "the intake clipboard says 19 trays received"
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": [
+          "One receipt for tomatoes, two versions: the loading sheet says 15 trays received and the intake clipboard says 19 trays received. Neither has been confirmed."
+        ]
+      },
+      "sanitized": {
+        "movements": [],
+        "observations": [
+          {
+            "itemName": "tomatoes",
+            "count": 15,
+            "unit": "trays",
+            "evidenceText": "the loading sheet says 15 trays received"
+          },
+          {
+            "itemName": "tomatoes",
+            "count": 19,
+            "unit": "trays",
+            "evidenceText": "the intake clipboard says 19 trays received"
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": [
+          "One receipt for tomatoes, two versions: the loading sheet says 15 trays received and the intake clipboard says 19 trays received. Neither has been confirmed."
+        ]
+      },
+      "latencyMs": 1529,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "09",
+      "startedAt": "2026-11-21T10:22:36.495Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"pears\",\n      \"quantity\": 3,\n      \"unit\": \"cases\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"Received 3 cases of pears.\",\n      \"ambiguity\": \"The packing slip does not say how many pears are in a case.\"\n    },\n    {\n      \"itemName\": \"pears\",\n      \"quantity\": 7,\n      \"unit\": \"individual\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"Distributed 7 individual pears.\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "pears",
+            "quantity": 3,
+            "unit": "cases",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 3 cases of pears.",
+            "ambiguity": "The packing slip does not say how many pears are in a case."
+          },
+          {
+            "itemName": "pears",
+            "quantity": 7,
+            "unit": "individual",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Distributed 7 individual pears.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "pears",
+            "quantity": 3,
+            "unit": "cases",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 3 cases of pears.",
+            "ambiguity": "The packing slip does not say how many pears are in a case."
+          },
+          {
+            "itemName": "pears",
+            "quantity": 7,
+            "unit": "individual",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Distributed 7 individual pears.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 1783,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "10",
+      "startedAt": "2026-11-21T10:22:38.278Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"jam\",\n      \"quantity\": 12,\n      \"unit\": \"jars\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"Distributed 12 jars of jam\",\n      \"ambiguity\": \"The 3 damaged jars of jam were included in those 12, but nobody knows whether they were actually handed out.\"\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "jam",
+            "quantity": 12,
+            "unit": "jars",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Distributed 12 jars of jam",
+            "ambiguity": "The 3 damaged jars of jam were included in those 12, but nobody knows whether they were actually handed out."
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "jam",
+            "quantity": 12,
+            "unit": "jars",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Distributed 12 jars of jam",
+            "ambiguity": "The 3 damaged jars of jam were included in those 12, but nobody knows whether they were actually handed out."
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 1481,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "11",
+      "startedAt": "2026-11-21T10:22:39.758Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"broth\",\n      \"quantity\": null,\n      \"unit\": \"cartons\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"received -6 cartons of broth\",\n      \"ambiguity\": \"Quantity is negative.\"\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [\n    {\n      \"text\": \"Nia should check the original slip.\",\n      \"assigneeName\": \"Nia\",\n      \"evidenceText\": \"Nia should check the original slip.\"\n    }\n  ],\n  \"unclassifiedText\": [\n    \"The receipt slip literally says received -6 cartons of broth.\",\n    \"Record the issue for follow-up.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "broth",
+            "quantity": null,
+            "unit": "cartons",
+            "kind": "RECEIVED",
+            "evidenceText": "received -6 cartons of broth",
+            "ambiguity": "Quantity is negative."
+          }
+        ],
+        "observations": [],
+        "followUps": [
+          {
+            "text": "Nia should check the original slip.",
+            "assigneeName": "Nia",
+            "evidenceText": "Nia should check the original slip."
+          }
+        ],
+        "unclassifiedText": [
+          "The receipt slip literally says received -6 cartons of broth.",
+          "Record the issue for follow-up."
+        ]
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "broth",
+            "quantity": null,
+            "unit": "cartons",
+            "kind": "RECEIVED",
+            "evidenceText": "received -6 cartons of broth",
+            "ambiguity": "Quantity is negative."
+          }
+        ],
+        "observations": [],
+        "followUps": [
+          {
+            "text": "Nia should check the original slip.",
+            "assigneeName": "Nia",
+            "evidenceText": "Nia should check the original slip."
+          }
+        ],
+        "unclassifiedText": [
+          "The receipt slip literally says received -6 cartons of broth.",
+          "Record the issue for follow-up."
+        ]
+      },
+      "latencyMs": 1773,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "12",
+      "startedAt": "2026-11-21T10:22:41.532Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"juice\",\n      \"quantity\": null,\n      \"unit\": \"bottles\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"0 bottles of juice distributed\",\n      \"ambiguity\": \"Quantity is zero or negative\"\n    }\n  ],\n  \"observations\": [\n    {\n      \"itemName\": \"juice\",\n      \"count\": 0,\n      \"unit\": \"bottles\",\n      \"evidenceText\": \"The closing count was 0 bottles of juice too.\"\n    }\n  ],\n  \"followUps\": [],\n  \"unclassifiedText\": [\n    \"The signed dispatch log says 0 bottles of juice distributed.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "juice",
+            "quantity": null,
+            "unit": "bottles",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "0 bottles of juice distributed",
+            "ambiguity": "Quantity is zero or negative"
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "juice",
+            "count": 0,
+            "unit": "bottles",
+            "evidenceText": "The closing count was 0 bottles of juice too."
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": [
+          "The signed dispatch log says 0 bottles of juice distributed."
+        ]
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "juice",
+            "quantity": null,
+            "unit": "bottles",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "0 bottles of juice distributed",
+            "ambiguity": "Quantity is zero or negative"
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "juice",
+            "count": 0,
+            "unit": "bottles",
+            "evidenceText": "The closing count was 0 bottles of juice too."
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": [
+          "The signed dispatch log says 0 bottles of juice distributed."
+        ]
+      },
+      "latencyMs": 1450,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "13",
+      "startedAt": "2026-11-21T10:22:42.981Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"instant soup\",\n      \"quantity\": 12500,\n      \"unit\": \"pouches\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"received 12500 pouches of instant soup\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": [\n    \"Regional transfer today\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "instant soup",
+            "quantity": 12500,
+            "unit": "pouches",
+            "kind": "RECEIVED",
+            "evidenceText": "received 12500 pouches of instant soup",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Regional transfer today"
+        ]
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "instant soup",
+            "quantity": 12500,
+            "unit": "pouches",
+            "kind": "RECEIVED",
+            "evidenceText": "received 12500 pouches of instant soup",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Regional transfer today"
+        ]
+      },
+      "latencyMs": 1576,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "14",
+      "startedAt": "2026-11-21T10:22:44.557Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": [\n    \"The afternoon shift swapped radio stations twice.\",\n    \"The fan was rattling again.\",\n    \"The door code sticker peeled off, so we put up a fresh one.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "The afternoon shift swapped radio stations twice.",
+          "The fan was rattling again.",
+          "The door code sticker peeled off, so we put up a fresh one."
+        ]
+      },
+      "sanitized": {
+        "movements": [],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "The afternoon shift swapped radio stations twice.",
+          "The fan was rattling again.",
+          "The door code sticker peeled off, so we put up a fresh one."
+        ]
+      },
+      "latencyMs": 1444,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "15",
+      "startedAt": "2026-11-21T10:22:46.001Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 627,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 13.575498824s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.5-flash-lite\",\"location\":\"global\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"13s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "16",
+      "startedAt": "2026-11-21T10:22:46.629Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"custard\",\n      \"quantity\": 8,\n      \"unit\": \"cartons\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"gave out 8 cartons of custard\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [\n    {\n      \"text\": \"Verify the pickup time.\",\n      \"assigneeName\": \"Ezra\",\n      \"evidenceText\": \"Ezra should verify the pickup time.\"\n    }\n  ],\n  \"unclassifiedText\": [\n    \"The desk log timestamps that pickup 07:10; the van sheet timestamps the same pickup 17:40.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "custard",
+            "quantity": 8,
+            "unit": "cartons",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "gave out 8 cartons of custard",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [
+          {
+            "text": "Verify the pickup time.",
+            "assigneeName": "Ezra",
+            "evidenceText": "Ezra should verify the pickup time."
+          }
+        ],
+        "unclassifiedText": [
+          "The desk log timestamps that pickup 07:10; the van sheet timestamps the same pickup 17:40."
+        ]
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "custard",
+            "quantity": 8,
+            "unit": "cartons",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "gave out 8 cartons of custard",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [
+          {
+            "text": "Verify the pickup time.",
+            "assigneeName": "Ezra",
+            "evidenceText": "Ezra should verify the pickup time."
+          }
+        ],
+        "unclassifiedText": [
+          "The desk log timestamps that pickup 07:10; the van sheet timestamps the same pickup 17:40."
+        ]
+      },
+      "latencyMs": 1443,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "17",
+      "startedAt": "2026-11-21T10:22:48.072Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"potatoes\",\n      \"quantity\": 21,\n      \"unit\": \"bags\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"Unloaded 21 bags of potatoes at dock B.\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": [\n    \"Same delivery copied from the whiteboard: unloaded 21 bags of potatoes at dock B.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "potatoes",
+            "quantity": 21,
+            "unit": "bags",
+            "kind": "RECEIVED",
+            "evidenceText": "Unloaded 21 bags of potatoes at dock B.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Same delivery copied from the whiteboard: unloaded 21 bags of potatoes at dock B."
+        ]
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "potatoes",
+            "quantity": 21,
+            "unit": "bags",
+            "kind": "RECEIVED",
+            "evidenceText": "Unloaded 21 bags of potatoes at dock B.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Same delivery copied from the whiteboard: unloaded 21 bags of potatoes at dock B."
+        ]
+      },
+      "latencyMs": 1474,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "18",
+      "startedAt": "2026-11-21T10:22:49.545Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"tuna\",\n      \"quantity\": null,\n      \"unit\": \"tins\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"Those five went to the night van.\",\n      \"ambiguity\": \"Could refer to tuna or sardines.\"\n    },\n    {\n      \"itemName\": \"sardines\",\n      \"quantity\": null,\n      \"unit\": \"tins\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"Those five went to the night van.\",\n      \"ambiguity\": \"Could refer to tuna or sardines.\"\n    }\n  ],\n  \"observations\": [\n    {\n      \"itemName\": \"tuna\",\n      \"count\": 5,\n      \"unit\": \"tins\",\n      \"evidenceText\": \"At closing I counted 5 tins of tuna\"\n    },\n    {\n      \"itemName\": \"sardines\",\n      \"count\": 5,\n      \"unit\": \"tins\",\n      \"evidenceText\": \"and 5 tins of sardines.\"\n    }\n  ],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "tuna",
+            "quantity": null,
+            "unit": "tins",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Those five went to the night van.",
+            "ambiguity": "Could refer to tuna or sardines."
+          },
+          {
+            "itemName": "sardines",
+            "quantity": null,
+            "unit": "tins",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Those five went to the night van.",
+            "ambiguity": "Could refer to tuna or sardines."
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "tuna",
+            "count": 5,
+            "unit": "tins",
+            "evidenceText": "At closing I counted 5 tins of tuna"
+          },
+          {
+            "itemName": "sardines",
+            "count": 5,
+            "unit": "tins",
+            "evidenceText": "and 5 tins of sardines."
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "tuna",
+            "quantity": null,
+            "unit": "tins",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Those five went to the night van.",
+            "ambiguity": "Could refer to tuna or sardines."
+          },
+          {
+            "itemName": "sardines",
+            "quantity": null,
+            "unit": "tins",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "Those five went to the night van.",
+            "ambiguity": "Could refer to tuna or sardines."
+          }
+        ],
+        "observations": [
+          {
+            "itemName": "tuna",
+            "count": 5,
+            "unit": "tins",
+            "evidenceText": "At closing I counted 5 tins of tuna"
+          },
+          {
+            "itemName": "sardines",
+            "count": 5,
+            "unit": "tins",
+            "evidenceText": "and 5 tins of sardines."
+          }
+        ],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 2023,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "19",
+      "startedAt": "2026-11-21T10:22:51.569Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 619,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 8.035798238s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.5-flash-lite\",\"location\":\"global\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"8s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "20",
+      "startedAt": "2026-11-21T10:22:52.188Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 557,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 7.452504014s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.5-flash-lite\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"7s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "21",
+      "startedAt": "2026-11-21T10:22:52.745Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"almonds\",\n      \"quantity\": 2.5,\n      \"unit\": \"kg\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"Received 2.5 kg of almonds\",\n      \"ambiguity\": null\n    },\n    {\n      \"itemName\": \"almonds\",\n      \"quantity\": 0.75,\n      \"unit\": \"kg\",\n      \"kind\": \"DISTRIBUTED\",\n      \"evidenceText\": \"distributed 0.75 kg of almonds\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": []\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "almonds",
+            "quantity": 2.5,
+            "unit": "kg",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 2.5 kg of almonds",
+            "ambiguity": null
+          },
+          {
+            "itemName": "almonds",
+            "quantity": 0.75,
+            "unit": "kg",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "distributed 0.75 kg of almonds",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "almonds",
+            "quantity": 2.5,
+            "unit": "kg",
+            "kind": "RECEIVED",
+            "evidenceText": "Received 2.5 kg of almonds",
+            "ambiguity": null
+          },
+          {
+            "itemName": "almonds",
+            "quantity": 0.75,
+            "unit": "kg",
+            "kind": "DISTRIBUTED",
+            "evidenceText": "distributed 0.75 kg of almonds",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": []
+      },
+      "latencyMs": 3990,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "22",
+      "startedAt": "2026-11-21T10:22:56.736Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\n  \"movements\": [\n    {\n      \"itemName\": \"crackers\",\n      \"quantity\": 3,\n      \"unit\": \"boxes\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"Three boxes of crackers came in with the first driver.\",\n      \"ambiguity\": null\n    },\n    {\n      \"itemName\": \"crackers\",\n      \"quantity\": 3,\n      \"unit\": \"boxes\",\n      \"kind\": \"RECEIVED\",\n      \"evidenceText\": \"A second driver brought three boxes of crackers after lunch.\",\n      \"ambiguity\": null\n    }\n  ],\n  \"observations\": [],\n  \"followUps\": [],\n  \"unclassifiedText\": [\n    \"Both deliveries were signed for.\"\n  ]\n}",
+      "rawParsed": {
+        "movements": [
+          {
+            "itemName": "crackers",
+            "quantity": 3,
+            "unit": "boxes",
+            "kind": "RECEIVED",
+            "evidenceText": "Three boxes of crackers came in with the first driver.",
+            "ambiguity": null
+          },
+          {
+            "itemName": "crackers",
+            "quantity": 3,
+            "unit": "boxes",
+            "kind": "RECEIVED",
+            "evidenceText": "A second driver brought three boxes of crackers after lunch.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Both deliveries were signed for."
+        ]
+      },
+      "sanitized": {
+        "movements": [
+          {
+            "itemName": "crackers",
+            "quantity": 3,
+            "unit": "boxes",
+            "kind": "RECEIVED",
+            "evidenceText": "Three boxes of crackers came in with the first driver.",
+            "ambiguity": null
+          },
+          {
+            "itemName": "crackers",
+            "quantity": 3,
+            "unit": "boxes",
+            "kind": "RECEIVED",
+            "evidenceText": "A second driver brought three boxes of crackers after lunch.",
+            "ambiguity": null
+          }
+        ],
+        "observations": [],
+        "followUps": [],
+        "unclassifiedText": [
+          "Both deliveries were signed for."
+        ]
+      },
+      "latencyMs": 1500,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "23",
+      "startedAt": "2026-11-21T10:22:58.236Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 483,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 1.472890617s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.5-flash-lite\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"1s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "24",
+      "startedAt": "2026-11-21T10:22:58.719Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 545,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 941.963989ms. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.5-flash-lite\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"0s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "25",
+      "startedAt": "2026-11-21T10:22:59.264Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 645,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 352.433105ms. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.5-flash-lite\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"0s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "26",
+      "startedAt": "2026-11-21T10:22:59.909Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 648,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 59.662988561s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.5-flash-lite\",\"location\":\"global\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"59s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "27",
+      "startedAt": "2026-11-21T10:23:00.557Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 628,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 59.077811077s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.5-flash-lite\",\"location\":\"global\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"59s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "28",
+      "startedAt": "2026-11-21T10:23:01.185Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "in_cloud",
+      "inferenceSource": "IN_CLOUD",
+      "rawText": "{\"movements\":[],\"observations\":[{\"itemName\":\"yogurt\",\"count\":7,\"unit\":\"tubs\",\"evidenceText\":\"7 tubs of yogurt on an unmarked cart\"}],\"followUps\":[{\"text\":\"Check with the cart lead.\",\"assigneeName\":null,\"evidenceText\":\"Check with the cart lead.\"}],\"unclassifiedText\":[\"A volunteer found 7 tubs of yogurt on an unmarked cart. Nobody saw whether they came in or were going out.\"]}",
+      "rawParsed": {
+        "movements": [],
+        "observations": [
+          {
+            "itemName": "yogurt",
+            "count": 7,
+            "unit": "tubs",
+            "evidenceText": "7 tubs of yogurt on an unmarked cart"
+          }
+        ],
+        "followUps": [
+          {
+            "text": "Check with the cart lead.",
+            "assigneeName": null,
+            "evidenceText": "Check with the cart lead."
+          }
+        ],
+        "unclassifiedText": [
+          "A volunteer found 7 tubs of yogurt on an unmarked cart. Nobody saw whether they came in or were going out."
+        ]
+      },
+      "sanitized": {
+        "movements": [],
+        "observations": [
+          {
+            "itemName": "yogurt",
+            "count": 7,
+            "unit": "tubs",
+            "evidenceText": "7 tubs of yogurt on an unmarked cart"
+          }
+        ],
+        "followUps": [
+          {
+            "text": "Check with the cart lead.",
+            "assigneeName": null,
+            "evidenceText": "Check with the cart lead."
+          }
+        ],
+        "unclassifiedText": [
+          "A volunteer found 7 tubs of yogurt on an unmarked cart. Nobody saw whether they came in or were going out."
+        ]
+      },
+      "latencyMs": 1552,
+      "quarantined": [],
+      "failureStage": null,
+      "failureKind": null,
+      "validationError": null
+    },
+    {
+      "noteId": "29",
+      "startedAt": "2026-11-21T10:23:02.737Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 692,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 56.871299445s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.5-flash-lite\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"56s\"}] (AI/fetch-error)"
+    },
+    {
+      "noteId": "30",
+      "startedAt": "2026-11-21T10:23:03.430Z",
+      "onlineAtStart": true,
+      "onlineAtEnd": true,
+      "rawInferenceSource": "UNKNOWN",
+      "inferenceSource": "UNKNOWN",
+      "rawText": "",
+      "rawParsed": null,
+      "sanitized": null,
+      "latencyMs": 970,
+      "quarantined": [],
+      "failureStage": "inference",
+      "failureKind": null,
+      "validationError": "FirebaseError: AI: Error fetching from https://firebasevertexai.googleapis.com/v1beta/projects/[REDACTED]/models/gemini-3.5-flash-lite:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 15, model: gemini-3.5-flash-lite, description: Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\nPlease retry in 56.179464854s. [{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://aistudio.google.com/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"description\":\"Generate content requests per minute limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\",\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.5-flash-lite\",\"location\":\"global\"},\"quotaValue\":\"15\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"56s\"}] (AI/fetch-error)"
+    }
+  ],
+  "score": {
+    "completion": {
+      "numerator": 30,
+      "denominator": 30
+    },
+    "jsonPass": {
+      "numerator": 20,
+      "denominator": 30
+    },
+    "schemaPass": {
+      "numerator": 20,
+      "denominator": 30
+    },
+    "sourceAndNetworkMatch": {
+      "numerator": 20,
+      "denominator": 30
+    },
+    "successfulInference": {
+      "numerator": 20,
+      "denominator": 30
+    },
+    "raw": {
+      "precision": {
+        "numerator": 20,
+        "denominator": 23
+      },
+      "recall": {
+        "numerator": 20,
+        "denominator": 32
+      },
+      "falsePositiveMovements": 3,
+      "inventedItemOrQuantity": 2,
+      "ambiguityFlagged": {
+        "numerator": 6,
+        "denominator": 30
+      },
+      "correctlyFlagged": {
+        "numerator": 5,
+        "denominator": 10
+      },
+      "falseAmbiguityFlags": 1,
+      "falselyResolved": {
+        "numerator": 4,
+        "denominator": 10
+      },
+      "missingAmbiguityResponse": 1
+    },
+    "guarded": {
+      "precision": {
+        "numerator": 20,
+        "denominator": 23
+      },
+      "recall": {
+        "numerator": 20,
+        "denominator": 32
+      },
+      "falsePositiveMovements": 3,
+      "inventedItemOrQuantity": 2,
+      "ambiguityFlagged": {
+        "numerator": 6,
+        "denominator": 30
+      },
+      "correctlyFlagged": {
+        "numerator": 5,
+        "denominator": 10
+      },
+      "falseAmbiguityFlags": 1,
+      "falselyResolved": {
+        "numerator": 4,
+        "denominator": 10
+      },
+      "missingAmbiguityResponse": 1
+    },
+    "allAttemptLatency": {
+      "n": 30,
+      "medianMs": 1477.5,
+      "p95Ms": 2432
+    },
+    "successfulLatency": {
+      "n": 20,
+      "medianMs": 1607,
+      "p95Ms": 2432
+    }
+  },
+  "reconciliation": {
+    "pass": {
+      "numerator": 10,
+      "denominator": 10
+    },
+    "discrepancyPrecision": {
+      "numerator": 4,
+      "denominator": 4
+    },
+    "discrepancyRecall": {
+      "numerator": 4,
+      "denominator": 4
+    },
+    "results": [
+      {
+        "id": "original-distribution",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 8,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 25,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 47,
+          "quarantinedBalance": 5,
+          "discrepancy": 22,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 47,
+          "quarantinedBalance": 5,
+          "discrepancy": 22,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "edited-distribution",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 25,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": 20,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": 20,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "blocked-draft",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 25,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": [
+            {
+              "tempId": "blocker",
+              "canonicalItemId": "rice",
+              "rawItemName": "rice",
+              "quantity": null,
+              "unit": "bags",
+              "kind": "RECEIVED",
+              "ambiguity": "No tally",
+              "evidenceText": "Some rice came in.",
+              "state": "NEEDS_CLARIFICATION",
+              "origin": "HUMAN_ADDED"
+            }
+          ]
+        },
+        "expected": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": 20,
+          "blockingDraftCount": 1
+        },
+        "actual": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": 20,
+          "blockingDraftCount": 1
+        },
+        "passed": true
+      },
+      {
+        "id": "missing-baseline",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": null,
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 25,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "MISSING_BASELINE",
+          "confirmedUsable": null,
+          "quarantinedBalance": null,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "MISSING_BASELINE",
+          "confirmedUsable": null,
+          "quarantinedBalance": null,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "mismatched-observation-unit",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 25,
+            "unit": "kg",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "UNIT_MISMATCH",
+          "confirmedUsable": null,
+          "quarantinedBalance": null,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "UNIT_MISMATCH",
+          "confirmedUsable": null,
+          "quarantinedBalance": null,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "mismatched-movement-unit",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "cases",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 25,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "UNIT_MISMATCH",
+          "confirmedUsable": null,
+          "quarantinedBalance": null,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "UNIT_MISMATCH",
+          "confirmedUsable": null,
+          "quarantinedBalance": null,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "dismissed-observation",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 25,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "DISMISSED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "NO_OBSERVATION",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "NO_OBSERVATION",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": null,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "balanced-observation",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 45,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "BALANCED",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": 0,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "BALANCED",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": 0,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "more-counted-than-expected",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 48,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": -3,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "DISCREPANCY",
+          "confirmedUsable": 45,
+          "quarantinedBalance": 5,
+          "discrepancy": -3,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      },
+      {
+        "id": "explicit-adjustment",
+        "input": {
+          "item": {
+            "id": "rice",
+            "name": "Rice",
+            "allowedUnits": [
+              "bags"
+            ],
+            "aliases": []
+          },
+          "openingBalance": {
+            "itemId": "rice",
+            "unit": "bags",
+            "usableQuantity": 24,
+            "quarantinedQuantity": 0,
+            "confirmedAt": "2026-01-01T12:00:00.000Z",
+            "isDemoSeed": false
+          },
+          "approvedEvents": [
+            {
+              "id": "RECEIVED",
+              "noteId": "human-fixture",
+              "kind": "RECEIVED",
+              "quantity": 36,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "DISTRIBUTED",
+              "noteId": "human-fixture",
+              "kind": "DISTRIBUTED",
+              "quantity": 10,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "QUARANTINED",
+              "noteId": "human-fixture",
+              "kind": "QUARANTINED",
+              "quantity": 5,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            },
+            {
+              "id": "ADJUSTMENT",
+              "noteId": "human-fixture",
+              "kind": "ADJUSTMENT",
+              "quantity": 2,
+              "itemId": "rice",
+              "unit": "bags",
+              "occurredAt": "2026-01-01T12:00:00.000Z",
+              "approvedAt": "2026-01-01T12:00:00.000Z",
+              "approvedBy": "Fixture reviewer",
+              "sourceNoteOrigin": "UNKNOWN"
+            }
+          ],
+          "latestObservation": {
+            "tempId": "count",
+            "rawItemName": "rice",
+            "canonicalItemId": "rice",
+            "count": 47,
+            "unit": "bags",
+            "evidenceText": "Counted 25 bags of rice.",
+            "state": "CONFIRMED"
+          },
+          "pendingDrafts": []
+        },
+        "expected": {
+          "status": "BALANCED",
+          "confirmedUsable": 47,
+          "quarantinedBalance": 5,
+          "discrepancy": 0,
+          "blockingDraftCount": 0
+        },
+        "actual": {
+          "status": "BALANCED",
+          "confirmedUsable": 47,
+          "quarantinedBalance": 5,
+          "discrepancy": 0,
+          "blockingDraftCount": 0
+        },
+        "passed": true
+      }
+    ]
+  }
+}

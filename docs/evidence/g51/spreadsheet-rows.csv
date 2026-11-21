@@ -1,0 +1,6 @@
+Note,Item,Unit,Opening,Received,Distributed,Quarantined,Observed,Follow-up,Expected usable,Discrepancy
+6,chickpeas,,,,14,,,Clarify dispatch unit,MISSING UNIT,
+19,rice,bags,,17,,,19,Verify opening balance,MISSING BASELINE,
+20,beans,cans,,,,,26,Imani: recount after the queue clears,MISSING BASELINE,
+25,rice,bags,24,,6,2,15,,16,1
+30,rice,bags,24,,4,,,Mo: ask where the rice delivery went,20,

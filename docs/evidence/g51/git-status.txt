@@ -1,0 +1,28 @@
+ M .gitignore
+ M package-lock.json
+ M package.json
+ M src/App.tsx
+ M tsconfig.json
+ M vite.config.ts
+?? PLANNING.md
+?? SPEC.md
+?? START_PLANNING_AGENT.md
+?? docs/EVALUATION.md
+?? docs/evidence/g51/build.txt
+?? docs/evidence/g51/cloud-unpaced.json
+?? docs/evidence/g51/cloud.json
+?? docs/evidence/g51/device.json
+?? docs/evidence/g51/git-status.txt
+?? docs/evidence/g51/npm-test.txt
+?? docs/evidence/g51/spreadsheet-rows.csv
+?? docs/evidence/g51/spreadsheet-timing.json
+?? docs/evidence/g51/test-e2e.txt
+?? docs/evidence/g51/typecheck.txt
+?? e2e/golden-path.spec.ts
+?? firebase.json
+?? playwright.config.ts
+?? src/components/BenchmarkRunner.tsx
+?? src/data/benchmarkNotes.ts
+?? src/data/benchmarkReconciliation.ts
+?? src/lib/benchmarkScore.test.ts
+?? src/lib/benchmarkScore.ts

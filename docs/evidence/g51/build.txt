@@ -1,0 +1,25 @@
+
+> pantryrelay@0.0.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.8 building client environment for production...
+transforming...
+✓ 159 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    0.62 kB │ gzip:   0.34 kB
+dist/assets/index-DNlMHHNO.css                    13.84 kB │ gzip:   3.61 kB
+dist/assets/workbox-window.prod.es5-Bd17z0YL.js    5.65 kB │ gzip:   2.20 kB
+dist/assets/BenchmarkRunner-RiCdduGs.js           23.28 kB │ gzip:   6.72 kB
+dist/assets/firebase-BVjjoi2C.js                 120.96 kB │ gzip:  36.29 kB
+dist/assets/index-yzUsn6fP.js                    376.64 kB │ gzip: 114.80 kB
+dist/assets/firebase-firestore-C8ythzfb.js       485.85 kB │ gzip: 147.27 kB
+
+✓ built in 161ms
+
+PWA v2.0.0
+mode      generateSW
+precache  7 entries (1002.80 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { CapturePanel } from './components/CapturePanel';
 import { ReviewPanel } from './components/ReviewPanel';
 import { HandoffPanel } from './components/HandoffPanel';
@@ -8,6 +8,8 @@ import { usePantryWorkflow } from './hooks/usePantryWorkflow';
 import type { PantryWorkflow } from './hooks/usePantryWorkflow';
 import { syntheticNotes } from './lib/syntheticNotes';
 import type { ExtractionMode } from './lib/spikeExtract';
+
+const BenchmarkRunner = lazy(() => import('./components/BenchmarkRunner'));
 
 function WorkspacePanels({ workflow }: { workflow: PantryWorkflow }) {
   const latest = workflow.state.notes.at(-1);
@@ -23,7 +25,7 @@ function WorkspacePanels({ workflow }: { workflow: PantryWorkflow }) {
   </fieldset>;
 }
 
-export default function App() {
+function VolunteerWorkspace() {
   const workflow = usePantryWorkflow();
   return <main className="workspace">
     <header className="workspace-header"><div className="brand"><svg aria-hidden="true" viewBox="0 0 32 32" width="34" height="34"><path d="M5 8h22v6H5zm0 10h22v6H5z" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M10 4v24M22 4v24" stroke="currentColor" strokeWidth="2" /></svg>
@@ -33,4 +35,13 @@ export default function App() {
     {workflow.state.hydrated && <WorkspacePanels key={workflow.state.sessionId} workflow={workflow} />}
     <footer>Human decisions. Traceable movements. No silent stock changes.</footer>
   </main>;
+}
+
+export default function App() {
+  if (new URLSearchParams(window.location.search).get('benchmark') === '1') {
+    return <Suspense fallback={<main className="workspace"><p role="status">Loading benchmark…</p></main>}>
+      <BenchmarkRunner />
+    </Suspense>;
+  }
+  return <VolunteerWorkspace />;
 }
