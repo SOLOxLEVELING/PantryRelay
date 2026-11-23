@@ -34,6 +34,6 @@ The pilot's median was 4.636 s for a prepared spreadsheet and 79.580 s for the a
 - Platform and category: Web (Chrome).
 - License and test path: [Apache-2.0](../LICENSE) and [Chrome setup](../README.md#chrome-and-offline-setup).
 - Hosted project: [Firebase Hosting](https://pantryrelay-c3246.web.app/). Desktop Chrome verified hosted App Check, cloud extraction and briefing, sync, and offline device extraction. [Verification](evidence/g52/verification.md)
-- Public GitHub or GitLab URL: pending owner publication.
+- Public GitHub or GitLab URL: [https://github.com/SOLOxLEVELING/PantryRelay](https://github.com/SOLOxLEVELING/PantryRelay).
 - Public YouTube URL: pending owner submission.
 - Devpost entry: pending owner submission. [Official rules and deadline](https://firebasehybridaihackathon.devpost.com/rules)
