@@ -6,7 +6,10 @@ import type { WorkflowState } from './workflowState';
 export interface LocalWorkspaceSnapshot extends Pick<WorkflowState, 'notes' | 'approvedEvents' | 'keptOpen'> {
   sessionId: string;
   updatedAt: string;
+  revision?: number;
 }
+
+export type SaveWorkspaceResult = { ok: true; revision: number } | { ok: false; reason: 'STALE_TAB' };
 
 export interface OutboxEntry {
   event: LedgerEvent;
@@ -45,9 +48,10 @@ async function withDatabase<T>(operation: (db: IDBPDatabase<PantryRelayDatabase>
   }
 }
 
-async function commitWrite(transaction: { done: Promise<void>; abort(): void }, write: () => Promise<void>) {
+async function commitWrite<T>(transaction: { done: Promise<void>; abort(): void }, write: () => Promise<T>): Promise<T> {
   try {
-    await Promise.all([transaction.done, write()]);
+    const [result] = await Promise.all([write(), transaction.done]);
+    return result;
   } catch (error) {
     try {
       transaction.abort();
@@ -74,12 +78,26 @@ export function loadLocalWorkspace(): Promise<LocalWorkspaceSnapshot | undefined
   });
 }
 
-export function saveLocalWorkspace(snapshot: LocalWorkspaceSnapshot): Promise<void> {
+export function saveLocalWorkspace(
+  snapshot: LocalWorkspaceSnapshot,
+  { expectedRevision }: { expectedRevision?: number } = {},
+): Promise<SaveWorkspaceResult> {
   return withDatabase(async db => {
     const transaction = db.transaction(['workspace', 'outbox'], 'readwrite');
-    await commitWrite(transaction, async () => {
+    return commitWrite(transaction, async (): Promise<SaveWorkspaceResult> => {
+      const workspaceStore = transaction.objectStore('workspace');
+      const existing = await workspaceStore.get('active');
+      const currentRevision = existing?.revision ?? 0;
+      if (expectedRevision !== undefined && (existing
+        ? existing.sessionId !== snapshot.sessionId || currentRevision !== expectedRevision
+        : expectedRevision > 0)) {
+        return { ok: false, reason: 'STALE_TAB' };
+      }
+
+      const revision = currentRevision + 1;
       await insertNewEvents(transaction.objectStore('outbox'), snapshot.sessionId, snapshot.approvedEvents);
-      await transaction.objectStore('workspace').put(snapshot, 'active');
+      await workspaceStore.put({ ...snapshot, revision }, 'active');
+      return { ok: true, revision };
     });
   });
 }

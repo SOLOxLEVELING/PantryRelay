@@ -1,0 +1,23 @@
+
+> pantryrelay@0.0.0 test:e2e
+> playwright test
+
+[WebServer] (node:62502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:62530) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:62531) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 e2e/golden-path.spec.ts:27:3 › manual approvals reconcile to 47 usable and a 22-bag discrepancy (1.2s)
+  ✓  2 e2e/golden-path.spec.ts:27:3 › manual approvals reconcile to 45 usable and a 20-bag discrepancy (853ms)
+  ✓  3 e2e/golden-path.spec.ts:109:1 › volunteer route exposes named sections, headings, live status and keyboard navigation (980ms)
+  ✓  4 e2e/golden-path.spec.ts:138:3 › a stale tab cannot undo approved stock (cross-tab notification) (607ms)
+  ✓  5 e2e/golden-path.spec.ts:138:3 › a stale tab cannot undo approved stock (IndexedDB fallback) (616ms)
+  ✓  6 e2e/golden-path.spec.ts:199:1 › adding a manual movement uses the newly typed note (261ms)
+  ✓  7 e2e/golden-path.spec.ts:220:3 › Review fits a 360×844 viewport after a movement is added (219ms)
+  ✓  8 e2e/golden-path.spec.ts:220:3 › Review fits a 390×844 viewport after a movement is added (268ms)
+
+  8 passed (6.0s)

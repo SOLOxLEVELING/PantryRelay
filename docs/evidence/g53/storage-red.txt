@@ -1,0 +1,160 @@
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+ ❯ src/lib/storage.test.ts (6 tests | 5 failed) 19ms
+   ❯ local workspace storage (6)
+     × restores the exact snapshot and pending approval on a fresh IndexedDB connection 7ms
+     × accepts one of two concurrent edits to a legacy snapshot and rejects the stale write atomically 5ms
+     × rejects edits from before reset even when the new session has the same revision 1ms
+     × rolls back an outbox insertion when the workspace snapshot cannot be cloned 3ms
+     × clears the workspace and outbox together for reset 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > restores the exact snapshot and pending approval on a fresh IndexedDB connection
+AssertionError: expected undefined to deeply equal { ok: true, revision: 1 }
+
+- Expected:
+{
+  "ok": true,
+  "revision": 1,
+}
+
++ Received:
+undefined
+
+ ❯ src/lib/storage.test.ts:44:47
+     42| describe('local workspace storage', () => {
+     43|   it('restores the exact snapshot and pending approval on a fresh Inde…
+     44|     await expect(saveLocalWorkspace(snapshot)).resolves.toEqual({ ok: …
+       |                                               ^
+     45|     const persisted = { ...snapshot, revision: 1 };
+     46|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > accepts one of two concurrent edits to a legacy snapshot and rejects the stale write atomically
+AssertionError: expected [ { event: { …(10) }, …(5) }, …(1) ] to deeply equal [ { event: { …(10) }, …(5) } ]
+
+- Expected
++ Received
+
+@@ -16,6 +16,25 @@
+      "lastError": null,
+      "sessionId": "shift-a",
+      "syncState": "APPROVED_PENDING_SYNC",
+      "syncedAt": null,
+    },
++   {
++     "attempts": 0,
++     "event": {
++       "approvedAt": "2026-11-21T10:00:00.000Z",
++       "approvedBy": "volunteer",
++       "id": "stale-event",
++       "itemId": "rice",
++       "kind": "RECEIVED",
++       "noteId": "note-a",
++       "occurredAt": "2026-11-21T10:00:00.000Z",
++       "quantity": 36,
++       "sourceNoteOrigin": "ON_DEVICE",
++       "unit": "bags",
++     },
++     "lastError": null,
++     "sessionId": "shift-a",
++     "syncState": "APPROVED_PENDING_SYNC",
++     "syncedAt": null,
++   },
+  ]
+
+ ❯ src/lib/storage.test.ts:77:39
+     75|     ]);
+     76|
+     77|     expect(await listOutboxEntries()).toEqual([
+       |                                       ^
+     78|       { event: receipt, sessionId, syncState: 'APPROVED_PENDING_SYNC',…
+     79|     ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > rejects edits from before reset even when the new session has the same revision
+AssertionError: expected undefined to deeply equal { ok: false, reason: 'STALE_TAB' }
+
+- Expected:
+{
+  "ok": false,
+  "reason": "STALE_TAB",
+}
+
++ Received:
+undefined
+
+ ❯ src/lib/storage.test.ts:89:72
+     87|     await clearLocalWorkspace();
+     88|
+     89|     await expect(saveLocalWorkspace(snapshot, { expectedRevision: 1 }))
+       |                                                                        ^
+     90|       .resolves.toEqual({ ok: false, reason: 'STALE_TAB' });
+     91|     expect(await loadLocalWorkspace()).toBeUndefined();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > rolls back an outbox insertion when the workspace snapshot cannot be cloned
+AssertionError: expected { sessionId: 'shift-a', …(4) } to deeply equal { sessionId: 'shift-a', …(5) }
+
+- Expected
++ Received
+
+@@ -83,9 +83,8 @@
+            "reason": "Untrusted claim",
+          },
+        ],
+      },
+    ],
+-   "revision": 1,
+    "sessionId": "shift-a",
+    "updatedAt": "2026-11-21T10:00:00.000Z",
+  }
+
+ ❯ src/lib/storage.test.ts:115:40
+    113|     await expect(saveLocalWorkspace(nextSnapshot)).rejects.toThrow();
+    114|
+    115|     expect(await loadLocalWorkspace()).toEqual({ ...snapshot, revision…
+       |                                        ^
+    116|     expect(await listOutboxEntries()).toMatchObject([{ event: receipt …
+    117|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/lib/storage.test.ts > local workspace storage > clears the workspace and outbox together for reset
+AssertionError: expected { sessionId: 'shift-a', …(4) } to deeply equal { sessionId: 'shift-a', …(5) }
+
+- Expected
++ Received
+
+@@ -83,9 +83,8 @@
+            "reason": "Untrusted claim",
+          },
+        ],
+      },
+    ],
+-   "revision": 1,
+    "sessionId": "shift-a",
+    "updatedAt": "2026-11-21T10:00:00.000Z",
+  }
+
+ ❯ src/lib/storage.test.ts:142:40
+    140|   it('clears the workspace and outbox together for reset', async () =>…
+    141|     await saveLocalWorkspace(snapshot);
+    142|     expect(await loadLocalWorkspace()).toEqual({ ...snapshot, revision…
+       |                                        ^
+    143|     expect(await listOutboxEntries()).toHaveLength(1);
+    144|     await clearLocalWorkspace();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 1 passed (6)
+   Start at  20:35:22
+   Duration  152ms (tests 33%, import 32%, transform 31%, worker 4%)
+

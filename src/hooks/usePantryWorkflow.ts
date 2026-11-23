@@ -22,6 +22,7 @@ const emptyBriefing = { text: '', inferenceSource: 'UNKNOWN', latencyMs: null } 
 >;
 const idleBriefing: BriefingState = { ...emptyBriefing, status: 'IDLE', error: null };
 const offlineBriefingMessage = 'Cloud briefing requires an internet connection. You can still copy the shift handoff offline.';
+const staleTabMessage = 'This workspace was updated or reset in another browser tab. Reload this tab to use the latest record.';
 
 const ledgerWriter = createFirestoreLedgerWriter(db);
 
@@ -46,6 +47,8 @@ export function usePantryWorkflow() {
   const [saved, setSaved] = useState<LocalWorkspaceSnapshot>();
   const [outboxEntries, setOutboxEntries] = useState<OutboxEntry[]>([]);
   const [storageError, setStorageError] = useState<string>();
+  const [staleTab, setStaleTab] = useState(false);
+  const [tabId] = useState(() => crypto.randomUUID());
   const [syncFailure, setSyncFailure] = useState<string>();
   const [syncing, setSyncing] = useState(false);
   const [resetting, setResetting] = useState(false);
@@ -53,6 +56,10 @@ export function usePantryWorkflow() {
   const briefingLock = useRef<number | null>(null);
   const generation = useRef(0);
   const storageQueue = useRef(Promise.resolve());
+  const savedRevision = useRef(0);
+  const hydratedSnapshot = useRef<LocalWorkspaceSnapshot>(undefined);
+  const staleTabLock = useRef(false);
+  const workspaceChannel = useRef<BroadcastChannel | null>(null);
   const syncLock = useRef<number | null>(null);
   const resetLock = useRef(false);
   const extracting = useRef(false);
@@ -63,6 +70,11 @@ export function usePantryWorkflow() {
     return result;
   }, []);
 
+  const markStaleTab = useCallback(() => {
+    staleTabLock.current = true;
+    setStaleTab(true);
+  }, []);
+
   useEffect(() => {
     if (hydrated) return;
     let active = true;
@@ -71,6 +83,8 @@ export function usePantryWorkflow() {
         const snapshot = await loadLocalWorkspace();
         const entries = await listOutboxEntries(snapshot?.sessionId ?? sessionId);
         if (!active) return;
+        savedRevision.current = snapshot?.revision ?? 0;
+        hydratedSnapshot.current = snapshot;
         setSaved(snapshot);
         setOutboxEntries(entries);
         dispatch({ type: 'HYDRATE', snapshot });
@@ -84,28 +98,38 @@ export function usePantryWorkflow() {
 
   useEffect(() => {
     if (!hydrated) return;
+    const loaded = hydratedSnapshot.current;
+    if (loaded?.sessionId === sessionId && loaded.notes === notes &&
+      loaded.approvedEvents === approvedEvents && loaded.keptOpen === keptOpen) return;
+    hydratedSnapshot.current = undefined;
     const token = generation.current;
     const snapshot = { sessionId, notes, approvedEvents, keptOpen, updatedAt: new Date().toISOString() };
     void queueStorage(async () => {
-      if (token !== generation.current || resetLock.current) return;
+      if (token !== generation.current || resetLock.current || staleTabLock.current) return;
       try {
-        await saveLocalWorkspace(snapshot);
+        const result = await saveLocalWorkspace(snapshot, { expectedRevision: savedRevision.current });
+        if (!result.ok) {
+          markStaleTab();
+          return;
+        }
+        savedRevision.current = result.revision;
+        workspaceChannel.current?.postMessage({ type: 'WORKSPACE_UPDATED', tabId });
         const entries = await listOutboxEntries(sessionId);
-        if (token !== generation.current) return;
-        setSaved(snapshot);
+        if (token !== generation.current || staleTabLock.current) return;
+        setSaved({ ...snapshot, revision: result.revision });
         setOutboxEntries(entries);
         setStorageError(undefined);
       } catch {
         if (token === generation.current) setStorageError('Could not save changes to IndexedDB. Check browser storage and try another edit.');
       }
     });
-  }, [sessionId, hydrated, notes, approvedEvents, keptOpen, queueStorage]);
+  }, [sessionId, hydrated, notes, approvedEvents, keptOpen, queueStorage, markStaleTab, tabId]);
 
   const syncNow = useCallback(async (onlyPending = false) => {
-    if (!navigator.onLine || !hydrated || resetLock.current || syncLock.current !== null) return;
+    if (!navigator.onLine || !hydrated || resetLock.current || staleTabLock.current || syncLock.current !== null) return;
     const token = generation.current;
     const isCurrent = () => token === generation.current;
-    const canWrite = () => isCurrent() && navigator.onLine;
+    const canWrite = () => isCurrent() && navigator.onLine && !staleTabLock.current;
     syncLock.current = token;
     try {
       await storageQueue.current;
@@ -149,7 +173,7 @@ export function usePantryWorkflow() {
   }, [syncNow]);
 
   async function resetDemo() {
-    if (!hydrated || resetLock.current) return;
+    if (!hydrated || resetLock.current || staleTabLock.current) return;
     resetLock.current = true;
     setResetting(true);
     generation.current += 1;
@@ -158,12 +182,18 @@ export function usePantryWorkflow() {
     briefingLock.current = null;
     setBriefing(idleBriefing);
     try {
-      await queueStorage(clearLocalWorkspace);
-      setSaved(undefined);
-      setOutboxEntries([]);
-      setStorageError(undefined);
-      setSyncFailure(undefined);
-      dispatch({ type: 'RESET' });
+      await queueStorage(async () => {
+        if (staleTabLock.current) return;
+        await clearLocalWorkspace();
+        savedRevision.current = 0;
+        hydratedSnapshot.current = undefined;
+        workspaceChannel.current?.postMessage({ type: 'WORKSPACE_RESET', tabId });
+        setSaved(undefined);
+        setOutboxEntries([]);
+        setStorageError(undefined);
+        setSyncFailure(undefined);
+        dispatch({ type: 'RESET' });
+      });
     } catch {
       setStorageError('Could not reset the local workspace. Try Reset demo again.');
     } finally {
@@ -174,6 +204,16 @@ export function usePantryWorkflow() {
 
   useEffect(() => {
     let active = true;
+    const channel = typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel('pantryrelay-workspace');
+    workspaceChannel.current = channel;
+    if (channel) {
+      channel.onmessage = (message: MessageEvent<unknown>) => {
+        const data = message.data;
+        if (data && typeof data === 'object' && 'tabId' in data && typeof data.tabId === 'string' &&
+          data.tabId !== tabId && 'type' in data &&
+          (data.type === 'WORKSPACE_UPDATED' || data.type === 'WORKSPACE_RESET')) markStaleTab();
+      };
+    }
     const updateOnline = () => setOnline(navigator.onLine);
     const updateShell = async () => {
       try {
@@ -196,11 +236,13 @@ export function usePantryWorkflow() {
     }
     return () => {
       active = false;
+      workspaceChannel.current = null;
+      channel?.close();
       window.removeEventListener('online', updateOnline);
       window.removeEventListener('offline', updateOnline);
       if ('serviceWorker' in navigator) navigator.serviceWorker.removeEventListener('controllerchange', updateShell);
     };
-  }, []);
+  }, [markStaleTab, tabId]);
 
   async function extractNote(noteText: string, mode: ExtractionMode) {
     if (extracting.current) return;
@@ -240,7 +282,10 @@ export function usePantryWorkflow() {
   }
 
   function addMovement(noteText: string, itemId?: string, adjustment = false) {
-    dispatch({ type: 'ADD_MOVEMENT', ...manualContext(noteText), tempId: crypto.randomUUID(), itemId, adjustment });
+    const latest = notes.at(-1)?.draft;
+    const context = adjustment ? manualContext(noteText) :
+      { noteId: latest?.noteText === noteText ? latest.noteId : crypto.randomUUID(), noteText };
+    dispatch({ type: 'ADD_MOVEMENT', ...context, tempId: crypto.randomUUID(), itemId, adjustment });
   }
 
   function addObservation(noteText: string) {
@@ -289,7 +334,8 @@ export function usePantryWorkflow() {
   const syncError = syncFailure ?? outboxEntries.find(entry => entry.syncState === 'SYNC_ERROR')?.lastError;
   const outboxByEvent = new Map(outboxEntries.map(entry => [entry.event.id, entry]));
   return { state, reconciliations, briefing, requestCloudBriefing, offlineBriefingMessage, online, modelStatus, shellCached, appCheck, preloading,
-    locallySaved, storageError, outboxByEvent, syncSummary, syncError, syncing, resetting, syncNow, resetDemo,
+    locallySaved, storageError: staleTab ? staleTabMessage : storageError, staleTab,
+    outboxByEvent, syncSummary, syncError, syncing, resetting, syncNow, resetDemo,
     busy: state.extractingNoteId !== null, extractNote, preload, refreshAppCheck,
     editMovement: (tempId: string, changes: MovementEdit) => dispatch({ type: 'EDIT', tempId, changes }),
     addMovement,

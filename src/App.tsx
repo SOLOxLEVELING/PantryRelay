@@ -16,7 +16,7 @@ function WorkspacePanels({ workflow }: { workflow: PantryWorkflow }) {
   const [noteText, setNoteText] = useState(() => latest?.draft.noteText ?? syntheticNotes[0]?.text ?? '');
   const [sampleId, setSampleId] = useState(() => syntheticNotes.find(note => note.text === noteText)?.id ?? 'custom');
   const [mode, setMode] = useState<ExtractionMode>('PREFER_ON_DEVICE');
-  return <fieldset className="workspace-panels" disabled={workflow.resetting} aria-label="Shift workspace">
+  return <fieldset className="workspace-panels" disabled={workflow.resetting || workflow.staleTab} aria-label="Shift workspace">
     <CapturePanel noteText={noteText} setNoteText={setNoteText} sampleId={sampleId} setSampleId={setSampleId}
       mode={mode} setMode={setMode} busy={workflow.busy} latest={latest} onExtract={() => void workflow.extractNote(noteText, mode)} />
     <div className="review-workspace"><ReviewPanel workflow={workflow} noteText={noteText} />

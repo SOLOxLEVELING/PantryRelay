@@ -41,11 +41,12 @@ beforeEach(clearLocalWorkspace);
 
 describe('local workspace storage', () => {
   it('restores the exact snapshot and pending approval on a fresh IndexedDB connection', async () => {
-    await saveLocalWorkspace(snapshot);
+    await expect(saveLocalWorkspace(snapshot)).resolves.toEqual({ ok: true, revision: 1 });
+    const persisted = { ...snapshot, revision: 1 };
 
     const freshConnection = await openDB('pantryrelay-local', 1);
     try {
-      expect(await freshConnection.getAll('workspace')).toEqual([snapshot]);
+      expect(await freshConnection.getAll('workspace')).toEqual([persisted]);
       expect(await freshConnection.get('outbox', receipt.id)).toMatchObject({
         event: receipt, sessionId, syncState: 'APPROVED_PENDING_SYNC', attempts: 0,
       });
@@ -54,8 +55,49 @@ describe('local workspace storage', () => {
     }
 
     const restored = await loadLocalWorkspace();
-    expect(restored).toEqual(snapshot);
+    expect(restored).toEqual(persisted);
     expect(Object.isFrozen(restored?.approvedEvents[0])).toBe(true);
+  });
+
+  it('accepts one of two concurrent edits to a legacy snapshot and rejects the stale write atomically', async () => {
+    const legacy = { ...snapshot, approvedEvents: [] };
+    const connection = await openDB('pantryrelay-local', 1);
+    try {
+      await connection.put('workspace', legacy, 'active');
+    } finally {
+      connection.close();
+    }
+    const staleEvent = { ...receipt, id: 'stale-event' };
+    const competingEdit = { ...legacy, approvedEvents: [staleEvent] };
+    const [approved, stale] = await Promise.all([
+      saveLocalWorkspace(snapshot, { expectedRevision: 0 }),
+      saveLocalWorkspace(competingEdit, { expectedRevision: 0 }),
+    ]);
+
+    expect(await listOutboxEntries()).toEqual([
+      { event: receipt, sessionId, syncState: 'APPROVED_PENDING_SYNC', attempts: 0, lastError: null, syncedAt: null },
+    ]);
+    expect(await loadLocalWorkspace()).toEqual({ ...snapshot, revision: 1 });
+    expect(approved).toEqual({ ok: true, revision: 1 });
+    expect(stale).toEqual({ ok: false, reason: 'STALE_TAB' });
+  });
+
+  it('rejects edits from before reset even when the new session has the same revision', async () => {
+    await saveLocalWorkspace(snapshot);
+    await clearLocalWorkspace();
+
+    await expect(saveLocalWorkspace(snapshot, { expectedRevision: 1 }))
+      .resolves.toEqual({ ok: false, reason: 'STALE_TAB' });
+    expect(await loadLocalWorkspace()).toBeUndefined();
+    expect(await listOutboxEntries()).toEqual([]);
+
+    const newSession = { ...snapshot, sessionId: 'shift-b', approvedEvents: [{ ...receipt, id: 'new-session-event' }] };
+    await expect(saveLocalWorkspace(newSession, { expectedRevision: 0 })).resolves.toEqual({ ok: true, revision: 1 });
+    const outbox = await listOutboxEntries();
+    await expect(saveLocalWorkspace(snapshot, { expectedRevision: 1 }))
+      .resolves.toEqual({ ok: false, reason: 'STALE_TAB' });
+    expect(await loadLocalWorkspace()).toEqual({ ...newSession, revision: 1 });
+    expect(await listOutboxEntries()).toEqual(outbox);
   });
 
   it('rolls back an outbox insertion when the workspace snapshot cannot be cloned', async () => {
@@ -70,7 +112,7 @@ describe('local workspace storage', () => {
     };
     await expect(saveLocalWorkspace(nextSnapshot)).rejects.toThrow();
 
-    expect(await loadLocalWorkspace()).toEqual(snapshot);
+    expect(await loadLocalWorkspace()).toEqual({ ...snapshot, revision: 1 });
     expect(await listOutboxEntries()).toMatchObject([{ event: receipt }]);
   });
 
@@ -97,7 +139,7 @@ describe('local workspace storage', () => {
 
   it('clears the workspace and outbox together for reset', async () => {
     await saveLocalWorkspace(snapshot);
-    expect(await loadLocalWorkspace()).toEqual(snapshot);
+    expect(await loadLocalWorkspace()).toEqual({ ...snapshot, revision: 1 });
     expect(await listOutboxEntries()).toHaveLength(1);
     await clearLocalWorkspace();
     await markOutboxSynced(receipt.id, updatedAt);

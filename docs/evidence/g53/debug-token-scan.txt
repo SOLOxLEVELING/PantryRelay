@@ -1,0 +1,3 @@
+Scanned 9 files under dist/.
+VITE_APPCHECK_DEBUG_TOKEN: 0 matching files
+Configured debug-token value (withheld): 0 matching files

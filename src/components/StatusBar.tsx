@@ -18,16 +18,17 @@ export function StatusBar({ workflow }: { workflow: PantryWorkflow }) {
       <button className="text-button" disabled={!workflow.online || workflow.appCheck === 'Checking'} onClick={() => void workflow.refreshAppCheck()}>Check</button></span>
     <span>IndexedDB <strong role="status">{storageLabel}</strong></span>
     <span>Sync <strong role="status" className={`badge ${hasSyncError && !workflow.syncing ? 'error-badge' : ''}`}>{syncLabel}</strong>
-      <button className="text-button" disabled={!workflow.online || !workflow.state.hydrated || !workflow.locallySaved || workflow.syncing || workflow.resetting}
+      <button className="text-button" disabled={!workflow.online || !workflow.state.hydrated || !workflow.locallySaved || workflow.syncing || workflow.resetting || workflow.staleTab}
         onClick={() => void workflow.syncNow()}>{hasSyncError ? 'Retry sync' : 'Sync now'}</button></span>
-    <button className="reset-button" disabled={!workflow.state.hydrated || workflow.resetting} onClick={() => void workflow.resetDemo()}>Reset demo</button>
+    <button className="reset-button" disabled={!workflow.state.hydrated || workflow.resetting || workflow.staleTab} onClick={() => void workflow.resetDemo()}>Reset demo</button>
   </div>
     <details className="browser-setup">
       <summary>Browser &amp; offline setup</summary>
       <p>In supported desktop Chrome, preload the on-device model while online. Wait for <strong>Ready</strong> and <strong>Cached offline</strong> before going offline, then choose <strong>ONLY_ON_DEVICE</strong> for extraction.</p>
       <p>If the browser or device cannot run the model, choose cloud extraction when connected or add movements manually. You can review, reconcile, and copy the handoff offline after the app shell is cached.</p>
     </details>
-    {workflow.storageError && <p role="alert" className="error-message">{workflow.storageError}</p>}
+    {workflow.storageError && <div className="error-message storage-alert"><p role="alert">{workflow.storageError}</p>
+      {workflow.staleTab && <button onClick={() => window.location.reload()}>Reload tab</button>}</div>}
     {workflow.syncError && !workflow.syncing && <p role="alert" className="error-message">{workflow.syncError}</p>}
   </>;
 }

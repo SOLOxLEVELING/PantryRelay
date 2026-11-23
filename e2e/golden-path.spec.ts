@@ -2,6 +2,11 @@ import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 const noteText = 'Received 36 bags of rice, distributed 8 bags, quarantined 5 bags and counted 25 bags on the shelf.';
+const staleTabMessage = 'This workspace was updated or reset in another browser tab. Reload this tab to use the latest record.';
+
+function locallySaved(page: Page) {
+  return page.getByRole('status').filter({ hasText: /^Locally saved$/ });
+}
 
 function movementRow(page: Page, index: number) {
   return page.getByRole('row').filter({ has: page.getByLabel(`Movement 1.${index} item`, { exact: true }) });
@@ -128,3 +133,104 @@ test('volunteer route exposes named sections, headings, live status and keyboard
   await expect(page.getByRole('heading', { name: 'Extraction benchmark' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Add manual movement' })).toHaveCount(0);
 });
+
+for (const broadcastAvailable of [true, false]) {
+  test(`a stale tab cannot undo approved stock (${broadcastAvailable ? 'cross-tab notification' : 'IndexedDB fallback'})`, async ({ context }) => {
+    await context.route(url => url.hostname !== 'localhost', route => route.abort());
+    const tabA = await context.newPage();
+    const tabB = await context.newPage();
+    if (!broadcastAvailable) {
+      await tabB.addInitScript(() => Object.defineProperty(window, 'BroadcastChannel', { value: undefined }));
+    }
+
+    await tabA.goto('/');
+    await enterMovement(tabA, 1, 'RECEIVED', '1');
+    await expect(locallySaved(tabA)).toBeVisible();
+    await tabB.goto('/');
+    await expect(movementRow(tabB, 1).getByRole('button', { name: 'Approve' })).toBeEnabled();
+    await expect(locallySaved(tabB)).toBeVisible();
+
+    const confirmed = (page: Page) => page.getByText('24 + 1 − 0 − 0 = 25 usable', { exact: true });
+    const pending = (page: Page) => page.getByRole('status').filter({ hasText: /^Pending sync \(1\)$/ });
+    await movementRow(tabA, 1).getByRole('button', { name: 'Approve' }).click();
+    await expect(confirmed(tabA)).toBeVisible();
+    await expect(pending(tabA)).toBeVisible();
+    await expect(locallySaved(tabA)).toBeVisible();
+
+    const addFromTabB = tabB.getByRole('button', { name: 'Add manual movement' });
+    const warning = tabB.getByRole('alert').filter({ hasText: staleTabMessage });
+    if (broadcastAvailable) {
+      await expect(warning).toBeVisible();
+      await expect(addFromTabB).toBeDisabled();
+      await addFromTabB.click({ force: true });
+      await expect(tabB.getByLabel('Movement 1.2 item')).toHaveCount(0);
+    } else {
+      await addFromTabB.click();
+      await expect(warning).toBeVisible();
+      await expect(addFromTabB).toBeDisabled();
+    }
+    await expect(tabB.getByRole('button', { name: 'Reset demo' })).toBeDisabled();
+
+    await tabA.reload();
+    await expect(confirmed(tabA)).toBeVisible();
+    await expect(pending(tabA)).toBeVisible();
+    await expect(tabA.getByRole('button', { name: 'Add manual movement' })).toBeEnabled();
+    await expect(tabA.getByLabel('Movement 1.2 item')).toHaveCount(0);
+    if (broadcastAvailable) {
+      await tabA.setViewportSize({ width: 1280, height: 900 });
+      await tabA.evaluate(() => window.scrollTo(0, 0));
+      await tabA.screenshot({ path: 'docs/evidence/g53/two-tab-preserved.png' });
+    }
+
+    await tabB.getByRole('button', { name: 'Reload tab' }).click();
+    await expect(confirmed(tabB)).toBeVisible();
+    await expect(pending(tabB)).toBeVisible();
+    await expect(addFromTabB).toBeEnabled();
+    if (broadcastAvailable) {
+      await tabA.getByRole('button', { name: 'Reset demo' }).click();
+      await expect(warning).toBeVisible();
+      await expect(addFromTabB).toBeDisabled();
+      await expect(locallySaved(tabA)).toBeVisible();
+      await expect(tabA.getByText('24 + 0 − 0 − 0 = 24 usable', { exact: true })).toBeVisible();
+    }
+  });
+}
+
+test('adding a manual movement uses the newly typed note', async ({ page, context }) => {
+  await context.route(url => url.hostname !== 'localhost', route => route.abort());
+  await page.goto('/');
+  const note = page.getByRole('textbox', { name: 'Volunteer note' });
+  const addMovement = page.getByRole('button', { name: 'Add manual movement' });
+  await note.fill('Audit note A');
+  await addMovement.click();
+  await note.fill('Audit note B');
+  await addMovement.click();
+
+  const original = page.locator('.review-note').filter({ hasText: 'Audit note A' });
+  const newNote = page.locator('.review-note').filter({ hasText: 'Audit note B' });
+  await expect(original.getByRole('row').filter({ has: page.getByLabel('Movement 1.1 item') })).toBeVisible();
+  await expect(original.getByLabel('Movement 1.2 item')).toHaveCount(0);
+  await expect(newNote.getByRole('row').filter({ has: page.getByLabel('Movement 2.1 item') })).toBeVisible();
+  await expect(locallySaved(page)).toBeVisible();
+  await page.reload();
+  await expect(newNote.getByLabel('Movement 2.1 item')).toBeVisible();
+});
+
+for (const width of [360, 390]) {
+  test(`Review fits a ${width}×844 viewport after a movement is added`, async ({ page, context }) => {
+    await context.route(url => url.hostname !== 'localhost', route => route.abort());
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/');
+    await enterMovement(page, 1, 'RECEIVED', '1');
+    const review = page.getByRole('region', { name: '2 Review' });
+    await expect(review.getByRole('button', { name: 'Approve' })).toBeEnabled();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+      await page.evaluate(() => window.innerWidth),
+    );
+    expect(await review.locator('.table-scroll').evaluate(table => table.scrollWidth <= table.clientWidth)).toBe(true);
+    if (width === 390) {
+      await review.scrollIntoViewIfNeeded();
+      await page.screenshot({ path: 'docs/evidence/g53/mobile-review-390.png' });
+    }
+  });
+}
