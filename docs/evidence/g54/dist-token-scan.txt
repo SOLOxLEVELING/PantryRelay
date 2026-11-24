@@ -1,0 +1,3 @@
+Scanned 9 files in dist/.
+VITE_APPCHECK_DEBUG_TOKEN occurrences: 0
+Configured debug token value occurrences: 0 (1 distinct configured values scanned)

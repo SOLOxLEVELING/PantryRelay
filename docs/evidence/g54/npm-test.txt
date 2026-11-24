@@ -1,0 +1,13 @@
+
+> pantryrelay@0.0.0 test
+> vitest run --exclude 'e2e/**'
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+
+ Test Files  10 passed (10)
+      Tests  152 passed (152)
+   Start at  02:08:04
+   Duration  454ms (import 56%, tests 21%, transform 21%, worker 2%)
+

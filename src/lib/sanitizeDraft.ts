@@ -90,6 +90,11 @@ export function sanitizeExtractedNote(noteText: string, raw: ExtractedNote): {
         const literal = literalNumbers[0];
         if (typeof claimed === 'number' && literalNumbers.length === 1 && literal !== undefined && Number(literal) !== claimed) {
           quarantined.push({ reason: 'Numeric claim contradicts its evidence', item });
+        } else if ('quantity' in item && typeof claimed === 'number' && claimed > 0 && claimed < 0.01) {
+          quarantined.push({ reason: 'Movement quantity is below 0.01', item });
+        } else if ('quantity' in item && typeof claimed === 'number' && claimed > 0 &&
+          literalNumbers.length > 0 && literalNumbers.every(number => Number(number) === 0)) {
+          quarantined.push({ reason: 'Positive movement quantity is backed only by zero values', item });
         } else kept.push(clean(item));
       }
     }

@@ -11,7 +11,7 @@ export function ReconcilePanel({ workflow, noteText }: { workflow: PantryWorkflo
   return <section className="reconcile-panel panel" aria-labelledby="reconcile-heading">
     <div className="section-heading"><h2 id="reconcile-heading"><span className="step">3</span> Reconcile</h2><span className="badge">Approved stock</span></div>
     <p className="section-intro">Confirmed records meet the shelf count.</p>
-    {workflow.reconciliations.map(({ item, openingBalance, latestObservation, result }) => <div className="item-reconciliation" key={item.id}>
+    {workflow.reconciliations.map(({ item, openingBalance, latestObservation, result, provisional }) => <div className="item-reconciliation" key={item.id}>
       <div className="item-heading"><h3>{item.name}</h3><span className="subtle">{openingBalance?.unit ?? item.allowedUnits.join(', ')}</span></div>
       {openingBalance?.isDemoSeed && <p className="demo-baseline"><span className="badge">Sample opening stock</span> {openingBalance.usableQuantity} {openingBalance.unit} · confirmed demo baseline</p>}
       {result.confirmedUsable !== null && <><dl className="balance-math">
@@ -30,9 +30,16 @@ export function ReconcilePanel({ workflow, noteText }: { workflow: PantryWorkflo
       {result.blockingDraftCount > 0 && <div className="pending-notice"><strong>{result.blockingDraftCount} pending {result.blockingDraftCount === 1 ? 'movement' : 'movements'}</strong>
         <p>Review or reject these rows. Pending drafts are excluded from the confirmed balance.</p>
         <details><summary>Show approval blockers</summary><ul>{result.pendingIssues.map(issue => <li key={issue.tempId}>{issue.reason}</li>)}</ul></details></div>}
-      {result.status === 'DISCREPANCY' && <div className="discrepancy" role="status"><div className="discrepancy-title"><span aria-hidden="true">!</span><h3>{Math.abs(result.discrepancy)} {openingBalance?.unit === 'bags' ? 'bag' : openingBalance?.unit} discrepancy</h3></div>
+      {result.status === 'DISCREPANCY' && <div className={provisional ? 'discrepancy is-provisional' : 'discrepancy'} role="status">
+        <div className="discrepancy-title">{!provisional && <span aria-hidden="true">!</span>}
+          <h3>{provisional ? `Provisional count difference (${Math.abs(result.discrepancy)} ${openingBalance?.unit}) — review pending` :
+            `${Math.abs(result.discrepancy)} ${openingBalance?.unit === 'bags' ? 'bag' : openingBalance?.unit} discrepancy`}</h3></div>
         <p>Expected <strong>{result.confirmedUsable}</strong> vs observed <strong>{latestObservation?.count}</strong>.</p>
-        <p>{latestObservation?.state === 'UNVERIFIED' ? 'Shelf count is unverified. ' : ''}The ledger stays unchanged until a volunteer records an explicit correction.</p>
+        {provisional ? <p>
+          {result.blockingDraftCount > 0 && 'Review pending movements. '}
+          {latestObservation?.state === 'UNVERIFIED' && 'Verify the shelf count. '}
+          Confirm the discrepancy after review is complete.
+        </p> : <p>The ledger stays unchanged until a volunteer records an explicit correction.</p>}
         <div className="discrepancy-actions"><button onClick={() => workflow.keepOpen(item.id)}>{workflow.state.keptOpen.includes(item.id) ? 'Discrepancy kept open' : 'Keep discrepancy open'}</button>
           <button onClick={() => setRecountFor(item.id)}>Add recount task</button>
           <button disabled={workflow.busy} onClick={() => workflow.addMovement(noteText, item.id, true)}>Record explicit adjustment</button></div>

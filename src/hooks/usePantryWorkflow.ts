@@ -6,7 +6,7 @@ import type { LocalWorkspaceSnapshot, OutboxEntry } from '../lib/storage';
 import { createFirestoreLedgerWriter, flushSyncOutbox, summarizeSyncState } from '../lib/syncOutbox';
 import { extractNoteHybrid, languageModelDiagnostic, preloadDeviceModel } from '../lib/spikeExtract';
 import type { ExtractionMode } from '../lib/spikeExtract';
-import { initialWorkflowState, reconcileWorkflow, workflowReducer } from '../lib/workflowState';
+import { duplicateExtractionSummary, initialWorkflowState, reconcileWorkflow, workflowReducer } from '../lib/workflowState';
 import type { MovementEdit, ObservationEdit, WorkflowState } from '../lib/workflowState';
 import type { FollowUpTask } from '../types/inventory';
 import { generateCloudShiftBriefing } from '../lib/shiftBriefing';
@@ -62,7 +62,7 @@ export function usePantryWorkflow() {
   const workspaceChannel = useRef<BroadcastChannel | null>(null);
   const syncLock = useRef<number | null>(null);
   const resetLock = useRef(false);
-  const extracting = useRef(false);
+  const extracting = useRef<{ noteId: string; controller: AbortController } | null>(null);
 
   const queueStorage = useCallback((operation: () => Promise<void>) => {
     const result = storageQueue.current.then(operation);
@@ -175,6 +175,7 @@ export function usePantryWorkflow() {
   async function resetDemo() {
     if (!hydrated || resetLock.current || staleTabLock.current) return;
     resetLock.current = true;
+    cancelExtraction();
     setResetting(true);
     generation.current += 1;
     syncLock.current = null;
@@ -245,17 +246,26 @@ export function usePantryWorkflow() {
   }, [markStaleTab, tabId]);
 
   async function extractNote(noteText: string, mode: ExtractionMode) {
-    if (extracting.current) return;
-    extracting.current = true;
-    const token = generation.current;
+    if (extracting.current || resetLock.current || staleTabLock.current) return;
     const noteId = crypto.randomUUID();
+    const request = { noteId, controller: new AbortController() };
+    extracting.current = request;
     dispatch({ type: 'EXTRACT_START', noteId, noteText });
     try {
-      const result = await extractNoteHybrid(noteText, mode);
-      if (token === generation.current) dispatch({ type: 'EXTRACT_FINISH', noteId, result });
+      const result = await extractNoteHybrid(noteText, mode, request.controller.signal);
+      if (extracting.current === request) dispatch({ type: 'EXTRACT_FINISH', noteId, result });
     } finally {
-      extracting.current = false;
+      if (extracting.current === request) extracting.current = null;
     }
+  }
+
+  function cancelExtraction() {
+    const request = extracting.current;
+    if (!request) return false;
+    extracting.current = null;
+    dispatch({ type: 'EXTRACT_CANCEL', noteId: request.noteId });
+    request.controller.abort();
+    return true;
   }
 
   async function preload() {
@@ -336,7 +346,8 @@ export function usePantryWorkflow() {
   return { state, reconciliations, briefing, requestCloudBriefing, offlineBriefingMessage, online, modelStatus, shellCached, appCheck, preloading,
     locallySaved, storageError: staleTab ? staleTabMessage : storageError, staleTab,
     outboxByEvent, syncSummary, syncError, syncing, resetting, syncNow, resetDemo,
-    busy: state.extractingNoteId !== null, extractNote, preload, refreshAppCheck,
+    busy: state.extractingNoteId !== null, extractNote, cancelExtraction, preload, refreshAppCheck,
+    duplicateExtraction: (noteText: string) => duplicateExtractionSummary(notes, noteText),
     editMovement: (tempId: string, changes: MovementEdit) => dispatch({ type: 'EDIT', tempId, changes }),
     addMovement,
     approveMovement: (tempId: string) => dispatch({ type: 'APPROVE', tempId, id: crypto.randomUUID(), now: new Date().toISOString() }),

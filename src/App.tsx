@@ -16,9 +16,21 @@ function WorkspacePanels({ workflow }: { workflow: PantryWorkflow }) {
   const [noteText, setNoteText] = useState(() => latest?.draft.noteText ?? syntheticNotes[0]?.text ?? '');
   const [sampleId, setSampleId] = useState(() => syntheticNotes.find(note => note.text === noteText)?.id ?? 'custom');
   const [mode, setMode] = useState<ExtractionMode>('PREFER_ON_DEVICE');
+  const [confirmDuplicate, setConfirmDuplicate] = useState(false);
+  const duplicate = workflow.duplicateExtraction(noteText);
+
+  function startExtraction() {
+    setConfirmDuplicate(false);
+    void workflow.extractNote(noteText, mode);
+  }
+
   return <fieldset className="workspace-panels" disabled={workflow.resetting || workflow.staleTab} aria-label="Shift workspace">
-    <CapturePanel noteText={noteText} setNoteText={setNoteText} sampleId={sampleId} setSampleId={setSampleId}
-      mode={mode} setMode={setMode} busy={workflow.busy} latest={latest} onExtract={() => void workflow.extractNote(noteText, mode)} />
+    <CapturePanel noteText={noteText} setNoteText={text => { setNoteText(text); setConfirmDuplicate(false); }}
+      sampleId={sampleId} setSampleId={setSampleId} mode={mode} setMode={setMode}
+      busy={workflow.busy} online={workflow.online} latest={latest} duplicateWarning={confirmDuplicate ? duplicate : undefined}
+      onExtract={() => { if (duplicate) setConfirmDuplicate(true); else startExtraction(); }}
+      onCancel={() => { if (workflow.cancelExtraction()) workflow.addMovement(noteText); }}
+      onConfirmDuplicate={startExtraction} onDismissDuplicate={() => setConfirmDuplicate(false)} />
     <div className="review-workspace"><ReviewPanel workflow={workflow} noteText={noteText} />
       <ReconcilePanel workflow={workflow} noteText={noteText} /></div>
     <HandoffPanel workflow={workflow} />

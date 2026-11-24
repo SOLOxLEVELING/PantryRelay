@@ -1,0 +1,10 @@
+200 /assets/BenchmarkRunner-BYg7aVis.js matches tested dist bytes
+200 /assets/firebase-BVjjoi2C.js matches tested dist bytes
+200 /assets/firebase-firestore-C8ythzfb.js matches tested dist bytes
+200 /assets/index-9p6hmEyO.js matches tested dist bytes
+200 /assets/index-BZ07wCkG.css matches tested dist bytes
+200 /assets/workbox-window.prod.es5-Bd17z0YL.js matches tested dist bytes
+200 / matches tested dist bytes
+200 /sw.js matches tested dist bytes
+200 /workbox-9c191d2f.js matches tested dist bytes
+9/9 hosted files matched.

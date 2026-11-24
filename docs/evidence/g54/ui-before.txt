@@ -1,0 +1,121 @@
+
+> pantryrelay@0.0.0 test
+> vitest run --exclude 'e2e/**' src/components/workspacePanels.test.tsx
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+ ❯ src/components/workspacePanels.test.tsx (7 tests | 6 failed) 24ms
+   ❯ Capture feedback (3)
+     × shows extraction metadata only when the current note matches after trimming 8ms
+     × renders plain-language guidance for [500] The model is experiencing high demand. and keeps diagnostics collapsed 2ms
+     × renders plain-language guidance for AI: Local LanguageModel API not available. and keeps diagnostics collapsed 2ms
+   ❯ discrepancy presentation (4)
+     × updates both panels with pending=true and unverified=true 5ms
+     × updates both panels with pending=true and unverified=false 2ms
+     × updates both panels with pending=false and unverified=true 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/workspacePanels.test.tsx > Capture feedback > shows extraction metadata only when the current note matches after trimming
+AssertionError: expected '<section class="capture-panel" aria-l…' not to contain 'Source:'
+
+Expected: "Source:"
+Received: "<section class="capture-panel" aria-labelledby="capture-heading"><div class="section-heading"><h2 id="capture-heading"><span class="step">1</span> Capture</h2><span class="subtle">A shift note becomes a draft. You decide what counts.</span></div><div class="capture-layout"><div class="note-editor"><div class="field-heading"><label for="note-text">Volunteer note</label><label class="sample-picker">Sample <select aria-label="Sample note"><option value="custom" disabled="" selected="">Custom note</option><option value="golden-rice">Golden rice</option><option value="damage-overlap">Damage overlap</option><option value="missing-unit">Missing unit</option><option value="injection">Prompt injection</option><option value="empty">Empty / Manual</option></select></label></div><textarea id="note-text" rows="3" placeholder="Write what arrived, went out, or needs checking. Or add a movement manually below.">Received 2 bags of rice. Counted 21 bags. Updated.</textarea><p class="field-hint">Original wording stays attached to the review. Stock changes only after your approval.</p></div><div class="extraction-controls"><label for="extraction-mode">Extraction mode</label><select id="extraction-mode"><option value="PREFER_ON_DEVICE">PREFER_ON_DEVICE · Hybrid</option><option value="ONLY_ON_DEVICE" selected="">ONLY_ON_DEVICE · Private</option><option value="ONLY_IN_CLOUD">ONLY_IN_CLOUD · Cloud</option></select><p class="privacy-note">Note stays on this device. Requires a downloaded browser model; manual entry is always available.</p><div class="extract-action"><button class="primary">Extract changes</button><span class="badge source-badge">Source: On-device · 1.5s</span></div></div></div><p role="alert" class="error-message">Extraction unavailable: AI/fetch-error Add a manual movement below, or choose another mode.</p></section>"
+
+ ❯ src/components/workspacePanels.test.tsx:42:24
+     40|     expect(matching).toContain('role="alert"');
+     41|     const edited = renderToStaticMarkup(<CapturePanel {...captureOptio…
+     42|     expect(edited).not.toContain('Source:');
+       |                        ^
+     43|     expect(edited).not.toContain('role="alert"');
+     44|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/components/workspacePanels.test.tsx > Capture feedback > renders plain-language guidance for [500] The model is experiencing high demand. and keeps diagnostics collapsed
+AssertionError: expected '<section class="capture-panel" aria-l…' to contain 'The extraction service is busy right …'
+
+Expected: "The extraction service is busy right now."
+Received: "<section class="capture-panel" aria-labelledby="capture-heading"><div class="section-heading"><h2 id="capture-heading"><span class="step">1</span> Capture</h2><span class="subtle">A shift note becomes a draft. You decide what counts.</span></div><div class="capture-layout"><div class="note-editor"><div class="field-heading"><label for="note-text">Volunteer note</label><label class="sample-picker">Sample <select aria-label="Sample note"><option value="custom" disabled="" selected="">Custom note</option><option value="golden-rice">Golden rice</option><option value="damage-overlap">Damage overlap</option><option value="missing-unit">Missing unit</option><option value="injection">Prompt injection</option><option value="empty">Empty / Manual</option></select></label></div><textarea id="note-text" rows="3" placeholder="Write what arrived, went out, or needs checking. Or add a movement manually below.">Received 2 bags of rice. Counted 21 bags.</textarea><p class="field-hint">Original wording stays attached to the review. Stock changes only after your approval.</p></div><div class="extraction-controls"><label for="extraction-mode">Extraction mode</label><select id="extraction-mode"><option value="PREFER_ON_DEVICE">PREFER_ON_DEVICE · Hybrid</option><option value="ONLY_ON_DEVICE" selected="">ONLY_ON_DEVICE · Private</option><option value="ONLY_IN_CLOUD">ONLY_IN_CLOUD · Cloud</option></select><p class="privacy-note">Note stays on this device. Requires a downloaded browser model; manual entry is always available.</p><div class="extract-action"><button class="primary">Extract changes</button><span class="badge source-badge">Source: On-device · 1.5s</span></div></div></div><p role="alert" class="error-message">Extraction unavailable: [500] The model is experiencing high demand. Add a manual movement below, or choose another mode.</p></section>"
+
+ ❯ src/components/workspacePanels.test.tsx:51:20
+     49|   ])('renders plain-language guidance for %s and keeps diagnostics col…
+     50|     const markup = renderToStaticMarkup(<CapturePanel {...captureOptio…
+     51|     expect(markup).toContain(guidance);
+       |                    ^
+     52|     expect(markup).toContain('<summary>Technical details</summary>');
+     53|     expect(markup).not.toMatch(/<details[^>]*\bopen(?:\s|=|>)/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/components/workspacePanels.test.tsx > Capture feedback > renders plain-language guidance for AI: Local LanguageModel API not available. and keeps diagnostics collapsed
+AssertionError: expected '<section class="capture-panel" aria-l…' to contain 'This browser’s on-device model isn’t …'
+
+Expected: "This browser’s on-device model isn’t ready."
+Received: "<section class="capture-panel" aria-labelledby="capture-heading"><div class="section-heading"><h2 id="capture-heading"><span class="step">1</span> Capture</h2><span class="subtle">A shift note becomes a draft. You decide what counts.</span></div><div class="capture-layout"><div class="note-editor"><div class="field-heading"><label for="note-text">Volunteer note</label><label class="sample-picker">Sample <select aria-label="Sample note"><option value="custom" disabled="" selected="">Custom note</option><option value="golden-rice">Golden rice</option><option value="damage-overlap">Damage overlap</option><option value="missing-unit">Missing unit</option><option value="injection">Prompt injection</option><option value="empty">Empty / Manual</option></select></label></div><textarea id="note-text" rows="3" placeholder="Write what arrived, went out, or needs checking. Or add a movement manually below.">Received 2 bags of rice. Counted 21 bags.</textarea><p class="field-hint">Original wording stays attached to the review. Stock changes only after your approval.</p></div><div class="extraction-controls"><label for="extraction-mode">Extraction mode</label><select id="extraction-mode"><option value="PREFER_ON_DEVICE">PREFER_ON_DEVICE · Hybrid</option><option value="ONLY_ON_DEVICE" selected="">ONLY_ON_DEVICE · Private</option><option value="ONLY_IN_CLOUD">ONLY_IN_CLOUD · Cloud</option></select><p class="privacy-note">Note stays on this device. Requires a downloaded browser model; manual entry is always available.</p><div class="extract-action"><button class="primary">Extract changes</button><span class="badge source-badge">Source: On-device · 1.5s</span></div></div></div><p role="alert" class="error-message">Extraction unavailable: AI: Local LanguageModel API not available. Add a manual movement below, or choose another mode.</p></section>"
+
+ ❯ src/components/workspacePanels.test.tsx:51:20
+     49|   ])('renders plain-language guidance for %s and keeps diagnostics col…
+     50|     const markup = renderToStaticMarkup(<CapturePanel {...captureOptio…
+     51|     expect(markup).toContain(guidance);
+       |                    ^
+     52|     expect(markup).toContain('<summary>Technical details</summary>');
+     53|     expect(markup).not.toMatch(/<details[^>]*\bopen(?:\s|=|>)/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/components/workspacePanels.test.tsx > discrepancy presentation > updates both panels with pending=true and unverified=true
+AssertionError: expected '<section class="reconcile-panel panel…' to contain 'class="discrepancy is-provisional"'
+
+Expected: "class="discrepancy is-provisional""
+Received: "<section class="reconcile-panel panel" aria-labelledby="reconcile-heading"><div class="section-heading"><h2 id="reconcile-heading"><span class="step">3</span> Reconcile</h2><span class="badge">Approved stock</span></div><p class="section-intro">Confirmed records meet the shelf count.</p><div class="item-reconciliation"><div class="item-heading"><h3>Rice</h3><span class="subtle">bags</span></div><p class="demo-baseline"><span class="badge">Sample opening stock</span> 24 bags · confirmed demo baseline</p><dl class="balance-math"><div><dt>Opening usable</dt><dd>24</dd></div><div><dt>Received</dt><dd>+ 0</dd></div><div><dt>Distributed</dt><dd>− 0</dd></div><div><dt>Set aside in quarantine</dt><dd>− 0</dd></div><div class="usable-total"><dt>Confirmed usable</dt><dd>24 <small>bags</small></dd></div></dl><p class="equation">24 + 0 − 0 − 0 = 24 usable</p><div class="stock-comparison"><span><strong>0</strong> quarantined</span><span><strong>21</strong> bags observed</span></div><div class="pending-notice"><strong>1 pending movement</strong><p>Review or reject these rows. Pending drafts are excluded from the confirmed balance.</p><details><summary>Show approval blockers</summary><ul><li>Review and approve or reject this movement</li></ul></details></div><div class="discrepancy" role="status"><div class="discrepancy-title"><span aria-hidden="true">!</span><h3>3 bag discrepancy</h3></div><p>Expected <strong>24</strong> vs observed <strong>21</strong>.</p><p>Shelf count is unverified. The ledger stays unchanged until a volunteer records an explicit correction.</p><div class="discrepancy-actions"><button>Keep discrepancy open</button><button>Add recount task</button><button>Record explicit adjustment</button></div></div></div><div class="follow-ups"><div class="field-heading"><h3>Follow-up tasks</h3><span class="badge">0 open</span></div><p class="subtle">Checks and recounts will appear here.</p></div></section><section class="handoff-panel panel" aria-labelledby="handoff-heading"><div class="section-heading"><h2 id="handoff-heading"><span class="step">4</span> Handoff</h2><button>Copy shift handoff</button></div><span class="handoff-copy-status" role="status"></span><div class="handoff-layout"><div class="handoff-record"><h3>Confirmed stock</h3><dl class="handoff-stock"><div><dt>Rice</dt><dd><strong>24 usable bags · 0 quarantined</strong><small>Demo seed: opening stock used 24 usable bags and 0 quarantined.</small></dd></div></dl><div class="handoff-checks"><div><h3>Unresolved discrepancies</h3><ul class="handoff-list"><li class="handoff-exception"><strong>Rice: 3 bag discrepancy</strong><small>Expected 24, observed 21 (unverified count).</small></li></ul></div><div><h3>Follow-up tasks</h3><p class="subtle">No follow-up tasks.</p></div></div></div><section class="cloud-briefing" aria-labelledby="cloud-briefing-heading"><h3 id="cloud-briefing-heading">Cloud Shift Briefing</h3><p id="cloud-disclosure" class="subtle">Sends confirmed balances, discrepancies, and open tasks—not raw notes—to Firebase AI Logic in the cloud. Approved movement summaries are also included.</p><button class="primary" aria-describedby="cloud-disclosure cloud-offline" disabled="">Generate cloud briefing</button><p id="cloud-offline" class="subtle">Cloud briefing requires an internet connection. You can still copy the shift handoff offline.</p><div role="status" aria-busy="false"></div></section></div><div class="handoff-ledger"><h3>Approved movements</h3><p class="subtle">No approved movements.</p></div></section>"
+
+ ❯ src/components/workspacePanels.test.tsx:68:22
+     66|     const markup = renderToStaticMarkup(<DiscrepancyPanels state={stat…
+     67|     if (pending || unverified) {
+     68|       expect(markup).toContain('class="discrepancy is-provisional"');
+       |                      ^
+     69|       expect(markup).toContain('Provisional count difference (3 bags)'…
+     70|       expect(markup).toContain('class="handoff-exception is-provisiona…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/components/workspacePanels.test.tsx > discrepancy presentation > updates both panels with pending=true and unverified=false
+AssertionError: expected '<section class="reconcile-panel panel…' to contain 'class="discrepancy is-provisional"'
+
+Expected: "class="discrepancy is-provisional""
+Received: "<section class="reconcile-panel panel" aria-labelledby="reconcile-heading"><div class="section-heading"><h2 id="reconcile-heading"><span class="step">3</span> Reconcile</h2><span class="badge">Approved stock</span></div><p class="section-intro">Confirmed records meet the shelf count.</p><div class="item-reconciliation"><div class="item-heading"><h3>Rice</h3><span class="subtle">bags</span></div><p class="demo-baseline"><span class="badge">Sample opening stock</span> 24 bags · confirmed demo baseline</p><dl class="balance-math"><div><dt>Opening usable</dt><dd>24</dd></div><div><dt>Received</dt><dd>+ 0</dd></div><div><dt>Distributed</dt><dd>− 0</dd></div><div><dt>Set aside in quarantine</dt><dd>− 0</dd></div><div class="usable-total"><dt>Confirmed usable</dt><dd>24 <small>bags</small></dd></div></dl><p class="equation">24 + 0 − 0 − 0 = 24 usable</p><div class="stock-comparison"><span><strong>0</strong> quarantined</span><span><strong>21</strong> bags observed</span></div><div class="pending-notice"><strong>1 pending movement</strong><p>Review or reject these rows. Pending drafts are excluded from the confirmed balance.</p><details><summary>Show approval blockers</summary><ul><li>Review and approve or reject this movement</li></ul></details></div><div class="discrepancy" role="status"><div class="discrepancy-title"><span aria-hidden="true">!</span><h3>3 bag discrepancy</h3></div><p>Expected <strong>24</strong> vs observed <strong>21</strong>.</p><p>The ledger stays unchanged until a volunteer records an explicit correction.</p><div class="discrepancy-actions"><button>Keep discrepancy open</button><button>Add recount task</button><button>Record explicit adjustment</button></div></div></div><div class="follow-ups"><div class="field-heading"><h3>Follow-up tasks</h3><span class="badge">0 open</span></div><p class="subtle">Checks and recounts will appear here.</p></div></section><section class="handoff-panel panel" aria-labelledby="handoff-heading"><div class="section-heading"><h2 id="handoff-heading"><span class="step">4</span> Handoff</h2><button>Copy shift handoff</button></div><span class="handoff-copy-status" role="status"></span><div class="handoff-layout"><div class="handoff-record"><h3>Confirmed stock</h3><dl class="handoff-stock"><div><dt>Rice</dt><dd><strong>24 usable bags · 0 quarantined</strong><small>Demo seed: opening stock used 24 usable bags and 0 quarantined.</small></dd></div></dl><div class="handoff-checks"><div><h3>Unresolved discrepancies</h3><ul class="handoff-list"><li class="handoff-exception"><strong>Rice: 3 bag discrepancy</strong><small>Expected 24, observed 21.</small></li></ul></div><div><h3>Follow-up tasks</h3><p class="subtle">No follow-up tasks.</p></div></div></div><section class="cloud-briefing" aria-labelledby="cloud-briefing-heading"><h3 id="cloud-briefing-heading">Cloud Shift Briefing</h3><p id="cloud-disclosure" class="subtle">Sends confirmed balances, discrepancies, and open tasks—not raw notes—to Firebase AI Logic in the cloud. Approved movement summaries are also included.</p><button class="primary" aria-describedby="cloud-disclosure cloud-offline" disabled="">Generate cloud briefing</button><p id="cloud-offline" class="subtle">Cloud briefing requires an internet connection. You can still copy the shift handoff offline.</p><div role="status" aria-busy="false"></div></section></div><div class="handoff-ledger"><h3>Approved movements</h3><p class="subtle">No approved movements.</p></div></section>"
+
+ ❯ src/components/workspacePanels.test.tsx:68:22
+     66|     const markup = renderToStaticMarkup(<DiscrepancyPanels state={stat…
+     67|     if (pending || unverified) {
+     68|       expect(markup).toContain('class="discrepancy is-provisional"');
+       |                      ^
+     69|       expect(markup).toContain('Provisional count difference (3 bags)'…
+     70|       expect(markup).toContain('class="handoff-exception is-provisiona…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/components/workspacePanels.test.tsx > discrepancy presentation > updates both panels with pending=false and unverified=true
+AssertionError: expected '<section class="reconcile-panel panel…' to contain 'class="discrepancy is-provisional"'
+
+Expected: "class="discrepancy is-provisional""
+Received: "<section class="reconcile-panel panel" aria-labelledby="reconcile-heading"><div class="section-heading"><h2 id="reconcile-heading"><span class="step">3</span> Reconcile</h2><span class="badge">Approved stock</span></div><p class="section-intro">Confirmed records meet the shelf count.</p><div class="item-reconciliation"><div class="item-heading"><h3>Rice</h3><span class="subtle">bags</span></div><p class="demo-baseline"><span class="badge">Sample opening stock</span> 24 bags · confirmed demo baseline</p><dl class="balance-math"><div><dt>Opening usable</dt><dd>24</dd></div><div><dt>Received</dt><dd>+ 0</dd></div><div><dt>Distributed</dt><dd>− 0</dd></div><div><dt>Set aside in quarantine</dt><dd>− 0</dd></div><div class="usable-total"><dt>Confirmed usable</dt><dd>24 <small>bags</small></dd></div></dl><p class="equation">24 + 0 − 0 − 0 = 24 usable</p><div class="stock-comparison"><span><strong>0</strong> quarantined</span><span><strong>21</strong> bags observed</span></div><div class="discrepancy" role="status"><div class="discrepancy-title"><span aria-hidden="true">!</span><h3>3 bag discrepancy</h3></div><p>Expected <strong>24</strong> vs observed <strong>21</strong>.</p><p>Shelf count is unverified. The ledger stays unchanged until a volunteer records an explicit correction.</p><div class="discrepancy-actions"><button>Keep discrepancy open</button><button>Add recount task</button><button>Record explicit adjustment</button></div></div></div><div class="follow-ups"><div class="field-heading"><h3>Follow-up tasks</h3><span class="badge">0 open</span></div><p class="subtle">Checks and recounts will appear here.</p></div></section><section class="handoff-panel panel" aria-labelledby="handoff-heading"><div class="section-heading"><h2 id="handoff-heading"><span class="step">4</span> Handoff</h2><button>Copy shift handoff</button></div><span class="handoff-copy-status" role="status"></span><div class="handoff-layout"><div class="handoff-record"><h3>Confirmed stock</h3><dl class="handoff-stock"><div><dt>Rice</dt><dd><strong>24 usable bags · 0 quarantined</strong><small>Demo seed: opening stock used 24 usable bags and 0 quarantined.</small></dd></div></dl><div class="handoff-checks"><div><h3>Unresolved discrepancies</h3><ul class="handoff-list"><li class="handoff-exception"><strong>Rice: 3 bag discrepancy</strong><small>Expected 24, observed 21 (unverified count).</small></li></ul></div><div><h3>Follow-up tasks</h3><p class="subtle">No follow-up tasks.</p></div></div></div><section class="cloud-briefing" aria-labelledby="cloud-briefing-heading"><h3 id="cloud-briefing-heading">Cloud Shift Briefing</h3><p id="cloud-disclosure" class="subtle">Sends confirmed balances, discrepancies, and open tasks—not raw notes—to Firebase AI Logic in the cloud. Approved movement summaries are also included.</p><button class="primary" aria-describedby="cloud-disclosure cloud-offline" disabled="">Generate cloud briefing</button><p id="cloud-offline" class="subtle">Cloud briefing requires an internet connection. You can still copy the shift handoff offline.</p><div role="status" aria-busy="false"></div></section></div><div class="handoff-ledger"><h3>Approved movements</h3><p class="subtle">No approved movements.</p></div></section>"
+
+ ❯ src/components/workspacePanels.test.tsx:68:22
+     66|     const markup = renderToStaticMarkup(<DiscrepancyPanels state={stat…
+     67|     if (pending || unverified) {
+     68|       expect(markup).toContain('class="discrepancy is-provisional"');
+       |                      ^
+     69|       expect(markup).toContain('Provisional count difference (3 bags)'…
+     70|       expect(markup).toContain('class="handoff-exception is-provisiona…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 1 passed (7)
+   Start at  02:04:50
+   Duration  312ms (import 62%, transform 26%, tests 11%, worker 1%)
+

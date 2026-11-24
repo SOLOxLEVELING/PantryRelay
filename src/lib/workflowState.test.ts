@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { describe, expect, it } from 'vitest';
-import { initialWorkflowState, reconcileWorkflow, workflowReducer } from './workflowState';
+import { duplicateExtractionSummary, initialWorkflowState, reconcileWorkflow, workflowReducer } from './workflowState';
 import type { WorkflowState } from './workflowState';
 import type { ExtractedNote, SpikeResult } from './spikeExtract';
 import { sanitizeExtractedNote } from './sanitizeDraft';
@@ -37,6 +37,38 @@ function approve(state: WorkflowState, index: number) {
 function summary(state: WorkflowState) { return reconcileWorkflow(state).find(item => item.item.id === 'rice')?.result; }
 
 describe('pantry workflow', () => {
+  it('counts approved and pending movements for matching extractions in the current session', () => {
+    const first = workflowReducer(approve(extract(), 0), { type: 'REJECT', tempId: 'note:movement:1' });
+    const state = extract(golden, noteText, first, 'intentional-repeat');
+    const normalizedMatch = ` \n${noteText.toUpperCase().replaceAll(' ', '  ')}\t`;
+    expect(duplicateExtractionSummary(state.notes, normalizedMatch)).toEqual({ approved: 1, pending: 4 });
+    expect(duplicateExtractionSummary(state.notes, `${noteText} Correction.`)).toBeUndefined();
+    expect(duplicateExtractionSummary(workflowReducer(state, { type: 'RESET' }).notes, noteText)).toBeUndefined();
+  });
+
+  it('skips manual notes, unfinished extractions and errors with no extracted drafts', () => {
+    const manual = workflowReducer(initialWorkflowState(), { type: 'ADD_MOVEMENT', noteId: 'manual', noteText, tempId: 'manual' });
+    const started = workflowReducer(manual, { type: 'EXTRACT_START', noteId: 'failed', noteText });
+    expect(duplicateExtractionSummary(started.notes, noteText)).toBeUndefined();
+    const failed = workflowReducer(started, { type: 'EXTRACT_FINISH', noteId: 'failed', result: {
+      ...result(), ok: false, sanitized: null, validationError: 'AI/fetch-error', failureStage: 'inference',
+    } });
+    expect(duplicateExtractionSummary(failed.notes, noteText)).toBeUndefined();
+  });
+
+  it('ignores a cancelled result after manual entry and while another extraction is active', () => {
+    const started = workflowReducer(initialWorkflowState(), { type: 'EXTRACT_START', noteId: 'cancelled', noteText });
+    const cancelled = workflowReducer(started, { type: 'EXTRACT_CANCEL', noteId: 'cancelled' });
+    expect(cancelled.extractingNoteId).toBeNull();
+    const manual = workflowReducer(cancelled, { type: 'ADD_MOVEMENT', noteId: 'cancelled', noteText, tempId: 'manual' });
+    const lateResult = { type: 'EXTRACT_FINISH', noteId: 'cancelled', result: result() } satisfies Parameters<typeof workflowReducer>[1];
+    expect(workflowReducer(manual, lateResult)).toBe(manual);
+    const newer = workflowReducer(manual, { type: 'EXTRACT_START', noteId: 'new', noteText });
+    expect(workflowReducer(newer, lateResult)).toBe(newer);
+    expect(workflowReducer(newer, { type: 'EXTRACT_CANCEL', noteId: 'cancelled' })).toBe(newer);
+    expect(newer.notes[0]?.draft.movements).toMatchObject([{ tempId: 'manual', origin: 'HUMAN_ADDED' }]);
+  });
+
   it('rehydrates the original note, mixed approvals, follow-ups and kept-open discrepancies from IndexedDB', async () => {
     const saved = workflowReducer(approve(approve(extract(), 0), 1), { type: 'KEEP_OPEN', itemId: 'rice' });
     const { sessionId, notes, approvedEvents, keptOpen } = saved;

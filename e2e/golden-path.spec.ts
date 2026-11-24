@@ -64,7 +64,7 @@ for (const { distributed, usable, difference } of [
 
     for (const index of [1, 2, 3]) await movementRow(page, index).getByRole('button', { name: 'Approve' }).click();
     const reconcile = page.getByRole('region', { name: '3 Reconcile' });
-    const discrepancy = reconcile.getByRole('status').filter({ hasText: `${difference} bag discrepancy` });
+    const discrepancy = reconcile.getByRole('status').filter({ hasText: `Provisional count difference (${difference} bags) — review pending` });
     await expect(reconcile.getByText(`24 + 36 − ${distributed} − 5 = ${usable} usable`)).toBeVisible();
     await expect(discrepancy).toContainText(`Expected ${usable} vs observed 25`);
     await discrepancy.getByRole('button', { name: 'Record explicit adjustment' }).click();
@@ -79,6 +79,7 @@ for (const { distributed, usable, difference } of [
     await expect(page.getByRole('status').filter({ hasText: 'Pending sync (3)' })).toBeVisible();
 
     const handoff = page.getByRole('region', { name: '4 Handoff' });
+    await expect(handoff.getByText('(provisional — review pending)')).toBeVisible();
     await handoff.getByRole('button', { name: 'Copy shift handoff' }).click();
     await expect(handoff.getByRole('status').filter({ hasText: /^Copied$/ })).toBeVisible();
     const copied = await page.evaluate(() => navigator.clipboard.readText());
@@ -94,6 +95,10 @@ for (const { distributed, usable, difference } of [
     await expect(blocker).toBeDisabled();
     await expect(discrepancy).toContainText(`Expected ${usable} vs observed 25`);
     await expect(page.getByRole('status').filter({ hasText: 'Pending sync (3)' })).toBeVisible();
+    await movementRow(page, 4).getByRole('button', { name: 'Reject' }).click();
+    await expect(discrepancy).toHaveCount(0);
+    await expect(reconcile.getByRole('heading', { name: `${difference} bag discrepancy` })).toBeVisible();
+    await expect(handoff.getByText('(provisional — review pending)')).toHaveCount(0);
 
     await page.getByRole('button', { name: 'Reset demo' }).click();
     await expect(page.getByRole('table')).toHaveCount(0);
@@ -105,6 +110,81 @@ for (const { distributed, usable, difference } of [
     await expect(page.getByRole('table')).toHaveCount(0);
   });
 }
+
+test('Capture warns before re-extracting, cancels a stalled draft, and clears stale feedback', async ({ page, context }) => {
+  await context.route(url => url.hostname !== 'localhost', route => route.abort());
+  const text = 'Received 2 bags of rice. Gave out 1 bag of rice.';
+  const response = JSON.stringify({ movements: [
+    { itemName: 'rice', quantity: 2, unit: 'bags', kind: 'RECEIVED', evidenceText: 'Received 2 bags of rice.', ambiguity: null },
+    { itemName: 'rice', quantity: 1, unit: 'bags', kind: 'DISTRIBUTED', evidenceText: 'Gave out 1 bag of rice.', ambiguity: null },
+  ], observations: [], followUps: [], unclassifiedText: [] });
+  await page.addInitScript(responseText => {
+    let attempts = 0;
+    let available = true;
+    document.addEventListener('test-disable-model', () => { available = false; });
+    Object.defineProperty(globalThis, 'LanguageModel', { configurable: true, value: {
+      availability: async () => available ? 'available' : 'unavailable',
+      create: async (options: { signal?: AbortSignal }) => ({
+        prompt: async () => {
+          attempts += 1;
+          document.documentElement.dataset.testInference = String(attempts);
+          if (attempts === 1) return responseText;
+          options.signal?.addEventListener('abort', () => { document.documentElement.dataset.testAborted = 'true'; }, { once: true });
+          return new Promise(resolve => {
+            document.addEventListener('test-finish-model', () => resolve(responseText), { once: true });
+          });
+        },
+      }),
+    } });
+  }, response);
+  await page.goto('/');
+  const capture = page.getByRole('region', { name: '1 Capture' });
+  const editor = capture.getByRole('textbox', { name: 'Volunteer note' });
+  const source = capture.getByText('Source: On-device', { exact: false });
+  const extract = capture.getByRole('button', { name: 'Extract changes', exact: true });
+  const confirm = capture.getByRole('button', { name: 'Extract again anyway' });
+  await editor.fill(text);
+  await capture.getByLabel('Extraction mode').selectOption('ONLY_ON_DEVICE');
+  await extract.click();
+  await expect(source).toBeVisible();
+  await movementRow(page, 1).getByRole('button', { name: 'Approve' }).click();
+  await editor.fill(`${text} Edited.`);
+  await expect(source).toHaveCount(0);
+  await editor.fill(text);
+  await expect(source).toBeVisible();
+  await capture.getByLabel('Sample note').selectOption('damage-overlap');
+  await expect(source).toHaveCount(0);
+  await editor.fill(` ${text} `);
+  await extract.click();
+  await expect(capture.getByText('This exact note was already extracted in this session.')).toBeVisible();
+  await expect(capture.getByRole('status')).toContainText('1 approved and 1 pending');
+  await capture.getByRole('button', { name: 'Dismiss', exact: true }).click();
+  await expect(confirm).toHaveCount(0);
+  const html = page.locator('html');
+  await expect(html).toHaveAttribute('data-test-inference', '1');
+  await extract.click();
+  await confirm.click();
+  await expect(html).toHaveAttribute('data-test-inference', '2');
+  await expect(editor).toBeDisabled();
+  await capture.getByRole('button', { name: 'Cancel & enter manually' }).click();
+  await expect(editor).toBeEnabled();
+  await expect(html).toHaveAttribute('data-test-aborted', 'true');
+  const manualQuantity = page.getByLabel('Movement 2.1 quantity');
+  await manualQuantity.fill('7');
+  await page.evaluate(() => document.dispatchEvent(new Event('test-finish-model')));
+  await expect(manualQuantity).toHaveValue('7');
+  await expect(page.getByLabel('Movement 2.2 quantity')).toHaveCount(0);
+  await expect(capture.getByRole('alert')).toHaveCount(0);
+
+  await page.evaluate(() => document.dispatchEvent(new Event('test-disable-model')));
+  await editor.fill('Received a new delivery.');
+  await extract.click();
+  await expect(capture.getByRole('alert')).toContainText('This browser’s on-device model isn’t ready.');
+  await expect(capture.locator('details')).not.toHaveAttribute('open');
+  await expect(capture.getByText('Technical details', { exact: true })).toBeVisible();
+  await capture.getByLabel('Sample note').selectOption('golden-rice');
+  await expect(capture.getByRole('alert')).toHaveCount(0);
+});
 
 test('volunteer route exposes named sections, headings, live status and keyboard navigation', async ({ page, context }) => {
   await context.route(url => url.hostname !== 'localhost', route => route.abort());

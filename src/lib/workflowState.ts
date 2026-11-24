@@ -32,6 +32,7 @@ export type WorkflowAction =
   | { type: 'RESET' }
   | { type: 'EXTRACT_START'; noteId: string; noteText: string }
   | { type: 'EXTRACT_FINISH'; noteId: string; result: SpikeResult }
+  | { type: 'EXTRACT_CANCEL'; noteId: string }
   | { type: 'EDIT'; tempId: string; changes: MovementEdit }
   | { type: 'ADD_MOVEMENT'; noteId: string; noteText: string; tempId: string; itemId?: string; adjustment?: boolean }
   | { type: 'APPROVE'; tempId: string; id: string; now: string }
@@ -59,6 +60,25 @@ function withNote(state: WorkflowState, noteId: string, noteText: string): Workf
     { ...state, notes: [...state.notes, emptyNote(noteId, noteText)] };
 }
 
+function normalizeNoteText(text: string): string {
+  return text.normalize('NFKC').trim().replace(/\s+/gu, ' ').toLowerCase();
+}
+
+export function duplicateExtractionSummary(notes: WorkflowState['notes'], noteText: string) {
+  const normalized = normalizeNoteText(noteText);
+  if (!normalized) return undefined;
+  const matching = notes.filter(({ draft, latencyMs, error }) => latencyMs !== null &&
+    normalizeNoteText(draft.noteText) === normalized &&
+    (error === null || draft.movements.some(row => row.origin !== 'HUMAN_ADDED') ||
+      draft.observations.some(row => row.origin !== 'HUMAN_ADDED')));
+  if (matching.length === 0) return undefined;
+  const movements = matching.flatMap(note => note.draft.movements);
+  return {
+    approved: movements.filter(row => row.state === 'APPROVED').length,
+    pending: movements.filter(row => row.state === 'DRAFT' || row.state === 'NEEDS_CLARIFICATION').length,
+  };
+}
+
 function isShelfCount(count: number): boolean {
   return Number.isFinite(count) && count >= 0;
 }
@@ -80,6 +100,7 @@ export function workflowReducer(state: WorkflowState, action: WorkflowAction): W
     }
     case 'RESET': return { ...initialWorkflowState(), hydrated: true };
     case 'EXTRACT_START': return { ...withNote(state, action.noteId, action.noteText), extractingNoteId: action.noteId };
+    case 'EXTRACT_CANCEL': return state.extractingNoteId === action.noteId ? { ...state, extractingNoteId: null } : state;
     case 'EXTRACT_FINISH': {
       if (state.extractingNoteId !== action.noteId) return state;
       return { ...state, extractingNoteId: null, notes: state.notes.map(note => note.draft.noteId !== action.noteId ? note : {
@@ -172,7 +193,9 @@ export function reconcileWorkflow(state: WorkflowState) {
     const openingBalance = state.openingBalances.find(balance => balance.itemId === item.id);
     const latestObservation = observations.findLast(row => row.canonicalItemId === item.id &&
       (row.state === 'CONFIRMED' || (row.state === 'UNVERIFIED' && row.origin === undefined)));
-    return { item, openingBalance, latestObservation, result: reconcileItem({ item, openingBalance,
-      latestObservation, approvedEvents: state.approvedEvents, pendingDrafts: movements }) };
+    const result = reconcileItem({ item, openingBalance, latestObservation, approvedEvents: state.approvedEvents, pendingDrafts: movements });
+    const provisional = result.status === 'DISCREPANCY' &&
+      (result.blockingDraftCount > 0 || latestObservation?.state === 'UNVERIFIED');
+    return { item, openingBalance, latestObservation, result, provisional };
   });
 }

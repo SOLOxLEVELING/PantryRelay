@@ -1,0 +1,142 @@
+
+> pantryrelay@0.0.0 test
+> vitest run --exclude 'e2e/**' src/lib/sanitizeDraft.regression.test.ts src/lib/workflowState.test.ts
+
+
+ RUN  v5.1.1 /Users/adnan/Developer/Hack/Projects/PantryRelay
+
+ ❯ src/lib/sanitizeDraft.regression.test.ts (10 tests | 4 failed) 15ms
+   ❯ G5.1 movement quantities (7)
+     × quarantines a positive juice claim of 1e-15 backed only by zeros 3ms
+     × quarantines a positive juice claim of 1 backed only by zeros 1ms
+     × quarantines grounded sub-0.01 claims even when the evidence supports the number 0ms
+     × preserves previously accepted movements in the device run except the false juice receipt 2ms
+ ❯ src/lib/workflowState.test.ts (27 tests | 1 failed) 18ms
+   ❯ pantry workflow (27)
+     × ignores a cancelled result after manual entry and while another extraction is active 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/sanitizeDraft.regression.test.ts > G5.1 movement quantities > quarantines a positive juice claim of 1e-15 backed only by zeros
+AssertionError: expected [ { itemName: 'juice', …(5) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "ambiguity": null,
++     "evidenceText": "The signed dispatch log says 0 bottles of juice distributed. The closing count was 0 bottles of juice too.",
++     "itemName": "juice",
++     "kind": "DISTRIBUTED",
++     "quantity": 1e-15,
++     "unit": "bottles",
++   },
++ ]
+
+ ❯ src/lib/sanitizeDraft.regression.test.ts:56:36
+     54|     const claim = { ...movement, quantity };
+     55|     const result = sanitizeExtractedNote(note.text, { ...raw, movement…
+     56|     expect(result.draft.movements).toEqual([]);
+       |                                    ^
+     57|     expect(result.quarantined).toContainEqual(expect.objectContaining(…
+     58|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/lib/sanitizeDraft.regression.test.ts > G5.1 movement quantities > quarantines a positive juice claim of 1 backed only by zeros
+AssertionError: expected [ { itemName: 'juice', …(5) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "ambiguity": null,
++     "evidenceText": "The signed dispatch log says 0 bottles of juice distributed. The closing count was 0 bottles of juice too.",
++     "itemName": "juice",
++     "kind": "DISTRIBUTED",
++     "quantity": 1,
++     "unit": "bottles",
++   },
++ ]
+
+ ❯ src/lib/sanitizeDraft.regression.test.ts:56:36
+     54|     const claim = { ...movement, quantity };
+     55|     const result = sanitizeExtractedNote(note.text, { ...raw, movement…
+     56|     expect(result.draft.movements).toEqual([]);
+       |                                    ^
+     57|     expect(result.quarantined).toContainEqual(expect.objectContaining(…
+     58|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/lib/sanitizeDraft.regression.test.ts > G5.1 movement quantities > quarantines grounded sub-0.01 claims even when the evidence supports the number
+AssertionError: expected [ 0.009, 0.01 ] to deeply equal [ 0.01 ]
+
+- Expected
++ Received
+
+  [
++   0.009,
+    0.01,
+  ]
+
+ ❯ src/lib/sanitizeDraft.regression.test.ts:66:71
+     64|     })), observations: [], followUps: [], unclassifiedText: [] });
+     65|     const result = sanitizeExtractedNote(noteText, raw);
+     66|     expect(result.draft.movements.map(movement => movement.quantity)).…
+       |                                                                       ^
+     67|     expect(result.quarantined).toHaveLength(1);
+     68|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/lib/sanitizeDraft.regression.test.ts > G5.1 movement quantities > preserves previously accepted movements in the device run except the false juice receipt
+AssertionError: note 12: expected [ { itemName: 'juice', …(5) } ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "ambiguity": null,
++     "evidenceText": "The signed dispatch log says 0 bottles of juice distributed. The closing count was 0 bottles of juice too.",
++     "itemName": "juice",
++     "kind": "DISTRIBUTED",
++     "quantity": 1e-15,
++     "unit": "bottles",
++   },
++ ]
+
+ ❯ src/lib/sanitizeDraft.regression.test.ts:80:88
+     78|       const movements = attempt.sanitized?.movements.filter(movement =>
+     79|         !(attempt.noteId === '12' && movement.quantity === 1e-15)) ?? …
+     80|       expect(sanitizeExtractedNote(note.text, raw).draft.movements, `n…
+       |                                                                                        ^
+     81|     }
+     82|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/lib/workflowState.test.ts > pantry workflow > ignores a cancelled result after manual entry and while another extraction is active
+TypeError: Cannot read properties of undefined (reading 'extractingNoteId')
+ ❯ src/lib/workflowState.test.ts:43:22
+     41|     const started = workflowReducer(initialWorkflowState(), { type: 'E…
+     42|     const cancelled = workflowReducer(started, { type: 'EXTRACT_CANCEL…
+     43|     expect(cancelled.extractingNoteId).toBeNull();
+       |                      ^
+     44|     const manual = workflowReducer(cancelled, { type: 'ADD_MOVEMENT', …
+     45|     const lateResult = { type: 'EXTRACT_FINISH', noteId: 'cancelled', …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  5 failed | 32 passed (37)
+   Start at  02:04:21
+   Duration  296ms (import 58%, transform 32%, tests 9%, worker 1%)
+

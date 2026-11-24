@@ -1,3 +1,4 @@
+import { errorText, extractionErrorGuidance } from '../lib/diagnostics';
 import { extractionModeSchema } from '../lib/spikeExtract';
 import type { ExtractionMode } from '../lib/spikeExtract';
 import { syntheticNotes } from '../lib/syntheticNotes';
@@ -23,11 +24,18 @@ interface CaptureProps {
   mode: ExtractionMode;
   setMode: (mode: ExtractionMode) => void;
   busy: boolean;
+  online: boolean;
   latest: WorkflowNote | undefined;
+  duplicateWarning: { approved: number; pending: number } | undefined;
   onExtract: () => void;
+  onCancel: () => void;
+  onConfirmDuplicate: () => void;
+  onDismissDuplicate: () => void;
 }
 
 export function CapturePanel(props: CaptureProps) {
+  const latest = props.latest?.draft.noteText.trim() === props.noteText.trim() ? props.latest : undefined;
+  const detail = latest?.error == null ? null : errorText(latest.error).trim();
   return <section className="capture-panel" aria-labelledby="capture-heading">
     <div className="section-heading"><h2 id="capture-heading"><span className="step">1</span> Capture</h2>
       <span className="subtle">A shift note becomes a draft. You decide what counts.</span></div>
@@ -55,11 +63,24 @@ export function CapturePanel(props: CaptureProps) {
         <p className="privacy-note">{props.mode === 'ONLY_ON_DEVICE' ? 'Note stays on this device. Requires a downloaded browser model; manual entry is always available.' :
           props.mode === 'ONLY_IN_CLOUD' ? 'Cloud disclosure: this note is sent to Firebase AI Logic for extraction. Use synthetic notes for this demo.' :
             'Tries the browser model first. If unavailable, this note may be sent to Firebase AI Logic in the cloud.'}</p>
-        <div className="extract-action"><button className="primary" disabled={props.busy} onClick={props.onExtract}>
-          {props.busy ? 'Extracting changes…' : 'Extract changes'}</button><SourceBadge note={props.latest} /></div>
+        {props.duplicateWarning && <div className="warning-box duplicate-warning">
+          <p role="status"><strong>This exact note was already extracted in this session.</strong> Movement rows already recorded include {props.duplicateWarning.approved} approved and {props.duplicateWarning.pending} pending.</p>
+          <div className="extract-action">
+            <button onClick={props.onConfirmDuplicate}>Extract again anyway</button>
+            <button className="text-button" onClick={props.onDismissDuplicate}>Dismiss</button>
+          </div>
+        </div>}
+        <div className="extract-action"><button className="primary" disabled={props.busy || props.duplicateWarning !== undefined} onClick={props.onExtract}>
+          {props.busy ? 'Extracting changes…' : 'Extract changes'}</button>
+          {props.busy && <button onClick={props.onCancel}>Cancel &amp; enter manually</button>}
+          <SourceBadge note={latest} />
+        </div>
       </div>
     </div>
     {props.busy && <p role="status" className="activity">Reading the note through Firebase AI Logic. Nothing has been approved.</p>}
-    {props.latest?.error && <p role="alert" className="error-message">Extraction unavailable: {props.latest.error} Add a manual movement below, or choose another mode.</p>}
+    {detail !== null && <div className="error-message extraction-error">
+      <p role="alert">{extractionErrorGuidance(detail, props.online)}</p>
+      {detail && <details><summary>Technical details</summary><p>{detail}</p></details>}
+    </div>}
   </section>;
 }

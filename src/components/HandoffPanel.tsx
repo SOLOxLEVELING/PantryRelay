@@ -5,6 +5,7 @@ import { buildDeterministicHandoffText, buildHandoffSummary } from '../lib/shift
 export function HandoffPanel({ workflow }: { workflow: PantryWorkflow }) {
   const { state, reconciliations, outboxByEvent, briefing, online } = workflow;
   const { stock, discrepancies, followUps, movements } = buildHandoffSummary(state, reconciliations, outboxByEvent);
+  const provisionalItems = new Set(reconciliations.filter(item => item.provisional).map(({ item }) => item.id));
   const [copyState, setCopyState] = useState<{ status: 'IDLE' | 'ERROR' } | { status: 'COPIED'; text: string }>({ status: 'IDLE' });
   const handoffText = buildDeterministicHandoffText(state, reconciliations, outboxByEvent);
   const copied = copyState.status === 'COPIED' && copyState.text === handoffText;
@@ -39,8 +40,10 @@ export function HandoffPanel({ workflow }: { workflow: PantryWorkflow }) {
           <div>
             <h3>Unresolved discrepancies</h3>
             {discrepancies.length === 0 ? <p className="subtle">None recorded.</p> :
-              <ul className="handoff-list">{discrepancies.map(item => <li key={item.id} className="handoff-exception">
-                <strong>{item.name}: {item.label}</strong><small>{item.detail}</small>
+              <ul className="handoff-list">{discrepancies.map(item => <li key={item.id}
+                className={provisionalItems.has(item.id) ? 'handoff-exception is-provisional' : 'handoff-exception'}>
+                <strong>{item.name}: {item.label}</strong>{provisionalItems.has(item.id) && ' (provisional — review pending)'}
+                <small>{item.detail}</small>
               </li>)}</ul>}
           </div>
           <div>

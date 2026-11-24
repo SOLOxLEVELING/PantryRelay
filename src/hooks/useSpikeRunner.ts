@@ -66,7 +66,7 @@ export function useSpikeRunner() {
       for (const [index, note] of notes.entries()) {
         setActivity(`Running ${index + 1}/${notes.length}: ${note.id}`);
         const onlineAtStart = navigator.onLine;
-        const result = await extractNoteHybrid(note.text, mode, cloudModel);
+        const result = await extractNoteHybrid(note.text, mode, undefined, cloudModel);
         setRuns(previous => [...previous, { noteId: note.id, noteText: note.text, mode, cloudModel,
           online: onlineAtStart, timestamp: new Date().toISOString(), result }]);
         consecutiveTimeouts = result.failureKind === 'timeout' ? consecutiveTimeouts + 1 : 0;

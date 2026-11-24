@@ -144,7 +144,9 @@ function sourceMode(source: string): SourceMode {
   }
 }
 
-export async function extractNoteHybrid(noteText: string, mode: ExtractionMode, cloudModel: CloudModel = defaultCloudModel): Promise<SpikeResult> {
+export async function extractNoteHybrid(
+  noteText: string, mode: ExtractionMode, callerSignal?: AbortSignal, cloudModel: CloudModel = defaultCloudModel,
+): Promise<SpikeResult> {
   if (noteText.trim().length === 0) {
     return { ok: true, inferenceSource: 'UNKNOWN', rawInferenceSource: 'SKIPPED_EMPTY', latencyMs: 0, rawText: '',
       parsed: null, rawParsed: null, sanitized: { movements: [], observations: [], followUps: [], unclassifiedText: [] },
@@ -155,15 +157,16 @@ export async function extractNoteHybrid(noteText: string, mode: ExtractionMode, 
   let rawInferenceSource = 'UNKNOWN';
   let failureStage: SpikeResult['failureStage'] = 'inference';
   const controller = new AbortController();
-  const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(60_000)]);
+  const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(60_000), ...(callerSignal ? [callerSignal] : [])]);
   try {
-    const deadline = new Promise<never>((_resolve, reject) => signal.addEventListener('abort', () =>
-      reject(new Error('Extraction exceeded 60000 ms; no SDK response received.')),
-    { once: true }));
-    const result = await Promise.race([
-      modelFor({ mode, signal, cloudModel }).generateContent(taggedNote(noteText), { signal }),
-      deadline,
-    ]);
+    signal.throwIfAborted();
+    const pending = modelFor({ mode, signal, cloudModel }).generateContent(taggedNote(noteText), { signal });
+    const aborted = new Promise<never>((_resolve, reject) => {
+      if (signal.aborted) reject(signal.reason);
+      else signal.addEventListener('abort', () => reject(signal.reason), { once: true });
+    });
+    const result = await Promise.race([pending, aborted]);
+    signal.throwIfAborted();
     rawInferenceSource = result.response.inferenceSource ?? 'UNKNOWN';
     rawText = result.response.text();
     failureStage = 'json';
@@ -175,11 +178,12 @@ export async function extractNoteHybrid(noteText: string, mode: ExtractionMode, 
       latencyMs: Math.round(performance.now() - started), rawText, parsed, rawParsed: parsed, sanitized: guarded.draft,
       quarantined: guarded.quarantined, validationError: null, failureStage: null, failureKind: null };
   } catch (error) {
+    const validationError = errorText(error);
     return { ok: false, inferenceSource: sourceMode(rawInferenceSource), rawInferenceSource,
       latencyMs: Math.round(performance.now() - started), rawText, parsed: null, rawParsed: null, sanitized: null, quarantined: [],
-      validationError: errorText(error), failureStage, failureKind: /60000|timeout/i.test(errorText(error)) ? 'timeout' :
-        /initial.?prompt|\brole\b|invalid.*content|content.*(?:invalid|unsupported)/i.test(errorText(error)) ? 'initial-prompts' :
-        /crash|model.*disconnect|session.*destroyed/i.test(errorText(error)) ? 'device-crash' : null };
+      validationError, failureStage, failureKind: /60000|timeout/i.test(validationError) ? 'timeout' :
+        /initial.?prompt|\brole\b|invalid.*content|content.*(?:invalid|unsupported)/i.test(validationError) ? 'initial-prompts' :
+        /crash|model.*disconnect|session.*destroyed/i.test(validationError) ? 'device-crash' : null };
   } finally {
     controller.abort();
   }
